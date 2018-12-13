@@ -7,7 +7,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
 enable_testing()
 
-find_package(Qt5 COMPONENTS Core Gui Widgets OpenGL)
+find_package(Qt5 COMPONENTS Core Gui Widgets OpenGL Charts)
 find_package(OpenGL REQUIRED)
 
 # check for SDL2
@@ -22,13 +22,14 @@ set(LIB_VERSION_STRING ${LIB_VERSION_MAJOR}.${LIB_VERSION_MINOR}.${LIB_VERSION_P
 
 add_subdirectory(enki)
 
-if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
+if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND AND Qt5Charts_FOUND)
 	add_subdirectory(viewer)
 endif()
 
 add_subdirectory(python)
 add_subdirectory(tests)
 add_subdirectory(examples)
+
 
 # Documentation
 find_package(Doxygen)

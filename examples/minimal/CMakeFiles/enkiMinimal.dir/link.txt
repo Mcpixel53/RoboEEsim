@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/enkiMinimal.dir/enkiMinimal.cpp.o  -o enkiMinimal  -L/media/Cousas/git/enki -Wl,-rpath,/media/Cousas/git/enki -rdynamic ../../enki/libenki.a 
