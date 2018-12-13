@@ -108,31 +108,46 @@ namespace Enki
 			w->setLayout(container);
 			setCentralWidget(w);
 
-			anlCharts = new QWidget();
-			QGridLayout *chartLayout = new QGridLayout;
-			anlCharts->setMinimumWidth(mainScreenSize.width()*0.3);
+			anlChart1 = new viewerChart(chart);
+			anlChart2 = new viewerChart(_chart);
 
-			chartLayout->addWidget(new viewerChart(chart),0,0);
-			chartLayout->addWidget(new viewerChart(_chart),1,0);
-			anlCharts->setLayout(chartLayout);
+			anlChart1->setMinimumWidth(mainScreenSize.width()*0.3);
+			anlChart2->setMinimumWidth(mainScreenSize.width()*0.3);
 
-			_viewer->setFocus();
+			//QGridLayout *chartLayout = new QGridLayout;
+			//chartLayout->addWidget(new viewerChart(chart),0,0);
+			//chartLayout->addWidget(new viewerChart(_chart),1,0);
+			//anlCharts->setLayout(chartLayout);
+
+			//_viewer->setFocus();
 			setWindowTitle(tr("eRoboSim"));
 			createDockWindows();
-	//    newLetter();
-	//    setUnifiedTitleAndToolBarOnMac(true);
+
 	}
 
 	void ViewerWindow::createDockWindows()
 	{
 		QDockWidget *dock = new QDockWidget(this);
+		QDockWidget *dock1 = new QDockWidget(this);
+		QDockWidget *dock2 = new QDockWidget(this);
 		dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-		dock->setWidget(anlCharts);
+		//dock1->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+		QGridLayout *dockLayout = new QGridLayout;
+		QWidget *layoutWidget = new QWidget();
+
+		dock->setWidget(layoutWidget);
+		dock1->setWidget(anlChart1);
+		dock2->setWidget(anlChart2);
 		addDockWidget(Qt::RightDockWidgetArea, dock);
+
+
+		dockLayout->addWidget(dock1,0,0);
+		dockLayout->addWidget(dock2,1,0);
+		layoutWidget->setLayout(dockLayout);
+
 		hideDock = dock->toggleViewAction();
 		//analytics->setCorner();
 		//viewMenu->addAction(dock->toggleViewAction());
-
 
 		/*dock = new QDockWidget(tr("Paragraphs"), this);
 		paragraphsList = new QListWidget(dock);
