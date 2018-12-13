@@ -1,0 +1,47 @@
+ToDo
+    → GitHub
+    X→ resto de integración exemplo, simRobobo
+    X→ iteration num(como FPS nunha esquina)
+    → Integración Loxica en EnkiFramework
+    → Desenvolver resto de módulos:
+        ~ → Módulo Lóxico
+         → Módulo Evolutivo
+        ~ → Módulo Gráfico (iconas + viewer)
+        ~ → Módulo Analytics
+    → License Purposes (ask Stephane)
+    → 2D <=
+
+
+Problems:
+    → Quality index not calibrated
+    →
+
+Needed:
+    → Control Iterations to stop as maxIt reached → stop screen?
+    → OpenGL master with 2D Viewer pluggin?
+    → class Control Evolution, integrate with World (addLogic)
+    → Develop Icons &
+    → Implement zoom into charts (qt examples)
+
+Desired:
+  → Window Size dependent??
+  →
+
+Questions:
+    → Need to simpify Individual fitness outcome? (like % or graph )
+    → Como mencionar autores proxecto github??
+    → Fitness xenérico? (como se sabe se acanzou os obxetivos? - puntuar evolución)
+    → Formula Fitness over speed?
+    → Mencionar tese Bernal como de investigacion e o meu e de desenvolvemento?
+    → bloquear vista cando a simulación está en pausa?
+* Módulo Gráfico (iconas + viewer)
+      → Iconas :
+        - Help
+        - Center view
+        - Pause Simulation / Terminate (On icon which opens lil window)
+        - Slider SimSpeed
+        - Slider MaxIter
+      → Robot selector (show characteristics, eg. max speed, torque, rotation, etc )
+      → Tela principal & Tela conf
+
+*Módulo Analytics

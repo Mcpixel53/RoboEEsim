@@ -194,6 +194,6 @@ int main()
 {
 	testPolygonCircleIntersection();
 	testSegmentSegmentIntersection();
-	
+	printf("everything alright! :) \n");
 	return 0;
 }

@@ -32,3 +32,9 @@ if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND AND Qt5Widgets_FOUND AND Qt5OpenGL_F
 else ()
 	message(WARNING "Python libs or executable, or Qt5, or OpenGL not found, skipping Python bindings")
 endif ()
+
+#Copy pyenki lib to used target
+add_custom_command(TARGET pyenki POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:pyenki>"
+     "../EnkiTest/$<TARGET_FILE_NAME:pyenki>"
+)

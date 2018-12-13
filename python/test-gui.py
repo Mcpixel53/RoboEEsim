@@ -1,35 +1,18 @@
 import pyenki
 import random
+import math as Math
+from Configuration import Config as conf
+import NeuralNetwork as nn
 
-class MyEPuck(pyenki.EPuck):
-	
-	def __init__(self):
-		super(MyEPuck, self).__init__()
-		self.timeout = 10
-		
-	def controlStep(self, dt):
-		if self.timeout == 0:
-			self.leftSpeed = random.uniform(-100,100)
-			self.rightSpeed = random.uniform(-100,100)
-			self.timeout = random.randint(1,10)
-		else:
-			self.timeout -= 1
-		#print('Control step')
-		#print('pos: ' + str(self.pos))
-		#print('IR dists: ' + str(self.proximitySensorDistances))
-		#print('IR values: ' + str(self.proximitySensorValues))
-		#print('Cam image: ' + str(self.cameraImage))
-		#print len(self.cameraImage), self.cameraImage[0]
-		print id(self), self.pos
+#Global world properties
+
+wL = 200
+wH = 100
 
 
-w = pyenki.World()
 
-for i in range(0,10):
-	for j in range(0,10):
-		e = MyEPuck()
-		e.pos = (i*10,j*10)
-		w.addObject(e)
+w = pyenki.World(wL,wH,pyenki.Color(0.5, 0.5, 0.5))
+w.steps = 100
 
-w.runInViewer()
-
+#//runInviewer(Enki::World self, camPos, camAltitude, camYaw, camPitch, wallsHeight)
+w.runInViewer((wL/2,wH/2),wH*1.05, 0, Math.radians(-89.9), 10)

@@ -15,5 +15,9 @@
 	<file>textures/selection.png</file>
 	<file>widgets/help.png</file>
 	<file>widgets/center.png</file>
+	<file>widgets/graph.png</file>
+	<file>widgets/pause.png</file>
+	<file>widgets/resume.png</file>
+	<file>widgets/settings.png</file>
 </qresource>
 </RCC>

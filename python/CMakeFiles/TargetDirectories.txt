@@ -1,0 +1,2 @@
+/media/Cousas/git/enki/python/CMakeFiles/rebuild_cache.dir
+/media/Cousas/git/enki/python/CMakeFiles/edit_cache.dir

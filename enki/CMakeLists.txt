@@ -16,6 +16,7 @@ add_library(enki
 	robots/s-bot/SbotObject.cpp
 	robots/marxbot/Marxbot.cpp
 	robots/thymio2/Thymio2.cpp
+        robots/Bola.cpp
 )
 
 target_include_directories (enki PUBLIC ${PROJECT_SOURCE_DIR})
