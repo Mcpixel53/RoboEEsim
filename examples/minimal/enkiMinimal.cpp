@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	for (unsigned i=0; i<10; i++)
 	{
 		// step of 50 ms
-		world.step(0.05);
+		world.step(1, 0.05);
 			std::cout << "Khepera pos is (" << khepera->pos.x << "," << khepera->pos.y << ")" << std::endl;
 
 	}

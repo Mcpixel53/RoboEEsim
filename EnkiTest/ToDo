@@ -1,39 +1,52 @@
 ToDo
-    → GitHub
-    X→ resto de integración exemplo, simRobobo
-    X→ iteration num(como FPS nunha esquina)
     → Integración Loxica en EnkiFramework
     → Desenvolver resto de módulos:
         ~ → Módulo Lóxico
          → Módulo Evolutivo
         ~ → Módulo Gráfico (iconas + viewer)
         ~ → Módulo Analytics
+    → 2D <= optional +- dessirable
     → License Purposes (ask Stephane)
-    → 2D <=
 
+    → Testing wether QGraphics vs OGLWidget is better capable?
+
+    X→ GitHub
+    X→ resto de integración exemplo, simRobobo
+    X→ iteration num(como FPS nunha esquina)
 
 Problems:
+    → Segment overflow
     → Quality index not calibrated
-    →
+
 
 Needed:
+    → Graphic easy variable picker
+    →Iterations dependent on speed.
+    →
     → Control Iterations to stop as maxIt reached → stop screen?
     → OpenGL master with 2D Viewer pluggin?
     → class Control Evolution, integrate with World (addLogic)
-    → Develop Icons &
-    → Implement zoom into charts (qt examples)
+    X→ Implement zoom into charts (qt examples)
+    X→ Develop Icons &
 
 Desired:
-  → Window Size dependent??
+  → Restart feature
   →
 
 Questions:
-    → Need to simpify Individual fitness outcome? (like % or graph )
-    → Como mencionar autores proxecto github??
-    → Fitness xenérico? (como se sabe se acanzou os obxetivos? - puntuar evolución)
-    → Formula Fitness over speed?
-    → Mencionar tese Bernal como de investigacion e o meu e de desenvolvemento?
+    → preguntar ao tio do GIT
+    X→ Interesa ter varias graficas? e posibilidade de engadir máis?
+    → As novas graficas(tanto creadas como cambiadas as dimensións), terían que recuperar os datos de toda a simulación anterior á sua inserción?
+    →
+    X→ Formulas de calidade predefinidas? Nope
+        → Fitness xenérico? (como se sabe se acanzou os obxetivos? - puntuar evolución)
+
     → bloquear vista cando a simulación está en pausa?
+
+    → Como mencionar autores proxecto github??
+    → Mencionar tfg Bernal?
+
+
 * Módulo Gráfico (iconas + viewer)
       → Iconas :
         - Help

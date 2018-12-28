@@ -18,7 +18,7 @@
 
     You can redistribute this program and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
+    the Free Software Foundation; either version 2 of the License, orÇ
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -578,8 +578,7 @@ namespace Enki
 	{
 		//Check for objects that are not by physics engine. Usefull for follow me tests.
 		if(this->ghost == 1 || that.ghost == 1){
-		/*	printf("Pasando de");
-			printf(" %s",typeid(that).name());*/
+			//Avoiding physics for certain objects with ghost tag. #P
 			return;
 		}
 		// handle infinite mass case
@@ -761,7 +760,8 @@ namespace Enki
 		groundTexture(groundTexture),
 		takeObjectOwnership(true),
 		bluetoothBase(NULL),
-		iterations(0)
+		iterations(0),
+		auxIt(0)
 	{
 	}
 
@@ -774,7 +774,8 @@ namespace Enki
 		groundTexture(groundTexture),
 		takeObjectOwnership(true),
 		bluetoothBase(NULL),
-		iterations(0)
+		iterations(0),
+		auxIt(0)
 	{
 	}
 
@@ -1085,8 +1086,10 @@ namespace Enki
 		}
 	}
 
-	void World::step(double dt, unsigned physicsOversampling)
+	void World::step(int mult, double dt, unsigned physicsOversampling)
 	{
+		// multiplying
+		dt *=mult;
 		// oversampling physics
 		const double overSampledDt = dt / (double)physicsOversampling;
 		for (unsigned po = 0; po < physicsOversampling; po++)
@@ -1162,7 +1165,10 @@ namespace Enki
 		if (bluetoothBase)
 			bluetoothBase->step(dt, this);
 
-	iterations++;
+	/*auxIt += (dt/0.03);
+	if (auxIt>=iterations+1)*/
+		iterations+= 1*mult;// (int) auxIt ;
+		//printf("iterations %d : %f",iterations, auxIt);
 	}
 
 	void World::addObject(PhysicalObject *o)

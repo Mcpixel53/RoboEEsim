@@ -80,7 +80,6 @@ namespace Enki
 
 	EPuck::EPuck(unsigned capabilities) :
 		DifferentialWheeled(5.1, 102.8, 0.05),
-
 		infraredSensor0(this, Vector(3.35, -1.05),  2.5, -deg2rad(18), 12, 3731, 0.3, 0.7, 10),
 		infraredSensor1(this, Vector(2.3, -2.6),  2.5, -deg2rad(45),   12, 3731, 0.3, 0.7, 10),
 		infraredSensor2(this, Vector(0.0, -3.3),  2.5, -deg2rad(90),   12, 3731, 0.3, 0.7, 10),
