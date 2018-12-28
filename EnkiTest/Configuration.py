@@ -38,8 +38,8 @@ class Config:
     maxWeight = 1.0
     minWeight = -1.0
 
-    inputSize = 2
-    outputSize = 2
+    inputSize = 1
+    outputSize = 1
 
     #Simulation
 
