@@ -32,6 +32,8 @@ class Neural_Network(object):
     self.W1 = np.reshape(flatW1,self.W1.shape)
     self.W2 = np.reshape(flatW2,self.W2.shape)
 
+
+
 class sigNeural_Network(object):
 
     # sigmoid function + derivative for backpropagation
@@ -57,9 +59,9 @@ class sigNeural_Network(object):
 
 
   def forward(self,X):
-    self.z = nonlin(np.dot(X, self.W1))
-    o = nonlin(np.dot(self.z,self.W2))
 
+    hL = nonlin(np.dot(X, self.W1))
+    o = nonlin(np.dot(hL,self.W2))
     return o
 
   def updateWeights(self, Genes):

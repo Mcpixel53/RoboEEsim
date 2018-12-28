@@ -87,7 +87,7 @@ class MyRobobo(pyenki.EPuck):
 		self.pos = pos
 		# self.speed is reserved by the engine
 		self.Speed = conf.roboboSpeed
-		self.controlSystem = nn.Neural_Network()
+		self.controlSystem = nn.sigNeural_Network() #Neural_Network
 		self.individual = gen.Individual(self.controlSystem.size)
 		self.distanceBuffer = MyQueue.MyQueue(conf.distanceBufferSize)
 		self.leftSpeed = self.Speed
@@ -159,8 +159,8 @@ class MyRobobo(pyenki.EPuck):
 		#print("Beta: ", beta)
 		#print("Delta: ", delta)
 
-		output = self.controlSystem.forward(-delta/180)
-
+		#output = self.controlSystem.forward(-delta/180)
+		(self.leftSpeed,self.rightSpeed) = self.controlSystem.forward((leftSpeed, rightSpeed, -delta/180))
 		#print ("Individual %i Neuronal Network Input: %1f, Output: %2f"%(self.individual.id,delta/180, output))
 
 		incrementRot = output/np.pi*180
