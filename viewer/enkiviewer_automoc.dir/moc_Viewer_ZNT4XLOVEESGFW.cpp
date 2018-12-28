@@ -209,8 +209,8 @@ void Enki::ViewerWidget::hideGraph()
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 struct qt_meta_stringdata_Enki__Settings_t {
-    QByteArrayData data[1];
-    char stringdata0[15];
+    QByteArrayData data[4];
+    char stringdata0[36];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -219,10 +219,13 @@ struct qt_meta_stringdata_Enki__Settings_t {
     )
 static const qt_meta_stringdata_Enki__Settings_t qt_meta_stringdata_Enki__Settings = {
     {
-QT_MOC_LITERAL(0, 0, 14) // "Enki::Settings"
+QT_MOC_LITERAL(0, 0, 14), // "Enki::Settings"
+QT_MOC_LITERAL(1, 15, 15), // "settingsChanged"
+QT_MOC_LITERAL(2, 31, 0), // ""
+QT_MOC_LITERAL(3, 32, 3) // "arg"
 
     },
-    "Enki::Settings"
+    "Enki::Settings\0settingsChanged\0\0arg"
 };
 #undef QT_MOC_LITERAL
 
@@ -232,22 +235,41 @@ static const uint qt_meta_data_Enki__Settings[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   19,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::QString,    3,
 
        0        // eod
 };
 
 void Enki::Settings::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
-    Q_UNUSED(_a);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Settings *_t = static_cast<Settings *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->settingsChanged((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (Settings::*)(QString );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Settings::settingsChanged)) {
+                *result = 0;
+                return;
+            }
+        }
+    }
 }
 
 QT_INIT_METAOBJECT const QMetaObject Enki::Settings::staticMetaObject = {
@@ -272,133 +294,25 @@ void *Enki::Settings::qt_metacast(const char *_clname)
 int Enki::Settings::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QDialog::qt_metacall(_c, _id, _a);
-    return _id;
-}
-struct qt_meta_stringdata_Enki__QAnalytics_t {
-    QByteArrayData data[6];
-    char stringdata0[47];
-};
-#define QT_MOC_LITERAL(idx, ofs, len) \
-    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_Enki__QAnalytics_t, stringdata0) + ofs \
-        - idx * sizeof(QByteArrayData)) \
-    )
-static const qt_meta_stringdata_Enki__QAnalytics_t qt_meta_stringdata_Enki__QAnalytics = {
-    {
-QT_MOC_LITERAL(0, 0, 16), // "Enki::QAnalytics"
-QT_MOC_LITERAL(1, 17, 7), // "newTopQ"
-QT_MOC_LITERAL(2, 25, 0), // ""
-QT_MOC_LITERAL(3, 26, 4), // "iter"
-QT_MOC_LITERAL(4, 31, 7), // "quality"
-QT_MOC_LITERAL(5, 39, 7) // "newAvgQ"
-
-    },
-    "Enki::QAnalytics\0newTopQ\0\0iter\0quality\0"
-    "newAvgQ"
-};
-#undef QT_MOC_LITERAL
-
-static const uint qt_meta_data_Enki__QAnalytics[] = {
-
- // content:
-       7,       // revision
-       0,       // classname
-       0,    0, // classinfo
-       2,   14, // methods
-       0,    0, // properties
-       0,    0, // enums/sets
-       0,    0, // constructors
-       0,       // flags
-       2,       // signalCount
-
- // signals: name, argc, parameters, tag, flags
-       1,    2,   24,    2, 0x06 /* Public */,
-       5,    2,   29,    2, 0x06 /* Public */,
-
- // signals: parameters
-    QMetaType::Void, QMetaType::Int, QMetaType::Double,    3,    4,
-    QMetaType::Void, QMetaType::Int, QMetaType::Double,    3,    4,
-
-       0        // eod
-};
-
-void Enki::QAnalytics::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
-{
-    if (_c == QMetaObject::InvokeMetaMethod) {
-        QAnalytics *_t = static_cast<QAnalytics *>(_o);
-        Q_UNUSED(_t)
-        switch (_id) {
-        case 0: _t->newTopQ((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 1: _t->newAvgQ((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        default: ;
-        }
-    } else if (_c == QMetaObject::IndexOfMethod) {
-        int *result = reinterpret_cast<int *>(_a[0]);
-        {
-            using _t = void (QAnalytics::*)(int , double );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&QAnalytics::newTopQ)) {
-                *result = 0;
-                return;
-            }
-        }
-        {
-            using _t = void (QAnalytics::*)(int , double );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&QAnalytics::newAvgQ)) {
-                *result = 1;
-                return;
-            }
-        }
-    }
-}
-
-QT_INIT_METAOBJECT const QMetaObject Enki::QAnalytics::staticMetaObject = {
-    { &QObject::staticMetaObject, qt_meta_stringdata_Enki__QAnalytics.data,
-      qt_meta_data_Enki__QAnalytics,  qt_static_metacall, nullptr, nullptr}
-};
-
-
-const QMetaObject *Enki::QAnalytics::metaObject() const
-{
-    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
-}
-
-void *Enki::QAnalytics::qt_metacast(const char *_clname)
-{
-    if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_Enki__QAnalytics.stringdata0))
-        return static_cast<void*>(this);
-    return QObject::qt_metacast(_clname);
-}
-
-int Enki::QAnalytics::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
-{
-    _id = QObject::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 1)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 1;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 1)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 2;
+        _id -= 1;
     }
     return _id;
 }
 
 // SIGNAL 0
-void Enki::QAnalytics::newTopQ(int _t1, double _t2)
+void Enki::Settings::settingsChanged(QString _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
-}
-
-// SIGNAL 1
-void Enki::QAnalytics::newAvgQ(int _t1, double _t2)
-{
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
-    QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 struct qt_meta_stringdata_Enki__eChart_t {
     QByteArrayData data[7];
@@ -443,7 +357,7 @@ static const uint qt_meta_data_Enki__eChart[] = {
        5,    1,   29,    2, 0x0a /* Public */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Int, QMetaType::Double,    3,    4,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double,    3,    4,
     QMetaType::Void, QMetaType::Bool,    6,
 
        0        // eod
@@ -455,7 +369,7 @@ void Enki::eChart::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         eChart *_t = static_cast<eChart *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->addPoint((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 0: _t->addPoint((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
         case 1: _t->zoomAction((*reinterpret_cast< bool(*)>(_a[1]))); break;
         default: ;
         }
@@ -603,9 +517,135 @@ void Enki::viewerChart::zoomSignal(bool _t1)
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
+struct qt_meta_stringdata_Enki__QAnalytics_t {
+    QByteArrayData data[6];
+    char stringdata0[47];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_Enki__QAnalytics_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_Enki__QAnalytics_t qt_meta_stringdata_Enki__QAnalytics = {
+    {
+QT_MOC_LITERAL(0, 0, 16), // "Enki::QAnalytics"
+QT_MOC_LITERAL(1, 17, 7), // "newTopQ"
+QT_MOC_LITERAL(2, 25, 0), // ""
+QT_MOC_LITERAL(3, 26, 4), // "iter"
+QT_MOC_LITERAL(4, 31, 7), // "quality"
+QT_MOC_LITERAL(5, 39, 7) // "newAvgQ"
+
+    },
+    "Enki::QAnalytics\0newTopQ\0\0iter\0quality\0"
+    "newAvgQ"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_Enki__QAnalytics[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       2,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       2,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    2,   24,    2, 0x06 /* Public */,
+       5,    2,   29,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::Double, QMetaType::Double,    3,    4,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double,    3,    4,
+
+       0        // eod
+};
+
+void Enki::QAnalytics::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        QAnalytics *_t = static_cast<QAnalytics *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->newTopQ((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 1: _t->newAvgQ((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (QAnalytics::*)(double , double );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&QAnalytics::newTopQ)) {
+                *result = 0;
+                return;
+            }
+        }
+        {
+            using _t = void (QAnalytics::*)(double , double );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&QAnalytics::newAvgQ)) {
+                *result = 1;
+                return;
+            }
+        }
+    }
+}
+
+QT_INIT_METAOBJECT const QMetaObject Enki::QAnalytics::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_Enki__QAnalytics.data,
+      qt_meta_data_Enki__QAnalytics,  qt_static_metacall, nullptr, nullptr}
+};
+
+
+const QMetaObject *Enki::QAnalytics::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *Enki::QAnalytics::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_Enki__QAnalytics.stringdata0))
+        return static_cast<void*>(this);
+    return QObject::qt_metacast(_clname);
+}
+
+int Enki::QAnalytics::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 2)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 2;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 2)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 2;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void Enki::QAnalytics::newTopQ(double _t1, double _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void Enki::QAnalytics::newAvgQ(double _t1, double _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
 struct qt_meta_stringdata_Enki__ViewerWindow_t {
-    QByteArrayData data[3];
-    char stringdata0[30];
+    QByteArrayData data[5];
+    char stringdata0[56];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -616,10 +656,13 @@ static const qt_meta_stringdata_Enki__ViewerWindow_t qt_meta_stringdata_Enki__Vi
     {
 QT_MOC_LITERAL(0, 0, 18), // "Enki::ViewerWindow"
 QT_MOC_LITERAL(1, 19, 9), // "hideGraph"
-QT_MOC_LITERAL(2, 29, 0) // ""
+QT_MOC_LITERAL(2, 29, 0), // ""
+QT_MOC_LITERAL(3, 30, 10), // "changeDock"
+QT_MOC_LITERAL(4, 41, 14) // "manageSettings"
 
     },
-    "Enki::ViewerWindow\0hideGraph\0"
+    "Enki::ViewerWindow\0hideGraph\0\0changeDock\0"
+    "manageSettings"
 };
 #undef QT_MOC_LITERAL
 
@@ -629,7 +672,7 @@ static const uint qt_meta_data_Enki__ViewerWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -637,10 +680,14 @@ static const uint qt_meta_data_Enki__ViewerWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   19,    2, 0x0a /* Public */,
+       1,    0,   29,    2, 0x0a /* Public */,
+       3,    0,   30,    2, 0x0a /* Public */,
+       4,    1,   31,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    2,
 
        0        // eod
 };
@@ -652,10 +699,11 @@ void Enki::ViewerWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->hideGraph(); break;
+        case 1: _t->changeDock(); break;
+        case 2: _t->manageSettings((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 QT_INIT_METAOBJECT const QMetaObject Enki::ViewerWindow::staticMetaObject = {
@@ -683,13 +731,13 @@ int Enki::ViewerWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 3;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 3)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 1;
+        _id -= 3;
     }
     return _id;
 }

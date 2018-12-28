@@ -4,7 +4,7 @@ class Config:
     #World
     wHeight = 250
     wWidth = 350
-    #General
+    #[General]
     maturity = 20  # Funcion Matematica = 1
     maxLifetime = 200.0  # Funcion Matematica 10
 
@@ -38,8 +38,8 @@ class Config:
     maxWeight = 1.0
     minWeight = -1.0
 
-    inputSize = 1
-    outputSize = 1
+    inputSize = 2
+    outputSize = 2
 
     #Simulation
 
@@ -51,7 +51,7 @@ class Config:
 
     populationSize = 20
     sleepTest = 0
-    maxIterations = 8000
+    maxIterations = 100000
 
     angleRange = 50
 
@@ -61,7 +61,7 @@ class Config:
     fitnessBarHeight = 20
 
     objectiveSize = 10
-    objectiveSpeed = 2
+    objectiveSpeed = 30
 
     distanceBufferSize = 50
 

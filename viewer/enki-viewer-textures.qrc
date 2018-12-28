@@ -19,5 +19,7 @@
 	<file>widgets/pause.png</file>
 	<file>widgets/resume.png</file>
 	<file>widgets/settings.png</file>
+	<file>widgets/plus.png</file>
+
 </qresource>
 </RCC>

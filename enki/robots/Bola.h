@@ -1,6 +1,6 @@
 
 #include <enki/PhysicalEngine.h>
-
+//#include <enki/robots/DifferentialWheeled.h>
 namespace Enki
 {
 	class Bola: public virtual Robot
@@ -10,8 +10,13 @@ namespace Enki
 		double maxSpeed;
 		//! Relative amount of motor noise
 		double noiseAmount;
-		//! angle of movement
-		double angle;
+
+	private:
+		//! Resulting angular speed from wheels
+		double cmdAngSpeed;
+		//! Resulting tangent speed from wheels
+		double cmdSpeed;
+
 
 	public:
 		//! Constructor
@@ -20,6 +25,12 @@ namespace Enki
 		//public overcharge of radius
 		int r;
 
+		//speed
+		double neutralSpeed;
+
+		double leftSpeed;
+		//! Reft speed of the robot
+		double rightSpeed;
 		//! collides
 		bool collide;
 		//agaisnt which wall collided?

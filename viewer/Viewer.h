@@ -58,7 +58,7 @@
 
 using namespace QtCharts;
 
-/*!	\file Viewer.h
+	/*!	\file Viewer.h
 	\brief Definition of the Qt-based viewer widget
 */
 
@@ -80,7 +80,7 @@ namespace Enki
 
 	public:
 		int timerPeriodMs;
-
+		int mult;
 		class ViewerUserData : public PhysicalObject::UserData
 		{
 		public:
@@ -215,6 +215,7 @@ namespace Enki
 		ViewerWidget(World *world, QWidget *parent = 0);
 		~ViewerWidget();
 
+		Settings* getSettings();
 		World* getWorld() const;
 		CameraPose getCamera() const;
 		QVector3D getPointedPoint() const;
@@ -300,6 +301,9 @@ namespace Enki
 	public:
 	    Settings();
 
+	signals:
+			void settingsChanged(QString arg);
+
 	private:
 //	    void createMenu();
 	    void createHorizontalGroupBox();
@@ -322,47 +326,30 @@ namespace Enki
 	    QMenu *fileMenu;
 	    QAction *exitAction;
 	};
-/////// Analytics_Module
-
-class QAnalytics: public QObject {
-	Q_OBJECT
-
-	public:
-		QAnalytics(){ internalLogic = 1;}
-
-	signals:
-			void newTopQ(int iter, double quality);
-			void newAvgQ(int iter, double quality);
-
-	private:
-			int internalLogic;
-	};
-
-
 /////// Grafo
 	class eChart : public QChart
 	{
 		Q_OBJECT
 
 		public:
-		    eChart(int maxIterations = 2500, QString title = "", QSplineSeries* _series = new QSplineSeries, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+		    eChart(int maxIterations = 2500, QString title = "", QLineSeries* _series = new QLineSeries, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
 		    virtual ~eChart();
 
 		public slots:
-				void addPoint(int it, double quality);
+				void addPoint(double it, double quality);
 				void zoomAction(bool enabled);
 
 		protected:
 			bool sceneEvent(QEvent *event);
 
 		private:
-				QSplineSeries *m_series;
+				QLineSeries *m_series;
 				QStringList m_titles;
 				QValueAxis *m_axis;
 				qreal m_step;
 				qreal m_x;
 				qreal m_y;
-				const int  RANGEinc = 250;
+				int	RANGEinc = 1500;
 				int RANGE = RANGEinc;
 				bool gestureEvent(QGestureEvent *event);
 				bool m_isZooming;
@@ -391,6 +378,23 @@ class QAnalytics: public QObject {
 
 	};
 
+	/////// Analytics_Module
+
+	class QAnalytics: public QObject {
+		Q_OBJECT
+
+	public:
+		QAnalytics(){ internalLogic = 1;}
+
+		signals:
+		void newTopQ(double iter, double quality);
+		void newAvgQ(double iter, double quality);
+
+	private:
+		int internalLogic;
+	};
+
+
 ///// Main viewer
 class ViewerWindow : public QMainWindow
 	{
@@ -404,17 +408,27 @@ class ViewerWindow : public QMainWindow
 
 	public slots:
 			void hideGraph();
+			void changeDock();
+			void manageSettings(QString);
 
 	private:
 	    void createActions();
 	    void createStatusBar();
 	    void createDockWindows();
+			void changeGraphLayout(QString arg);
 			QAction * hideDock;
+			void loadSettings();
+			void saveSettings();
+			QString m_sSettingsFile;
+			QLineEdit *m_pEdit;
 
 	protected:
 	    ViewerWidget *viewer;
-			viewerChart *anlChart1;
-			viewerChart *anlChart2;
+			QWidget *analise;
+			viewerChart  *charts[6];
+			// QDockWidget *dockChart2;
+			/*viewerChart *anlChart1;
+			viewerChart *anlChart2;*/
 //			virtual void keyPressEvent(QKeyEvent* event);
 
 	    //QChartView *indAnlChart;

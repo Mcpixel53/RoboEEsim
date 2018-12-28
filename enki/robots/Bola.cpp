@@ -20,12 +20,19 @@ namespace Enki
 
  Bola::Bola(double radio, double maxSpeed, double noiseAmount) :
 maxSpeed(maxSpeed),
-noiseAmount(noiseAmount),r(radio),collisionElasticity(0){
-	this->ghost = 1;
-	this->setSpheric(radio,10);
-	this->setColor(Color(0.3, 0.0, 0.9));
-	this->collide = false;
-	this->collXY = 0;
+noiseAmount(noiseAmount),
+r(radio),
+cmdAngSpeed(0),
+cmdSpeed(0),
+collisionElasticity(0)
+{
+	ghost = 1;
+	setSpheric(radio,10);
+	setColor(Color(0.3, 0.0, 0.9));
+	collide = false;
+	collXY = 0;
+	 dryFrictionCoefficient = 0.25;
+	// dryFrictionCoefficient = 2.5;
 };
 	/*DifferentialWheeled::DifferentialWheeled(double distBetweenWheels, double maxSpeed, double noiseAmount) :
 		distBetweenWheels(distBetweenWheels),
@@ -81,19 +88,34 @@ noiseAmount(noiseAmount),r(radio),collisionElasticity(0){
 
 	void Bola::controlStep(double dt)
 	{
-		// Call parent
+		const double baseFactor = 1 - noiseAmount;
+		const double noiseFactor = 2 * noiseAmount;
+
+		const double realSpeed = clamp(
+			neutralSpeed * (baseFactor + random.getRange(noiseFactor)),
+			-maxSpeed,maxSpeed
+		);
+		// set non slipping, override speed
+		cmdSpeed = realSpeed*50;// (realLeftSpeed + realRightSpeed) * 0.5;
+		cmdAngSpeed = 0;
+		printf("UEHA! %f %f SPEDA:  %f \n ",realSpeed, noiseFactor,speed);
+
 		Robot::controlStep(dt);
+
+
 	}
 
-	void Bola::applyForces(double dt)
-	{
-		/*const Vector cmdVelocity(
-			cmdSpeed * cos(angle + angSpeed * dt * 0.5),
-			cmdSpeed * sin(angle + angSpeed * dt * 0.5)
-		);
-		angSpeed = cmdAngSpeed;*/
-		//speed = maxSpeed;
-		Robot::applyForces(dt);
-	}
+
+		void Bola::applyForces(double dt)
+		{
+			const Vector cmdVelocity(
+				 cmdSpeed * cos(angle),
+				 cmdSpeed * sin(angle)
+			);
+			angSpeed = cmdAngSpeed;
+			speed = cmdVelocity/10;
+			// printf("UEHA! %f %f ",angle,speed);
+			//Robot::applyForces(dt);
+		}
 
 }

@@ -310,8 +310,8 @@ struct EPuckWrap: EPuck, wrapper<EPuck>
 
 // Bola Máxica
 struct BolaWrap: Bola, wrapper<Bola>
-{
-	BolaWrap():Bola(3,1,5){};
+{	//radius, maxSpeed, noise
+	BolaWrap():Bola(3,102,0.05){};
 	virtual void controlStep(double dt)
 	{
 		if (override controlStep = this->get_override("controlStep"))
@@ -418,12 +418,12 @@ struct Analytics: public QAnalytics
 	}
 
 //public:
- void addTopPoint(int iter, double quality){
+ void addTopPoint(double iter, double quality){
 		//Signal
 		emit newTopQ(iter,quality);
 		//printf("adding POint!");
 	}
-	void addAVGPoint(int iter, double quality){
+	void addAVGPoint(double iter, double quality){
 		//Signal
 		emit newAvgQ(iter,quality);
 		//printf("adding POint!");
@@ -457,17 +457,19 @@ void runInViewer(World& world, Analytics& anl, Vector camPos = Vector(0,0), doub
 	app.setWindowIcon(QIcon("./appicon.png"));
 	eChart topQChart(anl.maxIt,"TOP Quality over Iterations");
 	eChart indQChart(anl.maxIt,"AVG Quality over Iterations");
-	
 
-	QObject::connect(&anl, SIGNAL(newTopQ(int, double)),
-										&topQChart, SLOT(addPoint(int, double)) );
-	QObject::connect(&anl, SIGNAL(newAvgQ(int, double)),
-										&indQChart, SLOT(addPoint(int, double)) );
+
+	QObject::connect(&anl, SIGNAL(newTopQ(double, double)),
+										&topQChart, SLOT(addPoint(double, double)) );
+	QObject::connect(&anl, SIGNAL(newAvgQ(double, double)),
+										&indQChart, SLOT(addPoint(double, double)) );
 
 	ViewerWindow wViewer(&viewer, &topQChart, &indQChart);
 	wViewer.setWindowTitle("eRoboSim!");
 	//viewer.setWindowTitle("PyEnki Viewer");
 	//viewer.show();
+	wViewer.grabGesture(Qt::PanGesture);
+	wViewer.grabGesture(Qt::PinchGesture);
 	wViewer.show();
 	viewer.pythonSavedState = PyEval_SaveThread();
 	app.exec();
@@ -478,10 +480,10 @@ void runInViewer(World& world, Analytics& anl, Vector camPos = Vector(0,0), doub
 void run(World& world, unsigned steps)
 {
 	for (unsigned i = 0; i < steps; ++i)
-		world.step(1./30., 3);
+		world.step(1, 1./30., 3);
 }
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(step_overloads, step, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(step_overloads, step, 2, 3)
 BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 2, 7)
 
 BOOST_PYTHON_MODULE(pyenki)
@@ -594,6 +596,7 @@ BOOST_PYTHON_MODULE(pyenki)
 	.def("controlStep", &BolaWrap::controlStep)
 	.def("getWall",&BolaWrap::getWall)
 	.def_readwrite("collide", &BolaWrap::collide)
+	.def_readwrite("neutralSpeed", &BolaWrap::neutralSpeed)
 ;
 	class_<EPuckWrap, bases<DifferentialWheeled>, boost::noncopyable>("EPuck")
 		.def("controlStep", &EPuckWrap::controlStep)
@@ -624,7 +627,7 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def_readonly("width", &World::w)
 		.def_readonly("height", &World::h)
 		.def_readonly("iterations", &World::iterations)
-		.def("step", &World::step, step_overloads(args("dt", "physicsOversampling")))
+		.def("step", &World::step, step_overloads(args("mult", "dt", "physicsOversampling")))
 		.def("addObject", &World::addObject, with_custodian_and_ward<1,2>())
 		.def("removeObject", &World::removeObject)
 		.def("setRandomSeed", &World::setRandomSeed)

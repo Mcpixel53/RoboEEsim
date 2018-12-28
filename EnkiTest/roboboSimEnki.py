@@ -46,10 +46,10 @@ class MyBall(pyenki.Bola):
 		#starting pos and angle
 		self.pos = pos
 		self.angDir = 130
-		self.angle = Math.radians(self.angDir)
+		self.angle =  Math.radians(self.angDir)
 		self.dir = 1
-
-		print("New Ball At", self.dir, self.angDir)
+		self.neutralSpeed = conf.objectiveSpeed
+		print("New Ball At", self.pos)
 
 	def controlStep(self, dt):
 		num=random.choice([1.2,3]) # angle multiplier
@@ -60,7 +60,7 @@ class MyBall(pyenki.Bola):
 				print("////////////////////////////////")
 			coll = self.getWall(wW,wH) #get wich wall caused collision x =1, y = 2, both = 3
 			#recovering position before collision //even thought should already be done by engine//
-			nextPos = (self.pos[0]-OBJ_Speed*Math.cos(self.angle),self.pos[1]-OBJ_Speed*Math.sin(self.angle))
+			#nextPos = (self.pos[0]-OBJ_Speed*Math.cos(self.angle),self.pos[1]-OBJ_Speed*Math.sin(self.angle))
 			#calcular nova direcion & angulo
 			nextDir = 0 if (0 in self.dir) else self.dir[0]*self.dir[1] if (coll in (1,3)) else -1 * self.dir[0]*self.dir[1]
 			if (debugBall):
@@ -68,13 +68,14 @@ class MyBall(pyenki.Bola):
 			self.angDir = (self.angDir%360)+(nextDir*grads*num) if nextDir != 0 else (self.angDir%360)+(random.choice([1,-1])*grads*num)
 			self.angle = Math.radians(self.angDir)
 			if (debugBall):
-				print("debug self.dir2:",self.dir,"angle: ",self.angDir)
+				print("debug speed:",self.speed,"angle: ",self.angle)
 			self.collide=False ## check disable
+		#else:
+			#nextPos = (self.pos[0]+OBJ_Speed*Math.cos(self.angle),self.pos[1]+OBJ_Speed*Math.sin(self.angle))
+		if (debugBall):
+			print("debug speed:",self.speed,"angle: ",self.angle)
 
-		else:
-			nextPos = (self.pos[0]+OBJ_Speed*Math.cos(self.angle),self.pos[1]+OBJ_Speed*Math.sin(self.angle))
-
-			self.pos = nextPos
+			#self.pos = nextPos
 
 
 class MyRobobo(pyenki.EPuck):
@@ -84,12 +85,13 @@ class MyRobobo(pyenki.EPuck):
 		self.timeout = 10
 		self.id = "rBobo "+str(id)
 		self.pos = pos
-		self.speedy = conf.roboboSpeed
+		# self.speed is reserved by the engine
+		self.Speed = conf.roboboSpeed
 		self.controlSystem = nn.Neural_Network()
 		self.individual = gen.Individual(self.controlSystem.size)
 		self.distanceBuffer = MyQueue.MyQueue(conf.distanceBufferSize)
-		self.leftSpeed = self.speedy
-		self.rightSpeed = self.speedy
+		self.leftSpeed = self.Speed
+		self.rightSpeed = self.Speed
 		self.setFitnessVar(0)
 		self.changeWeights()
 
@@ -145,7 +147,7 @@ class MyRobobo(pyenki.EPuck):
 		beta = np.arctan2(Yrt,Xrt) * 180/np.pi
 		alpha = Math.degrees(self.angle)
 
-		delta = beta + alpha
+		delta = beta - alpha
 
 		if delta > 180:
 			delta = delta - 360
@@ -209,12 +211,6 @@ def updateLogic():
 			if exitFlag:
 			    running = False
 
-			#time.sleep(conf.sleepTest)
-			#if currentIteration >= conf.fastForwardToIterarion:
-			#    time.sleep(conf.algorithmSleep)
-
-			#objective.update()
-
 			for current in robotList:
 				current.setFitness()
 				#Guardar valores Individuales de los experimentos
@@ -265,17 +261,16 @@ def updateLogic():
 	#print("Experiment Dta: " , experimentData)
 	#print("UEAH",veryBest)
 
-ball = MyBall((50.0,5.0))
+ball = MyBall((wH/2,wW/2))
 objective = ball
 #w.steps = 100
 anl = Analise(conf.maxIterations)
 for i in range(conf.populationSize):
-	robobo = MyRobobo((i*10,5*10),i)
+	robobo = MyRobobo((random.randrange(0,wW,2),random.randrange(0,wH,2)),i)
 	w.addObject(robobo)
 	robotList.append(robobo)
 
 w.addObject(ball)
-#//runInviewer(Enki::World self, camPos, camAltitude, camYaw, camPitch, wallsHeight)
 
 #if __name__ == '__main__':
 try:
@@ -283,6 +278,7 @@ try:
 except Exception as e:
 	print ("Error: unable to start thread",str(e))
 
+	#//runSimulation(Enki::World, AnalyticsModule, camPos, camAltitude, camYaw, camPitch, wallsHeight)
 pyenki.EnkiViewer.runSimulation(w, anl, (wW/2,wH/2),wH*1.05, 0, Math.radians(-89.9), 10)
 
 #experimentData['Iterations'] = w.iterations

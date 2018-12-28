@@ -76,31 +76,41 @@ namespace Enki
 	#define clamp(x, low, high) ((x) < (low) ? (low) : ((x) > (high) ? (high) : (x)))
 
 	ViewerWindow::ViewerWindow(ViewerWidget* _viewer, eChart* chart, eChart* _chart)
-	    :viewer(_viewer)
+	    :viewer(_viewer),
+			m_pEdit(NULL),
+			analise(new QWidget)
 	{
-			setWindowIcon(QIcon("appicon.png"));
+			setWindowIcon(QIcon(":/appicon.png"));
 			QDesktopWidget widget;
 			QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen()); // or screenGeometry(), depending on your needs
 			int x = mainScreenSize.width()*0.9;
 			int y = mainScreenSize.height()*0.9;
+
 			this->resize(x,y);
-			QObject::connect(_viewer, SIGNAL(hideGraph()),
+			connect(_viewer, SIGNAL(hideGraph()),
 												this, SLOT(hideGraph()) );
+			connect(_viewer->getSettings(), SIGNAL(settingsChanged(QString)),
+			              this, SLOT(manageSettings(QString)));
 			QWidget *w = new QWidget;
 			QHBoxLayout *container = new QHBoxLayout;
 
 			QSlider *slider = new QSlider(Qt::Vertical);
-	    slider->setRange(1, 200);
-	    slider->setSingleStep(2);
-	    slider->setPageStep(2 * 10);
-	    slider->setTickInterval(2 * 10);
-			slider->setValue(30);
+	    slider->setRange(0.95, 20);
+	    slider->setSingleStep(1);
+	    slider->setPageStep(5);
+	    slider->setTickInterval(5);
+			slider->setValue(1);
 	    slider->setTickPosition(QSlider::TicksRight);
 			connect(slider, SIGNAL(valueChanged(int)),
 			              _viewer, SLOT(speedSim(int)));
 			//connect(_viewer, SIGNAL(valueChanged(int)),slider, SLOT(setValue(int)));
 
-
+			m_sSettingsFile =  "/media/Cousas/git/enki/EnkiTest/demosettings.ini";
+			char * stringg = getenv("PWD");
+			m_sSettingsFile = stringg;
+			//m_sSettingsFile.append(":/demosettings.ini");
+			loadSettings();
+			qDebug("A VERERR OHHH %s",m_sSettingsFile);
 
 			//_viewer->installEventFilter(this);
 			container->addWidget(_viewer);
@@ -108,62 +118,116 @@ namespace Enki
 			w->setLayout(container);
 			setCentralWidget(w);
 
-			anlChart1 = new viewerChart(chart);
-			anlChart2 = new viewerChart(_chart);
+			charts[0] = new viewerChart(chart);
+			charts[1] = new viewerChart(_chart);
 
-			anlChart1->setMinimumWidth(mainScreenSize.width()*0.3);
-			anlChart2->setMinimumWidth(mainScreenSize.width()*0.3);
+//			QGridLayout *chartLayout = new QGridLayout;
 
-			//QGridLayout *chartLayout = new QGridLayout;
-			//chartLayout->addWidget(new viewerChart(chart),0,0);
-			//chartLayout->addWidget(new viewerChart(_chart),1,0);
 			//anlCharts->setLayout(chartLayout);
+			//m_pEdit = new QLineEdit("", this);
 
-			//_viewer->setFocus();
+			_viewer->setFocus();
 			setWindowTitle(tr("eRoboSim"));
 			createDockWindows();
-
+	//    newLetter();
+	//    setUnifiedTitleAndToolBarOnMac(true);
 	}
 
 	void ViewerWindow::createDockWindows()
 	{
 		QDockWidget *dock = new QDockWidget(this);
-		QDockWidget *dock1 = new QDockWidget(this);
-		QDockWidget *dock2 = new QDockWidget(this);
+		// *analise = new QWidget;
+		QVBoxLayout *VLayout = new QVBoxLayout();
+		QHBoxLayout *HLayout = new QHBoxLayout();
+
+		//QVBoxLayout
+		//QDockWidget *dock = new QDockWidget(this);
+		QLabel *PlusIcon = new QLabel(this);
+		PlusIcon->setPixmap(QPixmap(":/widgets/plus.png"));
+		//QLabel *PlusIcon2 = new QLabel(this);
+		//PlusIcon2->setPixmap(QPixmap(":/widgets/plus.png"));
+		//Label *boatIcon2 = boatIcon.duplicate();
+		VLayout->addWidget(charts[0]);
+		VLayout->addWidget(charts[1]);
+		HLayout->addLayout(VLayout);
+		HLayout->setStretchFactor(VLayout,3);
+		HLayout->addStretch();
+
+		VLayout = new QVBoxLayout();
+		PlusIcon->setAlignment(Qt::AlignCenter);
+		//PlusIcon2->setAlignment(Qt::AlignCenter);
+		VLayout->addWidget(new viewerChart(new eChart));
+		VLayout->addStretch();
+		VLayout->addWidget(PlusIcon);
+		VLayout->setStretchFactor(VLayout->itemAt(0)->widget(),2);
+		VLayout->setStretchFactor(PlusIcon,1);
+		HLayout->addLayout(VLayout);
+		HLayout->setStretchFactor(VLayout,3);
+
+		analise->setLayout(HLayout);
+
+		dock->setWidget(analise);
 		dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-		//dock1->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-		QGridLayout *dockLayout = new QGridLayout;
-		QWidget *layoutWidget = new QWidget();
-
-		dock->setWidget(layoutWidget);
-		dock1->setWidget(anlChart1);
-		dock2->setWidget(anlChart2);
 		addDockWidget(Qt::RightDockWidgetArea, dock);
-
-
-		dockLayout->addWidget(dock1,0,0);
-		dockLayout->addWidget(dock2,1,0);
-		layoutWidget->setLayout(dockLayout);
-
 		hideDock = dock->toggleViewAction();
-		//analytics->setCorner();
-		//viewMenu->addAction(dock->toggleViewAction());
+		dock->hide();
+		// dockChart2->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-		/*dock = new QDockWidget(tr("Paragraphs"), this);
-		paragraphsList = new QListWidget(dock);
-		paragraphsList->addItems(QStringList()
-		<< "You made an overpayment (more than $5). Do you wish to "
-		"buy more items, or should we return the excess to you?");
-		dock->setWidget(paragraphsList);
-		addDockWidget(Qt::RightDockWidgetArea, dock);
-		//viewMenu->addAction(dock->toggleViewAction());
+		//addDockWidget(Qt::RightDockWidgetArea, dock2);
+		// connect(dock, SIGNAL(visibilityChanged(bool)),
+		 //				dock2, SLOT(setVisible(bool)));
+		// dockChart2->setWidget(anlChart2);
+		// addDockWidget(Qt::RightDockWidgetArea, dockChart2);
 
-		/* connect(customerList, &QListWidget::currentTextChanged,
-		this, &ViewerWindow::insertCustomer);
-		connect(paragraphsList, &QListWidget::currentTextChanged,
-		this, &ViewerWindow::addParagraph);*/
+	}
+	void ViewerWindow::loadSettings()
+	{
+	 QSettings settings(m_sSettingsFile, QSettings::NativeFormat);
+	 QString sText = settings.value("text", "loaded").toString();
+	 settings.setValue("text", sText);
+	 settings.sync();
+
 	}
 
+	void ViewerWindow::saveSettings()
+	{
+	 QSettings settings(m_sSettingsFile, QSettings::NativeFormat);
+	 QString sText = (m_pEdit) ? m_pEdit->text() : "";
+
+	}
+	void ViewerWindow::changeDock(){
+			/*QDockWidget * dockSlot = qobject_cast<QDockWidget*>(sender());
+			QDockWidget * newDock = new QDockWidget;
+			newDock = dockSlot;
+			if (dockSlot == dockChart1){
+				dockChart1 = new QDockWidget;
+				dockChart1->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+				hideDock = dockChart1->toggleViewAction();
+				connect(dockChart1, SIGNAL(visibilityChanged(bool)),
+								dockSlot, SLOT(setVisible(bool)));
+				dockChart1->setWidget(new QPushButton(QIcon(":/plus.png"),""));
+			}else{
+				qDebug("another brick in da wall");
+			}*/
+
+	}
+
+void ViewerWindow::manageSettings(QString what){
+
+		QStringList args = what.split('&');
+		if (args.empty()){
+			 qWarning("manageSettings called without string!");
+			 return;
+		 }
+
+		 if(args[0]=="graphNum"){
+			 changeGraphLayout(args[1]);
+		 }
+		 else return;
+}
+void ViewerWindow::changeGraphLayout(QString arg){
+			qDebug("num layouts %d",analise->layout()->count());
+}
 void ViewerWindow::hideGraph(){
 	//anlCharts->setVisible(anlCharts->isHidden());
 	hideDock->trigger();
@@ -179,13 +243,15 @@ ViewerWindow::~ViewerWindow()
 	//delete customerList;
 
 }
-
 	viewerChart::viewerChart(eChart *chart, QWidget *parent):
 		QChartView(chart, parent),
 		    m_isTouching(false)
 		{
+			QDesktopWidget widget;
+			QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen()); // or screenGeometry(), depending on your needs
 			setRenderHint(QPainter::Antialiasing);
 			setRubberBand(QChartView::RectangleRubberBand);
+			setMinimumWidth(mainScreenSize.width()*0.3);
 			//Notify chart when zoom is on not to
 			QObject::connect(this, SIGNAL(zoomSignal(bool)),
 												chart, SLOT(zoomAction(bool)));
@@ -202,7 +268,7 @@ ViewerWindow::~ViewerWindow()
 	        m_isTouching = true;
 	        // Turn off animations when handling gestures they
 	        // will only slow us down.
-	        chart()->setAnimationOptions(QChart::NoAnimation);
+	        //chart()->setAnimationOptions(QChart::NoAnimation);
 	    }
 
 	    return QChartView::viewportEvent(event);
@@ -238,7 +304,7 @@ ViewerWindow::~ViewerWindow()
 
     // Because we disabled animations when touch event was detected
     // we must put them back on.
-    chart()->setAnimationOptions(QChart::SeriesAnimations);
+    //chart()->setAnimationOptions(QChart::SeriesAnimations);
 
     QChartView::mouseReleaseEvent(event);
 }
@@ -281,7 +347,7 @@ ViewerWindow::~ViewerWindow()
 	        break;
 	    }
 	}
-	eChart::eChart(int maxIterations, QString title, QSplineSeries* _series, QGraphicsItem *parent, Qt::WindowFlags wFlags  ):
+	eChart::eChart(int maxIterations, QString title, QLineSeries* _series, QGraphicsItem *parent, Qt::WindowFlags wFlags  ):
 		QChart(QChart::ChartTypeCartesian,parent,wFlags),
 		m_series(_series),
     m_axis(new QValueAxis),
@@ -289,9 +355,12 @@ ViewerWindow::~ViewerWindow()
     m_x(0.0),
     m_y(0.0)
 		{
-		setTitle(title);
+		if (title==NULL) setTitle("Por defeito");
+		else setTitle(title);
     legend()->hide();
-    //setAnimationOptions(QChart::AllAnimations); // xa se fai?
+
+		//Todo check how to make it work with animations
+    //setAnimationOptions(QChart::SeriesAnimations); // En linux-Q5.11 mellor sin elas..
 		grabGesture(Qt::PanGesture);
     grabGesture(Qt::PinchGesture);
 
@@ -310,12 +379,12 @@ ViewerWindow::~ViewerWindow()
     axisY()->setRange(0, 0.6);
 	  //m_series->append(1, 4.5);
 	}
-
 	void eChart::zoomAction(bool act){
 		m_isZooming = act;
 		if(!act){
 			//Reset scroll
-			//zoomReset();
+			// resetCachedContent()
+			zoomReset();
 			axisX()->setRange(RANGE-RANGEinc,RANGE);
 			axisY()->setRange(0,m_y+0.1);
 		}
@@ -345,19 +414,20 @@ ViewerWindow::~ViewerWindow()
 
 	    return true;
 	}
-	void eChart::addPoint(int it, double quality){
+	void eChart::addPoint(double it, double quality){
 		//std::cout << "addddding"<< it <<"+"<<quality;
 		if (quality>m_y){
 			m_y=quality;
 			axisY()->setMax(m_y+0.1);
 			}
 		//qreal x = (m_axis->max() - m_axis->min()) / m_axis->tickCount
-		qreal x = plotArea().width() / m_axis->tickCount();
     if (it >= (RANGE)){
 			RANGE += RANGEinc;
 			//qDebug("Zoomed?? %i",isZoomed());
-			if(!m_isZooming)
-				scroll(x*5, 0);
+			if(!m_isZooming){
+					qreal x = plotArea().width() / m_axis->tickCount();
+					scroll(x*5, 0);
+				}
 			//printf("avanzamos %f",x);
 			//printf("XMAX %f",maxx);
 		}
@@ -496,9 +566,12 @@ ViewerWindow::~ViewerWindow()
 
 		    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
 			 	QLabel * comLabel = new QLabel(tr("Comentarios:"));
+				// qDebug("Parent: %s", parentWidget());
 
 		    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 		    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+				//connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+				// connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
 		    QVBoxLayout *mainLayout = new QVBoxLayout;
 		    //mainLayout->setMenuBar(menuBar);
@@ -548,14 +621,19 @@ ViewerWindow::~ViewerWindow()
 				QCheckBox *opcionZeta = new QCheckBox(tr("Grafos dinámicos"));
 				QCheckBox *opcionOptativa = new QCheckBox(tr("Algo máis"));
 				QCheckBox *opcionOptativa2 = new QCheckBox(tr("Marcar"));
-
+				QSpinBox *spinGraph = new QSpinBox;
+				spinGraph->setMaximum(6);
+				spinGraph->setSingleStep(1);
+				spinGraph->setValue(4);
 
 				layout->addWidget(opcionFollow, 0, 0);
 				layout->addWidget(opcionTrack, 0, 1);
 				layout->addWidget(opcionZeta, 1, 0);
 				layout->addWidget(opcionOptativa, 1, 1);
 				layout->addWidget(opcionOptativa2, 1, 2);
-		   /* for (int i = 0; i < NumGridRows; ++i) {
+				layout->addWidget(new QLabel(tr("Número de grafos:")), 2, 0);
+				layout->addWidget(spinGraph, 2, 1);
+			 /* for (int i = 0; i < NumGridRows; ++i) {
 		        labels[i] = new QLabel(tr("Line %1:").arg(i + 1));
 		        lineEdits[i] = new QLineEdit;
 		        layout->addWidget(labels[i], i + 1, 0);
@@ -603,6 +681,7 @@ ViewerWindow::~ViewerWindow()
 	ViewerWidget::ViewerWidget(World *world, QWidget *parent) :
 		QGLWidget(parent),
 		timerPeriodMs(30),
+		mult(1),
 		camera(world),
 		doDumpFrames(false),
 		dumpFramesCounter(0),
@@ -624,38 +703,18 @@ ViewerWindow::~ViewerWindow()
 
 	{
 		initTexturesResources();
-
+		//qDebug("oarent: %s", parentWidget());
 		settings = new Settings();
 		settings->setWindowFlags(Qt::Popup|Qt::WindowStaysOnTopHint);
 		settings->resize(this->width()*0.5,this->height()*0.5);
 		//settings->setAlignment(Qt::AlignCenter);
 
-		/*QGridLayout *setLayout = new QGridLayout;
-		QLineEdit *lineEdit;
-		QLabel *label= new QLabel(tr("Find &what:"));
-		QCheckBox *caseCheckBox = new QCheckBox(tr("Seguir zoom"));
-		QPushButton * buttonn = new QPushButton(tr("&Position"));
-		QPushButton * aceptar = new QPushButton(tr("&Aceptar"));
-		aceptar->setDefault(true);
-		QLabel	*labeel = new QLabel(tr("Configuración"));
-		labeel->setAlignment(Qt::AlignTop);
-		labeel->setStyleSheet("font-weight: bold; color: black");
-		//labeel->setFrameStyle(QFrame::Box);
-		setLayout->addWidget(labeel,0,0);
-		setLayout->addWidget(label,1,0);
-		setLayout->addWidget(caseCheckBox,1,1);
-		setLayout->addWidget(buttonn,2,0);
-		setLayout->addWidget(aceptar,2,1);
-		settings->setLayout(setLayout);
-		settings->setWindowTitle("eRoboSim!");
-		settings->setMinimumSize(500,200);
-		settings->hide();*/
-
+// elapsed time currently used in help messages
 		elapsedTime = double(30)/1000.; // average second between two frames, can be updated each frame to better precision
 		startTimer(timerPeriodMs);
 	}
 	void  ViewerWidget::speedSim(int timerSpeed){
-		timerPeriodMs = timerSpeed;
+		mult = timerSpeed;
 	}
 
 	//Somehow ViewerWidget stoped receiving KeyPress events, probablt after docking or adding layout to centralWidget.
@@ -695,6 +754,10 @@ ViewerWindow::~ViewerWindow()
 			delete data;
 		}
 	}
+
+	Settings* ViewerWidget::getSettings(){
+			return settings;
+ }
 
 	World* ViewerWidget::getWorld() const
 	{
@@ -1783,7 +1846,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		int ww = (int) width()+0.5;
 		int offsetX = 80, offsetY = 15 ;
 		//printf("wea %d$%d ",ww,wh);
-		renderText(ww-offsetX,wh-offsetY, ("Iter:"+std::to_string(getWorld()->iterations)).c_str());
+		renderText(ww-offsetX,wh-offsetY, ("Iter:"+std::to_string((int) getWorld()->iterations)).c_str());
 		picking(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
 
 		displayMessages();
@@ -1817,7 +1880,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 					//chart()->scroll(0, -10);
 	        break;
 			default:
-				helpActivated();
+				//helpActivated();
 				break;
 		}
 	}
@@ -2021,7 +2084,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 	void ViewerWidget::timerEvent(QTimerEvent * event)
 	{
 		if(!s_paused)
-			world->step(double(timerPeriodMs)/1000., 3);
+			world->step(mult, double(timerPeriodMs)/1000., 1);
 		updateGL();
 	}
 
