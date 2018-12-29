@@ -37,13 +37,12 @@ class Neural_Network(object):
 class sigNeural_Network(object):
 
     # sigmoid function + derivative for backpropagation
-    def nonlin(x,deriv=False):
+  def nonlin(x,deriv=False):
         if(deriv==True):
             return x*(1-x)
         return 1/(1+np.exp(-x))
 
-    def __init__(self):
-
+  def __init__(self):
     #parameters
     self.inputSize = cnf.Config.inputSize
     self.outputSize = cnf.Config.outputSize
