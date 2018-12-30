@@ -1,6 +1,16 @@
 import numpy as np
 import Configuration as cnf
 
+
+##Internal Functions:
+
+    #sigmoid function + derivative for backpropagation
+def nonlin(x,deriv=False):
+    if(deriv==True):
+        return x*(1-x)
+    return 1/(1+np.exp(-x))
+#########################################################
+
 class Neural_Network(object):
 
   def __init__(self):
@@ -36,11 +46,6 @@ class Neural_Network(object):
 
 class sigNeural_Network(object):
 
-    # sigmoid function + derivative for backpropagation
-  def nonlin(x,deriv=False):
-        if(deriv==True):
-            return x*(1-x)
-        return 1/(1+np.exp(-x))
 
   def __init__(self):
     #parameters
@@ -58,9 +63,11 @@ class sigNeural_Network(object):
 
 
   def forward(self,X):
-
-    hL = nonlin(np.dot(X, self.W1))
-    o = nonlin(np.dot(hL,self.W2))
+    try:
+        hL = nonlin(np.dot(X,self.W1))
+        o = nonlin(np.dot(hL,self.W2))
+    except Exception as e:
+        print(e)
     return o
 
   def updateWeights(self, Genes):

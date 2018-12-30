@@ -635,10 +635,17 @@ BOOST_PYTHON_MODULE(pyenki)
 	;
 
 	class_<WorldWithTexturedGround, bases<World> >("WorldWithTexturedGround",
-		init<double, double, const std::string&, optional<const Color&> >(args("width", "height", "ppmFileName", "wallsColor"))
-	)
+		init<double, double, const std::string&, optional<const Color&> >(args("width", "height", "ppmFileName", "wallsColor")))
 		.def(init<double, const std::string&, optional<const Color&> >(args("r", "ppmFileName", "wallsColor")))
-	;
+		.def_readonly("width", &World::w)
+		.def_readonly("height", &World::h)
+		.def_readonly("iterations", &World::iterations)
+		.def("step", &World::step, step_overloads(args("mult", "dt", "physicsOversampling")))
+		.def("addObject", &World::addObject, with_custodian_and_ward<1,2>())
+		.def("removeObject", &World::removeObject)
+		.def("setRandomSeed", &World::setRandomSeed)
+		.def("run", run)
+	;;
 	//class_<Analytics>("AnalyticsModule")
 	class_<Analytics, bases<> , boost::noncopyable>("Analytics_Module")
 	.def(init<int>(args("MaxIterations")))

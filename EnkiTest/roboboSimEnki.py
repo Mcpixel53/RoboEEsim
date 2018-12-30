@@ -19,6 +19,7 @@ debugLogic = 0
 
 wW = conf.wWidth
 wH = conf.wHeight
+wR = conf.wRadio # for round worlds
 
 WIDTH = conf.environmentWidth
 HEIGHT = conf.environmentHeight
@@ -28,7 +29,9 @@ OBJ_SIZE = conf.objectiveSize
 OBJ_Speed = conf.objectiveSpeed
 
 robotList = []
-w = pyenki.World(wW,wH,pyenki.Color(0.5, 0.5, 0.5))
+#w = pyenki.World(wW,wH,pyenki.Color(0.5, 0.5, 0.5))
+w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/herba.png", pyenki.Color(0.9, 0.9, 0.9))
+
 experimentData = {"Iterations": 0, "Individuals": [], "IndividualFitness": [], "MeanFitness": [] , "TopFitness": []}
 exitFlag = 0
 
@@ -87,7 +90,7 @@ class MyRobobo(pyenki.EPuck):
 		self.pos = pos
 		# self.speed is reserved by the engine
 		self.Speed = conf.roboboSpeed
-		self.controlSystem = nn.Neural_Network() #Neural_Network
+		self.controlSystem = nn.sigNeural_Network() #Neural_Network
 		self.individual = gen.Individual(self.controlSystem.size)
 		self.distanceBuffer = MyQueue.MyQueue(conf.distanceBufferSize)
 		self.leftSpeed = self.Speed
@@ -158,8 +161,10 @@ class MyRobobo(pyenki.EPuck):
 		#print("Alpha: ", alpha)
 		#print("Beta: ", beta)
 		#print("Delta: ", delta)
-
-		output = self.controlSystem.forward(-delta/180)
+		output = self.controlSystem.forward([self.rightSpeed,self.leftSpeed,delta])
+		print (output)
+		(self.leftSpeed,self.rightSpeed) = output*100
+		#output = self.controlSystem.forward(-delta/180)
 		#(self.leftSpeed,self.rightSpeed) = self.controlSystem.forward((leftSpeed, rightSpeed, -delta/180))
 		#print ("Individual %i Neuronal Network Input: %1f, Output: %2f"%(self.individual.id,delta/180, output))
 		'''
