@@ -4,6 +4,7 @@ class Config:
     #World
     wHeight = 250
     wWidth = 350
+    wRadio = 150
     #[General]
     maturity = 20  # Funcion Matematica = 1
     maxLifetime = 200.0  # Funcion Matematica 10
@@ -38,8 +39,8 @@ class Config:
     maxWeight = 1.0
     minWeight = -1.0
 
-    inputSize = 1
-    outputSize = 1
+    inputSize = 3
+    outputSize = 2
 
     #Simulation
 
