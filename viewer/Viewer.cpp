@@ -109,8 +109,8 @@ namespace Enki
 			char * stringg = getenv("PWD");
 			m_sSettingsFile = stringg;
 			//m_sSettingsFile.append(":/demosettings.ini");
-			loadSettings();
-			qDebug("A VERERR OHHH %s",m_sSettingsFile);
+			//loadSettings();
+			//qDebug("A VERERR OHHH %s",m_sSettingsFile);
 
 			//_viewer->installEventFilter(this);
 			container->addWidget(_viewer);
@@ -118,8 +118,8 @@ namespace Enki
 			w->setLayout(container);
 			setCentralWidget(w);
 
-			charts[0] = new viewerChart(chart);
-			charts[1] = new viewerChart(_chart);
+			charts[0] = new viewerChart(chart,this);
+			charts[1] = new viewerChart(_chart,this);
 
 //			QGridLayout *chartLayout = new QGridLayout;
 
@@ -247,15 +247,21 @@ ViewerWindow::~ViewerWindow()
 		QChartView(chart, parent),
 		    m_isTouching(false)
 		{
+
 			QDesktopWidget widget;
 			QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen()); // or screenGeometry(), depending on your needs
 			setRenderHint(QPainter::Antialiasing);
+
+			QLabel *PlusIcon = new QLabel(this);
+			PlusIcon->setPixmap(QPixmap(":/widgets/plus.png"));
+
 			setRubberBand(QChartView::RectangleRubberBand);
 			setMinimumWidth(mainScreenSize.width()*0.3);
 			//Notify chart when zoom is on not to
 			QObject::connect(this, SIGNAL(zoomSignal(bool)),
 												chart, SLOT(zoomAction(bool)));
 			//emit zoomSignal(false);
+
 	}
 
 	bool viewerChart::viewportEvent(QEvent *event)
@@ -729,30 +735,30 @@ ViewerWindow::~ViewerWindow()
 	ViewerWidget::~ViewerWidget()
 	{
 		world->disconnectExternalObjectsUserData();
-		if (isValid())
-		{
-			deleteTexture(helpWidget);
-			deleteTexture(centerWidget);
-			deleteTexture(pauseWidget);
-			deleteTexture(resumeWidget);
-			deleteTexture(graphWidget);
-			deleteTexture(settingsWidget);
-			deleteTexture(selectionTexture);
-			glDeleteLists(worldList, 1);
-			deleteTexture (worldTexture);
-			deleteTexture (wallTexture);
-			if (world->hasGroundTexture())
-				glDeleteTextures(1, &worldGroundTexture);
-		}
-
-		ManagedObjectsMapIterator i(managedObjects);
-		while (i.hasNext())
-		{
-			i.next();
-			ViewerUserData* data = i.value();
-			data->cleanup(this);
-			delete data;
-		}
+	-               if (isValid())
+	-               {
+	-                       deleteTexture(helpWidget);
+	-                       deleteTexture(centerWidget);
+	-                       deleteTexture(pauseWidget);
+	-                       deleteTexture(resumeWidget);
+	-                       deleteTexture(graphWidget);
+	-                       deleteTexture(settingsWidget);
+	-                       deleteTexture(selectionTexture);
+	-                       glDeleteLists(worldList, 1);
+	-                       deleteTexture (worldTexture);
+	-                       deleteTexture (wallTexture);
+	-                       if (world->hasGroundTexture())
+	-                               glDeleteTextures(1, &worldGroundTexture);
+	-               }
+	-
+	-               ManagedObjectsMapIterator i(managedObjects);
+	-               while (i.hasNext())
+	-               {
+	-                       i.next();
+	-                       ViewerUserData* data = i.value();
+	-                       data->cleanup(this);
+	-                       delete data;
+	-               }
 	}
 
 	Settings* ViewerWidget::getSettings(){
@@ -1820,6 +1826,8 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 
 	void ViewerWidget::paintGL()
 	{
+		bool drawBar = false;
+		int Ifitness = 0;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		const double znear = 0.5;
 		if (trackingView && selectedObject){
@@ -1828,12 +1836,11 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		  Robot* robot = dynamic_cast<Robot*>(selectedObject);
 			Bola* ball = dynamic_cast<Bola*>(selectedObject);
 			if (robot && !ball){
-				int Ifitness = robot->getIntFitness();
-				fitnessBar.setValue(Ifitness);
-				if (fitnessBar.isEnabled())
+				Ifitness = robot->getIntFitness();
+					fitnessBar.setValue(Ifitness);
+					drawBar = fitnessBar.isEnabled();
 					//qDebug("fitnessEnabledinRobot");
-					renderText(5, 15, QString("Fitness robot, %0 %").arg(Ifitness));
-			  //else renderText(5, 15, QString("Not Fitness MAaan"));
+	  		//else renderText(5, 15, QString("Not Fitness MAaan"));
 				//printf("found robot fitness");
 			}camera.updateTracking(selectedObject->angle, QVector3D(selectedObject->pos.x, selectedObject->pos.y, selectedObject->getHeight()), znear);
 		}else
@@ -1846,6 +1853,9 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		int ww = (int) width()+0.5;
 		int offsetX = 80, offsetY = 15 ;
 		//printf("wea %d$%d ",ww,wh);
+		glColor3d(0,0,0);
+		if (drawBar)
+			renderText(((width()/2)-30), 15, QString("Fitness robot, %0 %").arg(Ifitness));
 		renderText(ww-offsetX,wh-offsetY, ("Iter:"+std::to_string((int) getWorld()->iterations)).c_str());
 		picking(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
 

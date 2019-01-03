@@ -431,7 +431,7 @@ struct Analytics: public QAnalytics
 };
 
 
-struct PythonViewer
+struct PythonViewer //static Class to call simulation
 {
 	//ViewerWindow vWindow;
 	/*Analytics anl;
@@ -448,7 +448,7 @@ struct PythonViewer
 };
 
 
-void runInViewer(World& world, Analytics& anl, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0, double wallsHeight = 10)
+void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0)
 {
 	int argc(1);
 	char* argv[1] = {(char*)"eRoboSim!"}; // FIXME: recovery sys.argv
@@ -470,6 +470,7 @@ void runInViewer(World& world, Analytics& anl, Vector camPos = Vector(0,0), doub
 	//viewer.show();
 	wViewer.grabGesture(Qt::PanGesture);
 	wViewer.grabGesture(Qt::PinchGesture);
+	viewer.centerCameraWorld();
 	wViewer.show();
 	viewer.pythonSavedState = PyEval_SaveThread();
 	app.exec();
@@ -484,7 +485,7 @@ void run(World& world, unsigned steps)
 }
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(step_overloads, step, 2, 3)
-BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 2, 7)
+BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 3, 7)
 
 BOOST_PYTHON_MODULE(pyenki)
 {
@@ -656,7 +657,7 @@ BOOST_PYTHON_MODULE(pyenki)
 	;
 
 	class_<PythonViewer, boost::noncopyable>("EnkiViewer",no_init)//<World&, optional<Analytics&>>)
-	.def("runSimulation", runInViewer,runInViewer_overloads(args("World", "Analytics", "WorldSize", "camAltitude", "camPitch", "Jaw", "wallsHeight")))
+	.def("runSimulation", runInViewer,runInViewer_overloads(args("World", "Analytics", "wallsHeight" , "WorldSize", "camAltitude", "camPitch", "Jaw")))
 	.staticmethod("runSimulation")
 	;
 }
