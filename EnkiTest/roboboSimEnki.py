@@ -30,7 +30,7 @@ OBJ_Speed = conf.objectiveSpeed
 
 robotList = []
 #w = pyenki.World(wW,wH,pyenki.Color(0.5, 0.5, 0.5))
-w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/herba.png", pyenki.Color(0.9, 0.9, 0.9))
+w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/area.png", pyenki.Color(0.9, 0.9, 0.9))
 
 experimentData = {"Iterations": 0, "Individuals": [], "IndividualFitness": [], "MeanFitness": [] , "TopFitness": []}
 exitFlag = 0
@@ -244,12 +244,10 @@ def updateLogic():
 			fitnessList.append(iterationMeanFitness)
 			maxFitnessList.append(iterationMaxFitness)
 			bestFittedList.append(bestFitted)
-			#print(currentIteration)
-			if (iterationMaxFitness>veryBest):
-				 veryBest=iterationMaxFitness
+
 
 			#Notify right before waiting
-			anl.notifyBestQuality(w.iterations, float(veryBest))
+			anl.notifyBestQuality(w.iterations, float(iterationMaxFitness))
 			anl.notifyAVGQuality(w.iterations, float(iterationMeanFitness))
 			while currentIteration >= w.iterations:
 				time.sleep(0.05)
@@ -266,12 +264,12 @@ def updateLogic():
 	#print("Experiment Dta: " , experimentData)
 	#print("UEAH",veryBest)
 
-ball = MyBall((wH/2,wW/2))
+ball = MyBall((0,0))
 objective = ball
 #w.steps = 100
 anl = Analise(conf.maxIterations)
 for i in range(conf.populationSize):
-	robobo = MyRobobo((random.randrange(0,wW,2),random.randrange(0,wH,2)),i)
+	robobo = MyRobobo((random.randrange(-wR/2,wR/2,2),random.randrange(-wR/2,wR/2,2)),i)
 	w.addObject(robobo)
 	robotList.append(robobo)
 
@@ -284,6 +282,7 @@ except Exception as e:
 	print ("Error: unable to start thread",str(e))
 
 	#//runSimulation(Enki::World, AnalyticsModule, camPos, camAltitude, camYaw, camPitch, wallsHeight)
-pyenki.EnkiViewer.runSimulation(w, anl, (wW/2,wH/2),wH*1.05, 0, Math.radians(-89.9), 10)
+#pyenki.EnkiViewer.runSimulation(w, anl, (wW/2,wH/2),wH*1.05, 0, Math.radians(-89.9), 10)
+pyenki.EnkiViewer.runSimulation(w, anl, 10)
 
 #experimentData['Iterations'] = w.iterations

@@ -96,7 +96,7 @@ collisionElasticity(0)
 			-maxSpeed,maxSpeed
 		);
 		// set non slipping, override speed
-		cmdSpeed = realSpeed*50;// (realLeftSpeed + realRightSpeed) * 0.5;
+		cmdSpeed = realSpeed*40;// (realLeftSpeed + realRightSpeed) * 0.5;
 		cmdAngSpeed = 0;
 		//printf("UEHA! %f %f SPEDA:  %f \n ",realSpeed, noiseFactor,speed);
 

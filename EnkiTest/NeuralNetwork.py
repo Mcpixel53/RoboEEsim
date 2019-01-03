@@ -67,7 +67,7 @@ class sigNeural_Network(object):
         hL = nonlin(np.dot(X,self.W1))
         o = nonlin(np.dot(hL,self.W2))
     except Exception as e:
-        print(e)
+        print("Error with the neural controller!",e)
     return o
 
   def updateWeights(self, Genes):
