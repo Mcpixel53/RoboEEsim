@@ -69,6 +69,8 @@ QtGui
 -
 
 /media/Cousas/git/enki/viewer/Viewer.h
+unordered_map
+-
 typeinfo
 -
 QtWidgets

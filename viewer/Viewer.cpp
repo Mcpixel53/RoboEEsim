@@ -75,10 +75,11 @@ namespace Enki
 	#define rad2deg (180 / M_PI)
 	#define clamp(x, low, high) ((x) < (low) ? (low) : ((x) > (high) ? (high) : (x)))
 
-	ViewerWindow::ViewerWindow(ViewerWidget* _viewer, eChart* chart, eChart* _chart)
+	ViewerWindow::ViewerWindow(ViewerWidget* _viewer,  QAnalytics* _anl)
 	    :viewer(_viewer),
+			anl(_anl),
 			m_pEdit(NULL),
-			analise(new QWidget)
+			chartLayout(new QWidget)
 	{
 			setWindowIcon(QIcon(":/appicon.png"));
 			QDesktopWidget widget;
@@ -118,9 +119,6 @@ namespace Enki
 			w->setLayout(container);
 			setCentralWidget(w);
 
-			charts[0] = new viewerChart(chart,this);
-			charts[1] = new viewerChart(_chart,this);
-
 //			QGridLayout *chartLayout = new QGridLayout;
 
 			//anlCharts->setLayout(chartLayout);
@@ -137,36 +135,27 @@ namespace Enki
 	{
 		QDockWidget *dock = new QDockWidget(this);
 		// *analise = new QWidget;
-		QVBoxLayout *VLayout = new QVBoxLayout();
-		QHBoxLayout *HLayout = new QHBoxLayout();
+		QGridLayout *GLayout = new QGridLayout();
+		// QHBoxLayout *HLayout = new QHBoxLayout();
+		charts[0] = new viewerChart(new eChart(), this);
+		GLayout->addWidget(charts[0],0,0);
+		// VLayout->setStretchFactor(charts[0],2);
+		// HLayout->addLayout(VLayout);
+		int i, t = i = 1;
+		for(i; i<activeGraphs;i++){
+			QPushButton *PlusIcon = new QPushButton(this);
+			PlusIcon->setIcon(QPixmap(":/widgets/plus.png"));
+			PlusIcon->setIconSize(QSize(300, 300));
+			PlusIcon->setFlat(true);
+//			PlusIcon->setAlignment(Qt::AlignCenter);
+			QObject::connect(PlusIcon, SIGNAL(clicked()),
+												this, SLOT(manageGraphs()));
 
-		//QVBoxLayout
-		//QDockWidget *dock = new QDockWidget(this);
-		QLabel *PlusIcon = new QLabel(this);
-		PlusIcon->setPixmap(QPixmap(":/widgets/plus.png"));
-		//QLabel *PlusIcon2 = new QLabel(this);
-		//PlusIcon2->setPixmap(QPixmap(":/widgets/plus.png"));
-		//Label *boatIcon2 = boatIcon.duplicate();
-		VLayout->addWidget(charts[0]);
-		VLayout->addWidget(charts[1]);
-		HLayout->addLayout(VLayout);
-		HLayout->setStretchFactor(VLayout,3);
-		HLayout->addStretch();
-
-		VLayout = new QVBoxLayout();
-		PlusIcon->setAlignment(Qt::AlignCenter);
-		//PlusIcon2->setAlignment(Qt::AlignCenter);
-		VLayout->addWidget(new viewerChart(new eChart));
-		VLayout->addStretch();
-		VLayout->addWidget(PlusIcon);
-		VLayout->setStretchFactor(VLayout->itemAt(0)->widget(),2);
-		VLayout->setStretchFactor(PlusIcon,1);
-		HLayout->addLayout(VLayout);
-		HLayout->setStretchFactor(VLayout,3);
-
-		analise->setLayout(HLayout);
-
-		dock->setWidget(analise);
+			charts[i] = PlusIcon;
+			GLayout->addWidget(charts[i],i%2,i/2);
+		}
+		chartLayout->setLayout(GLayout);
+		dock->setWidget(chartLayout);
 		dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 		addDockWidget(Qt::RightDockWidgetArea, dock);
 		hideDock = dock->toggleViewAction();
@@ -178,8 +167,8 @@ namespace Enki
 		 //				dock2, SLOT(setVisible(bool)));
 		// dockChart2->setWidget(anlChart2);
 		// addDockWidget(Qt::RightDockWidgetArea, dockChart2);
-
 	}
+
 	void ViewerWindow::loadSettings()
 	{
 	 QSettings settings(m_sSettingsFile, QSettings::NativeFormat);
@@ -189,13 +178,88 @@ namespace Enki
 
 	}
 
+
+
+	void ViewerWindow::getChoices(viewerChart *parent){
+
+			QDialog *widget = new QDialog(parent,Qt::Popup);;
+			QFormLayout *layout = new QFormLayout();
+
+			// QPushButton *buttonBox = new QPushButton(tr("&Find"));
+      // buttonBox->setDefault(true);
+			QDialogButtonBox *buttonBox = new QDialogButtonBox();
+			buttonBox->addButton(new QPushButton(tr("&Aceptar")), QDialogButtonBox::AcceptRole);
+			connect(buttonBox, SIGNAL(accepted()), widget, SLOT(accept()));
+
+			QComboBox *var1 = new QComboBox;
+			QStringList *temp = anl->getListVars();
+			var1->insertItems(0,*temp);
+			QComboBox *var2 = new QComboBox;
+			var2->insertItems(0,*temp);
+			delete(temp);
+			QComboBox *modificador = new QComboBox;
+			modificador->insertItems(0, {"","maior/es","menor/es","primeiro/a/s"});
+
+			QSpinBox *iterSpin = new QSpinBox;
+			iterSpin->setMaximum(100);
+			iterSpin->setSingleStep(1);
+
+			QSlider *calidadeSpin = new QSlider(Qt::Horizontal);
+			calidadeSpin->setRange(0, 2);
+			calidadeSpin->setSingleStep(1);
+			//slider->setPageStep(2 * 10);
+			calidadeSpin->setTickInterval(1);
+			calidadeSpin->setValue(1);
+			calidadeSpin->setTickPosition(QSlider::TicksRight);
+			QSpinBox * algo = new QSpinBox();
+			layout->addRow(new QLabel(tr("x:")),modificador);
+			layout->addRow(iterSpin, var1 );
+			layout->addRow(new QLabel(tr("y:")));
+			layout->addRow(var2);
+			layout->addRow(buttonBox);
+
+			layout->setRowWrapPolicy(QFormLayout::DontWrapRows);
+		  layout->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
+		  layout->setFormAlignment(Qt::AlignHCenter | Qt::AlignTop);
+
+			widget->setLayout(layout);
+			widget->setWindowFlags(Qt::Popup);
+			widget->setWindowTitle(tr("Selección de eixos"));
+			widget->show();
+			//->setWindowFlags(Qt::Popup|Qt::WindowStaysOnTopHint);
+			int result = widget->exec();
+			if(result == QDialog::Accepted){
+				int a [] = {var1->currentIndex(), iterSpin->value(), algo->value()};
+				parent->change(a);
+			}
+	}
+	QStringList*  QAnalytics::getListVars() {
+		QStringList *a = new QStringList();
+		//retrieve tracked variables
+		for( const auto& n : varList )
+			a->append(n.first.c_str());
+			return a;
+		}
 	void ViewerWindow::saveSettings()
 	{
 	 QSettings settings(m_sSettingsFile, QSettings::NativeFormat);
 	 QString sText = (m_pEdit) ? m_pEdit->text() : "";
 
 	}
-	void ViewerWindow::changeDock(){
+	void ViewerWindow::manageGraphs(){
+		QPushButton *push = qobject_cast<QPushButton*>( sender());
+		// qDebug("Manage Graphs debug: %d",analise->layout()->indexOf(push));
+		viewerChart *chart = new viewerChart(new eChart, this);
+		qDebug("%s",this->metaObject()->className());
+		chartLayout->layout()->replaceWidget(push, chart);
+		delete push;
+		getChoices(chart);
+		qDebug("HJELP MEJ!");
+		//QWidget* widget =
+		//connect(widget, SIGNAL(visibilityChanged(bool)),chart, SLOT(setVisible(bool)));
+		//analise->layout()->replaceWidget(chart, widget);
+		// connect(charts->, SIGNAL(visibilityChanged(bool)),
+		// 				dockSlot, SLOT(setVisible(bool)));
 			/*QDockWidget * dockSlot = qobject_cast<QDockWidget*>(sender());
 			QDockWidget * newDock = new QDockWidget;
 			newDock = dockSlot;
@@ -226,7 +290,7 @@ void ViewerWindow::manageSettings(QString what){
 		 else return;
 }
 void ViewerWindow::changeGraphLayout(QString arg){
-			qDebug("num layouts %d",analise->layout()->count());
+			qDebug("num layouts %d",chartLayout->layout()->count());
 }
 void ViewerWindow::hideGraph(){
 	//anlCharts->setVisible(anlCharts->isHidden());
@@ -243,7 +307,18 @@ ViewerWindow::~ViewerWindow()
 	//delete customerList;
 
 }
-	viewerChart::viewerChart(eChart *chart, QWidget *parent):
+
+	void viewerChart::change(int params [] = NULL){
+
+		Enki::ViewerWindow *parente = qobject_cast<Enki::ViewerWindow*>(parentWidget());
+
+		QDialog *dialog = qobject_cast<QDialog*>( sender());
+		if( params!=NULL)
+		qDebug("%d %d %d", params [0], params [1], params [2]);
+		else qDebug("change NULL");
+
+}
+	viewerChart::viewerChart( eChart *chart, QWidget *parent):
 		QChartView(chart, parent),
 		    m_isTouching(false)
 		{
@@ -251,16 +326,14 @@ ViewerWindow::~ViewerWindow()
 			QDesktopWidget widget;
 			QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen()); // or screenGeometry(), depending on your needs
 			setRenderHint(QPainter::Antialiasing);
-
-			QLabel *PlusIcon = new QLabel(this);
-			PlusIcon->setPixmap(QPixmap(":/widgets/plus.png"));
-
 			setRubberBand(QChartView::RectangleRubberBand);
-			setMinimumWidth(mainScreenSize.width()*0.3);
+
 			//Notify chart when zoom is on not to
 			QObject::connect(this, SIGNAL(zoomSignal(bool)),
 												chart, SLOT(zoomAction(bool)));
-			//emit zoomSignal(false);
+
+			setMinimumWidth(mainScreenSize.width()*0.3);
+						//emit zoomSignal(false);
 
 	}
 
@@ -733,33 +806,30 @@ ViewerWindow::~ViewerWindow()
 	}*/
 
 	ViewerWidget::~ViewerWidget()
-	{
-		world->disconnectExternalObjectsUserData();
-	-               if (isValid())
-	-               {
-	-                       deleteTexture(helpWidget);
-	-                       deleteTexture(centerWidget);
-	-                       deleteTexture(pauseWidget);
-	-                       deleteTexture(resumeWidget);
-	-                       deleteTexture(graphWidget);
-	-                       deleteTexture(settingsWidget);
-	-                       deleteTexture(selectionTexture);
-	-                       glDeleteLists(worldList, 1);
-	-                       deleteTexture (worldTexture);
-	-                       deleteTexture (wallTexture);
-	-                       if (world->hasGroundTexture())
-	-                               glDeleteTextures(1, &worldGroundTexture);
-	-               }
-	-
-	-               ManagedObjectsMapIterator i(managedObjects);
-	-               while (i.hasNext())
-	-               {
-	-                       i.next();
-	-                       ViewerUserData* data = i.value();
-	-                       data->cleanup(this);
-	-                       delete data;
-	-               }
-	}
+{
+	world->disconnectExternalObjectsUserData();
+	if (isValid()){
+		deleteTexture(helpWidget);
+		deleteTexture(centerWidget);
+		deleteTexture(pauseWidget);
+		deleteTexture(resumeWidget);
+		deleteTexture(graphWidget);
+		deleteTexture(settingsWidget);
+		deleteTexture(selectionTexture);
+		glDeleteLists(worldList, 1);
+		deleteTexture (worldTexture);
+		deleteTexture (wallTexture);
+		if (world->hasGroundTexture())
+				glDeleteTextures(1, &worldGroundTexture);
+		}
+	ManagedObjectsMapIterator i(managedObjects);
+	while (i.hasNext()){
+  		i.next();
+  		ViewerUserData* data = i.value();
+  		data->cleanup(this);
+  		delete data;
+			}
+}
 
 	Settings* ViewerWidget::getSettings(){
 			return settings;
@@ -2094,7 +2164,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 	void ViewerWidget::timerEvent(QTimerEvent * event)
 	{
 		if(!s_paused)
-			world->step(mult, double(timerPeriodMs)/1000., 1);
+			world->step(mult, double(timerPeriodMs)/1000., 3);
 		updateGL();
 	}
 

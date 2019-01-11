@@ -34,6 +34,7 @@
 #ifndef __ENKI_VIEWER_H
 #define __ENKI_VIEWER_H
 
+#include <unordered_map>
 #include <typeinfo>
 #include <QtWidgets>
 #include <QGLWidget>
@@ -297,7 +298,7 @@ namespace Enki
 	class Settings : public QDialog
 	{
 	    Q_OBJECT
-
+			int maxIterations = 10000;
 	public:
 	    Settings();
 
@@ -332,7 +333,7 @@ namespace Enki
 		Q_OBJECT
 
 		public:
-		    eChart(int maxIterations = 2500, QString title = "", QLineSeries* _series = new QLineSeries, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+		    eChart(int maxIterations = 10000, QString title = "", QLineSeries* _series = new QLineSeries, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
 		    virtual ~eChart();
 
 		public slots:
@@ -361,7 +362,7 @@ namespace Enki
 		Q_OBJECT
 
 	public:
-    viewerChart(eChart *chart, QWidget *parent = 0);
+    viewerChart( eChart *chart, QWidget *parent = nullptr);
 
 	protected:
 	    virtual bool viewportEvent(QEvent *event);
@@ -369,6 +370,9 @@ namespace Enki
 	    virtual void mouseMoveEvent(QMouseEvent *event);
 	    virtual void mouseReleaseEvent(QMouseEvent *event);
 	    virtual void keyPressEvent(QKeyEvent *event);
+
+	public slots:
+			void change(int params[]);
 
 	signals:
 			void zoomSignal(bool act);
@@ -384,14 +388,28 @@ namespace Enki
 		Q_OBJECT
 
 	public:
-		QAnalytics(){ internalLogic = 1;}
+		QAnalytics(int maxIt){ maxIt=maxIt; internalLogic = 1;}
+		// void  getVarList() {qDebug("size: %d; %2.2f ",varList->size(),varList->at(0));}
 
-		signals:
+
+	public slots:
+		QStringList*  getListVars();
+
+	protected:
+		// std::vector<double> * varList = NULL;
+		std::unordered_map <std::string, std::vector<double>* > varList;
+		template <typename T>
+		void registaer(std::string name, std::vector<T>* list)  {varList[name] = list;};
+		// void registaer(std::string name, std::vector<double> *list){varList = list;};
+		virtual void evController(){qDebug("EvController virtual loaded");};
+
+	signals:
 		void newTopQ(double iter, double quality);
 		void newAvgQ(double iter, double quality);
 
 	private:
 		int internalLogic;
+		int maxIt;
 	};
 
 
@@ -402,30 +420,35 @@ class ViewerWindow : public QMainWindow
 
 	public:
 //TODO specify mandatory charts in constructor
-	    ViewerWindow(ViewerWidget *_viewer, eChart* chart, eChart* _chart);
+	    ViewerWindow(ViewerWidget *_viewer, QAnalytics* anl);
 			~ViewerWindow();
 			ViewerWidget* getViewer();
 
 	public slots:
 			void hideGraph();
-			void changeDock();
 			void manageSettings(QString);
+			void manageGraphs();
+			QStringList * getVariables(){ return new QStringList("variables"); };
 
 	private:
 	    void createActions();
 	    void createStatusBar();
 	    void createDockWindows();
+			void getChoices(viewerChart *parent);
 			void changeGraphLayout(QString arg);
 			QAction * hideDock;
 			void loadSettings();
 			void saveSettings();
 			QString m_sSettingsFile;
 			QLineEdit *m_pEdit;
+			QStringList *variables;
 
 	protected:
 	    ViewerWidget *viewer;
-			QWidget *analise;
-			viewerChart  *charts[6];
+			QWidget *chartLayout;
+			QAnalytics *anl;
+			QWidget  *charts[6];  //TODO quitar
+			int activeGraphs = 5;
 			// QDockWidget *dockChart2;
 			/*viewerChart *anlChart1;
 			viewerChart *anlChart2;*/
