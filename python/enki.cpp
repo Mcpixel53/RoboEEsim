@@ -89,6 +89,66 @@ struct Vector_to_python_tuple
 		return incref(make_tuple(value.x, value.y).ptr());
 	}
 };
+// struct iterable_converter
+// {
+//   /// @note Registers converter from a python interable type to the
+//   ///       provided type.
+//   template <typename Container>
+//   iterable_converter&
+//   from_python()
+//   {
+//     boost::python::converter::registry::push_back(
+//       &iterable_converter::convertible,
+//       &iterable_converter::construct<Container>,
+//       boost::python::type_id<Container>());
+//
+//     // Support chaining.
+//     return *this;
+//   }
+
+  /// @brief Check if PyObject is iterable.
+  static void* convertible(PyObject* object)
+  {
+    return PyObject_GetIter(object) ? object : NULL;
+  }
+
+  /// @brief Convert iterable PyObject to C++ container type.
+  ///
+  /// Container Concept requirements:
+  ///
+  ///   * Container::value_type is CopyConstructable.
+  ///   * Container can be constructed and populated with two iterators.
+  ///     I.e. Container(begin, end)
+//   template <typename Container>
+//   static void construct(
+//     PyObject* object,
+//     boost::python::converter::rvalue_from_python_stage1_data* data)
+//   {
+//     namespace python = boost::python;
+//     // Object is a borrowed reference, so create a handle indicting it is
+//     // borrowed for proper reference counting.
+//     python::handle<> handle(python::borrowed(object));
+//
+//     // Obtain a handle to the memory block that the converter has allocated
+//     // for the C++ type.
+//     typedef python::converter::rvalue_from_python_storage<Container>
+//                                                                 storage_type;
+//     void* storage = reinterpret_cast<storage_type*>(data)->storage.bytes;
+//
+//     typedef python::stl_input_iterator<typename Container::value_type>
+//                                                                     iterator;
+//
+//     // Allocate the C++ type into the converter's memory block, and assign
+//     // its handle to the converter's convertible variable.  The C++
+//     // container is populated by passing the begin and end iterators of
+//     // the python object to the container's constructor.
+//     new (storage) Container(
+//       iterator(python::object(handle)), // begin
+//       iterator());                      // end
+//     data->convertible = storage;
+//   }
+// };
+
 struct Vector_from_python
 {
 	Vector_from_python()
@@ -401,21 +461,37 @@ struct EnkiViewer: public ViewerWidget
 };
 
 
+typedef std::vector<std::string> tvarList;
 
 struct Analytics: public QAnalytics
 {
 
 	//QSplineSeries *series;
 	//ViewerChart *chart;
-	//QValueAxis *axis;
-	int maxIt;
-	Analytics(int _itMax = 2500):
-		QAnalytics(),
-		maxIt(_itMax)
+	//std::vector<double> * lista = NULL;
+	Analytics(int _itMax = 5000):
+		QAnalytics(_itMax)
 		//*chart ( new Chart),
 	{
 		//series->append(0, 0);
 	}
+	// virtual void registaer(std::string name, std::string type){
+	// 	qDebug("SEH");
+	// }
+
+	std::vector<double> * getDoubleList(std::string name){
+		std::vector<double>* lista = new std::vector<double>();
+		registaer(name, lista);
+		return lista;
+		}
+
+	// void getVarList2(){
+	// 	qDebug("[");
+	// 		for(int i = 0; i < varList->size(); i++)
+	// 		qDebug("%3.4f ,",varList->at(i));
+	// 	qDebug("]");
+	//
+	// }
 
 //public:
  void addTopPoint(double iter, double quality){
@@ -427,6 +503,9 @@ struct Analytics: public QAnalytics
 		//Signal
 		emit newAvgQ(iter,quality);
 		//printf("adding POint!");
+	}
+	virtual void evolve(){
+			qDebug("evoolving");
 	}
 };
 
@@ -454,17 +533,9 @@ void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector c
 	char* argv[1] = {(char*)"eRoboSim!"}; // FIXME: recovery sys.argv
 	QApplication app(argc, argv);
 	EnkiViewer viewer(world, camPos, camAltitude, camYaw, camPitch, wallsHeight);
-	app.setWindowIcon(QIcon("./appicon.png"));
-	eChart topQChart(anl.maxIt,"TOP Quality over Iterations");
-	eChart indQChart(anl.maxIt,"AVG Quality over Iterations");
+	app.setWindowIcon(QIcon("appicon.png"));
 
-
-	QObject::connect(&anl, SIGNAL(newTopQ(double, double)),
-										&topQChart, SLOT(addPoint(double, double)) );
-	QObject::connect(&anl, SIGNAL(newAvgQ(double, double)),
-										&indQChart, SLOT(addPoint(double, double)) );
-
-	ViewerWindow wViewer(&viewer, &topQChart, &indQChart);
+	ViewerWindow wViewer(&viewer, &anl);
 	wViewer.setWindowTitle("eRoboSim!");
 	//viewer.setWindowTitle("PyEnki Viewer");
 	//viewer.show();
@@ -476,6 +547,7 @@ void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector c
 	app.exec();
 	if (viewer.pythonSavedState)
 		PyEval_RestoreThread(viewer.pythonSavedState);
+
 }
 
 void run(World& world, unsigned steps)
@@ -495,8 +567,19 @@ BOOST_PYTHON_MODULE(pyenki)
 	Vector_from_python();
 
 	// TODO: complete doc
+	// Register interable conversions.
 
+	// iterable_converter()
+	//     // Build-in type.
+	//     .from_python<std::vector<double> >()
+	//     // Each dimension needs to be convertable.
+	//     .from_python<std::vector<std::string> >()
+	//     .from_python<std::vector<std::vector<std::string> > >()
+	//     // User type.
+	//     .from_python<std::list<std::string> >()
+	//     ;
 	// Color and texture
+	class_<QString>("QString");
 
 	class_<Color>("Color",
 		"A color in RGBA",
@@ -646,12 +729,23 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def("removeObject", &World::removeObject)
 		.def("setRandomSeed", &World::setRandomSeed)
 		.def("run", run)
-	;;
+	;
+
+
+	class_<std::vector<double>>("vector_double")
+	   .def(vector_indexing_suite<std::vector<double>>())
+	;
 	//class_<Analytics>("AnalyticsModule")
 	class_<Analytics, bases<> , boost::noncopyable>("Analytics_Module")
-	.def(init<int>(args("MaxIterations")))
-	.def("notifyBestQuality", &Analytics::addTopPoint)//, with_custodian_and_ward<1,2>())
-	.def("notifyAVGQuality", &Analytics::addAVGPoint)//, with_custodian_and_ward<1,2>())
+	.def(init<int>(args("maxIt")))
+	// .def("notifyBestQuality", &Analytics::addTopPoint)//, with_custodian_and_ward<1,2>())
+	// .def("notifyAVGQuality", &Analytics::addAVGPoint)//, with_custodian_and_ward<1,2>())
+	// .def("varList", &Analytics::varList, return_value_policy<reference_existing_object>())
+	//return_internal_reference
+	.def("getDoubleList", &Analytics::getDoubleList, return_internal_reference<>())
+	// .def("evController", &Analytics::evController)
+	// .def("testList", &Analytics::getVarList)
+	// .def("testList2", &Analytics::getVarList2)
 
 	//.def(init<>())
 	;

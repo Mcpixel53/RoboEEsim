@@ -25,21 +25,113 @@ WIDTH = conf.environmentWidth
 HEIGHT = conf.environmentHeight
 maxFitness = np.sqrt(np.power(0 - WIDTH,2)+np.power(0-HEIGHT,2))
 
-OBJ_SIZE = conf.objectiveSize
-OBJ_Speed = conf.objectiveSpeed
+#OBJ_SIZE = conf.objectiveSize
+#OBJ_Speed = conf.objectiveSpeed
 
-robotList = []
 #w = pyenki.World(wW,wH,pyenki.Color(0.5, 0.5, 0.5))
 w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/area.png", pyenki.Color(0.9, 0.9, 0.9))
 
 experimentData = {"Iterations": 0, "Individuals": [], "IndividualFitness": [], "MeanFitness": [] , "TopFitness": []}
-exitFlag = 0
+
 
 
 class Analise(pyenki.Analytics_Module):
+
 	def __init__(self, maxIts):
 		super(Analise,self).__init__(maxIts)
-		self.integro = 8
+		self.integero = 8
+		self.individuals = []
+		self.maxFit =  self.getDoubleList("Max Fitness");
+		self.meanFitness = self.getDoubleList("Mean Fitness");
+		self.robotList = []
+		self.exitFlag = 0
+		self.varList = {}
+		#self.maxFitInd
+
+	def register(self,lep,lop):
+		print("debugging py",lop,type(lop[0]))
+		super(Analise,self).registaer(lep,lop)
+
+	def addRobot(self,robot):
+		self.robotList.append(robot)
+
+	def evController(self):
+		global w
+		print("initiated EvController")
+	#	experimentData['Size'] = conf.populationSize
+		veryBest = 0.0
+		running = True
+		#currentIteration = 0
+		#time.sleep(conf.startTime)
+		try:
+			currentIteration = w.iterations
+			#print(running,(w.iterations<conf.maxIterations))
+			while (running and currentIteration < conf.maxIterations):
+				iterationMeanFitness = 0
+				iterationMaxFitness = 0
+				bestFitted = None
+
+				if self.exitFlag:
+					running = False
+
+				for current in self.robotList:
+					current.setFitness()
+					#Guardar valores Individuales de los experimentos
+					#if (currentIteration % conf.eachIterationCollection == 0):
+					#experimentData['Individuals'].append(current.individual.genotype.chromosome[:])
+					#experimentData['IndividualFitness'].append(current.individual.genotype.fitness)
+
+					#Buscar el individuo mas apto
+					if current.individual.genotype.fitness > iterationMaxFitness:
+						iterationMaxFitness = current.individual.genotype.fitness
+						bestFitted = current
+
+					iterationMeanFitness += current.individual.genotype.fitness
+
+					current.individual.incrementAge()
+					current.individual.checkStatus()
+					if current.individual.age == 0:
+						current.changeWeights()
+					if current.individual.matingOperator.isMating:
+						checkMatings(self.robotList,current)
+
+				#Guardar valores Globales de los experimentos
+				#if (currentIteration % conf.eachIterationCollection == 0):
+				#print(iterationMeanFitness,len(self.robotList))
+				iterationMeanFitness = iterationMeanFitness/len(self.robotList)
+				self.meanFitness.append(iterationMeanFitness)
+				self.maxFit.append(iterationMaxFitness)
+				# if (currentIteration >= 20):
+				# 	if (currentIteration <=50):
+				# 		self.testList()
+				# 		print(self.meanFitness[0])
+				# 	elif (currentIteration <=80):
+				# 		self.testList2()
+				#bestFittedList.append(bestFitted)
+
+
+				#Notify right before waiting
+				while currentIteration >= w.iterations:
+					time.sleep(0.05)
+				currentIteration = w.iterations
+				#experimentData['Iterations'] = currentIteration
+
+		except Exception as e:
+			print(e)
+
+	#	experimentData['MeanFitness'] = fitnessList
+	#	experimentData['TopFitness'] = maxFitnessList
+		#gm.experimentDataToCSVs(conf.experimentName,experimentData)
+		self.exitFlag = True
+
+
+
+	def evolve(self):
+		try:
+		    logicThread = threading._start_new_thread(self.evController, () )
+		except Exception as e:
+			print ("Error: unable to start thread",str(e))
+
 
 class MyBall(pyenki.Bola):
 	#Radius = 2
@@ -53,6 +145,7 @@ class MyBall(pyenki.Bola):
 		self.dir = 1
 		self.neutralSpeed = conf.objectiveSpeed
 		print("New Ball At", self.pos)
+
 
 	def controlStep(self, dt):
 		num=random.choice([1.2,3]) # angle multiplier
@@ -78,7 +171,6 @@ class MyBall(pyenki.Bola):
 		if (debugBall):
 			print("debug speed:",self.speed,"angle: ",self.angle)
 
-			#self.pos = nextPos
 
 
 class MyRobobo(pyenki.EPuck):
@@ -162,7 +254,7 @@ class MyRobobo(pyenki.EPuck):
 		#print("Beta: ", beta)
 		#print("Delta: ", delta)
 		output = self.controlSystem.forward([self.rightSpeed,self.leftSpeed,delta])
-		print (output)
+		#print (output)
 		(self.leftSpeed,self.rightSpeed) = output*100
 		#output = self.controlSystem.forward(-delta/180)
 		#(self.leftSpeed,self.rightSpeed) = self.controlSystem.forward((leftSpeed, rightSpeed, -delta/180))
@@ -192,95 +284,19 @@ def checkMatings(pRobotList,pCurrent):
                 candidate.individual.mate(pCurrent.individual.genotype)
 
 
-
-def updateLogic():
-
-	global exitFlag, robotList, w
-
-	experimentData['Size'] = conf.populationSize
-	fitnessList = []
-	maxFitnessList = []
-	bestFittedList = []
-	veryBest = 0.0
-	running = True
-	#currentIteration = 0
-	#time.sleep(conf.startTime)
-	try:
-		currentIteration = w.iterations
-		#print(running,(w.iterations<conf.maxIterations))
-		while (running and currentIteration < conf.maxIterations):
-			iterationMeanFitness = 0
-			iterationMaxFitness = 0
-			bestFitted = None
-
-			if exitFlag:
-			    running = False
-
-			for current in robotList:
-				current.setFitness()
-				#Guardar valores Individuales de los experimentos
-				#if (currentIteration % conf.eachIterationCollection == 0):
-				experimentData['Individuals'].append(current.individual.genotype.chromosome[:])
-				experimentData['IndividualFitness'].append(current.individual.genotype.fitness)
-
-				#Buscar el individuo mas apto
-				if current.individual.genotype.fitness > iterationMaxFitness:
-				    iterationMaxFitness = current.individual.genotype.fitness
-				    bestFitted = current
-
-				iterationMeanFitness += current.individual.genotype.fitness
-
-				current.individual.incrementAge()
-				current.individual.checkStatus()
-				if current.individual.age == 0:
-				    current.changeWeights()
-				if current.individual.matingOperator.isMating:
-				    checkMatings(robotList,current)
-
-			#Guardar valores Globales de los experimentos
-			#if (currentIteration % conf.eachIterationCollection == 0):
-			#print(iterationMeanFitness,len(robotList))
-			iterationMeanFitness = iterationMeanFitness/len(robotList)
-			fitnessList.append(iterationMeanFitness)
-			maxFitnessList.append(iterationMaxFitness)
-			bestFittedList.append(bestFitted)
-
-
-			#Notify right before waiting
-			anl.notifyBestQuality(w.iterations, float(iterationMaxFitness))
-			anl.notifyAVGQuality(w.iterations, float(iterationMeanFitness))
-			while currentIteration >= w.iterations:
-				time.sleep(0.05)
-			currentIteration = w.iterations
-			experimentData['Iterations'] = currentIteration
-
-	except Exception as e:
-	    print(e)
-
-	experimentData['MeanFitness'] = fitnessList
-	experimentData['TopFitness'] = maxFitnessList
-	#gm.experimentDataToCSVs(conf.experimentName,experimentData)
-	exitFlag = True
-	#print("Experiment Dta: " , experimentData)
-	#print("UEAH",veryBest)
-
 ball = MyBall((0,0))
 objective = ball
 #w.steps = 100
 anl = Analise(conf.maxIterations)
+
 for i in range(conf.populationSize):
 	robobo = MyRobobo((random.randrange(-wR/2,wR/2,2),random.randrange(-wR/2,wR/2,2)),i)
 	w.addObject(robobo)
-	robotList.append(robobo)
+	anl.addRobot(robobo)
 
 w.addObject(ball)
 
-#if __name__ == '__main__':
-try:
-    logicThread = threading._start_new_thread( updateLogic, () )
-except Exception as e:
-	print ("Error: unable to start thread",str(e))
-
+anl.evolve()
 	#//runSimulation(Enki::World, AnalyticsModule, camPos, camAltitude, camYaw, camPitch, wallsHeight)
 #pyenki.EnkiViewer.runSimulation(w, anl, (wW/2,wH/2),wH*1.05, 0, Math.radians(-89.9), 10)
 pyenki.EnkiViewer.runSimulation(w, anl, 10)
