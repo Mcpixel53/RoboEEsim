@@ -1,0 +1,15 @@
+[ 41%] Built target enki
+[ 43%] Automatic moc and rcc for target enkiviewer
+[ 43%] Built target enkiviewer_automoc
+[ 45%] Building CXX object viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o
+viewer/CMakeFiles/enkiviewer.dir/build.make:62: recipe for target 'viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o' failed
+CMakeFiles/Makefile2:142: recipe for target 'viewer/CMakeFiles/enkiviewer.dir/all' failed
+Makefile:138: recipe for target 'all' failed
+[ 41%] Built target enki
+[ 43%] Automatic moc and rcc for target enkiviewer
+[ 43%] Built target enkiviewer_automoc
+Scanning dependencies of target enkiviewer
+[ 45%] Building CXX object viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o
+viewer/CMakeFiles/enkiviewer.dir/build.make:62: recipe for target 'viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o' failed
+CMakeFiles/Makefile2:142: recipe for target 'viewer/CMakeFiles/enkiviewer.dir/all' failed
+Makefile:138: recipe for target 'all' failed

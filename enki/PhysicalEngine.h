@@ -482,7 +482,7 @@ namespace Enki
 		//! Base for the Bluetooth connections between robots
 		BluetoothBase* bluetoothBase;
 		//number of iterations
-		float iterations;
+		int iterations;
 
 		float auxIt;
 

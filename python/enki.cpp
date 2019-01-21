@@ -468,7 +468,7 @@ struct Analytics: public QAnalytics
 
 	//QSplineSeries *series;
 	//ViewerChart *chart;
-	//std::vector<double> * lista = NULL;
+	QList<double> * listaa = NULL;
 	Analytics(int _itMax = 5000):
 		QAnalytics(_itMax)
 		//*chart ( new Chart),
@@ -479,12 +479,20 @@ struct Analytics: public QAnalytics
 	// 	qDebug("SEH");
 	// }
 
-	std::vector<double> * getDoubleList(std::string name){
+	std::vector<double> * getDoubleList(std::string name, std::string var){
 		std::vector<double>* lista = new std::vector<double>();
-		registaer(name, lista);
+		registaer(name, lista, var);
 		return lista;
 		}
 
+	QList<double> * getQList(std::string name){
+		QList<double>* lista = new QList<double>;
+		listaa = lista;
+		return lista;
+	}
+	void getVarList(){
+		qDebug("sizeListaa %d",listaa->size());
+	}
 	// void getVarList2(){
 	// 	qDebug("[");
 	// 		for(int i = 0; i < varList->size(); i++)
@@ -735,6 +743,7 @@ BOOST_PYTHON_MODULE(pyenki)
 	class_<std::vector<double>>("vector_double")
 	   .def(vector_indexing_suite<std::vector<double>>())
 	;
+
 	//class_<Analytics>("AnalyticsModule")
 	class_<Analytics, bases<> , boost::noncopyable>("Analytics_Module")
 	.def(init<int>(args("maxIt")))
@@ -743,8 +752,8 @@ BOOST_PYTHON_MODULE(pyenki)
 	// .def("varList", &Analytics::varList, return_value_policy<reference_existing_object>())
 	//return_internal_reference
 	.def("getDoubleList", &Analytics::getDoubleList, return_internal_reference<>())
-	// .def("evController", &Analytics::evController)
-	// .def("testList", &Analytics::getVarList)
+	.def("getQList", &Analytics::getQList,  return_internal_reference<>())// .def("evController", &Analytics::evController)
+	.def("testList", &Analytics::getVarList)
 	// .def("testList2", &Analytics::getVarList2)
 
 	//.def(init<>())

@@ -5,10 +5,11 @@ class Config:
     wHeight = 250
     wWidth = 350
     wRadio = 150
+
     #[General]
     maturity = 20  # Funcion Matematica = 1
     maxLifetime = 200.0  # Funcion Matematica 10
-
+    best = "Fitness"
     #Genes
     geneMax = 1.0
     geneMin = -1.0

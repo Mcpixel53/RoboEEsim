@@ -137,6 +137,7 @@ namespace Enki
 		// *analise = new QWidget;
 		QGridLayout *GLayout = new QGridLayout();
 		// QHBoxLayout *HLayout = new QHBoxLayout();
+		QWidget  *charts[chMAX];
 		charts[0] = new viewerChart(new eChart(), this);
 		GLayout->addWidget(charts[0],0,0);
 		// VLayout->setStretchFactor(charts[0],2);
@@ -178,11 +179,20 @@ namespace Enki
 
 	}
 
+	QStringList*  QAnalytics::getListVars() {
+		QStringList *a = new QStringList();
+		//retrieve tracked variables
+		for( const auto& n : varList )
+			a->append(n.first.c_str());
+			return a;
+		}
 
 
-	void ViewerWindow::getChoices(viewerChart *parent){
 
-			QDialog *widget = new QDialog(parent,Qt::Popup);;
+
+	void ViewerWindow::getChoices(viewerChart *vChart){
+
+			QDialog *widget = new QDialog(vChart,Qt::Popup);;
 			QFormLayout *layout = new QFormLayout();
 
 			// QPushButton *buttonBox = new QPushButton(tr("&Find"));
@@ -191,18 +201,18 @@ namespace Enki
 			buttonBox->addButton(new QPushButton(tr("&Aceptar")), QDialogButtonBox::AcceptRole);
 			connect(buttonBox, SIGNAL(accepted()), widget, SLOT(accept()));
 
-			QComboBox *var1 = new QComboBox;
+			QComboBox *yVars = new QComboBox;
 			QStringList *temp = anl->getListVars();
-			var1->insertItems(0,*temp);
-			QComboBox *var2 = new QComboBox;
-			var2->insertItems(0,*temp);
+			yVars->insertItems(0,*temp);
+			QComboBox *xVars = new QComboBox;
+			xVars->insertItem(0,"Iteracións");
 			delete(temp);
 			QComboBox *modificador = new QComboBox;
 			modificador->insertItems(0, {"","maior/es","menor/es","primeiro/a/s"});
 
-			QSpinBox *iterSpin = new QSpinBox;
-			iterSpin->setMaximum(100);
-			iterSpin->setSingleStep(1);
+			QSpinBox *t_gAmm = new QSpinBox;
+			t_gAmm->setMaximum(100);
+			t_gAmm->setSingleStep(1);
 
 			QSlider *calidadeSpin = new QSlider(Qt::Horizontal);
 			calidadeSpin->setRange(0, 2);
@@ -211,11 +221,11 @@ namespace Enki
 			calidadeSpin->setTickInterval(1);
 			calidadeSpin->setValue(1);
 			calidadeSpin->setTickPosition(QSlider::TicksRight);
-			QSpinBox * algo = new QSpinBox();
-			layout->addRow(new QLabel(tr("x:")),modificador);
-			layout->addRow(iterSpin, var1 );
-			layout->addRow(new QLabel(tr("y:")));
-			layout->addRow(var2);
+				// QSpinBox * t_gModif = new QSpinBox();
+			layout->addRow(new QLabel(tr("y:")),modificador);
+			layout->addRow(t_gAmm, yVars );
+			layout->addRow(new QLabel(tr("x:")));
+			layout->addRow(xVars);
 			layout->addRow(buttonBox);
 
 			layout->setRowWrapPolicy(QFormLayout::DontWrapRows);
@@ -226,37 +236,50 @@ namespace Enki
 			widget->setWindowFlags(Qt::Popup);
 			widget->setWindowTitle(tr("Selección de eixos"));
 			widget->show();
+			connect(vChart, SIGNAL(changeSignal()), this, SLOT(manageGraphs()));
 			//->setWindowFlags(Qt::Popup|Qt::WindowStaysOnTopHint);
 			int result = widget->exec();
 			if(result == QDialog::Accepted){
-				int a [] = {var1->currentIndex(), iterSpin->value(), algo->value()};
-				parent->change(a);
+				const std::string a[3] = {yVars->currentText().toStdString(), QString::number(t_gAmm->value()).toStdString(), modificador->currentText().toStdString()};
+				// qDebug(" %d  elemts first List?", anl->getVarList().count("Fitness"));
+				// qDebug("found and correct? %d - %d" ,anl->getListVar(a[0]) == anl->getVarList().at(a[0]),anl->getListVar(a[0])->size());
+				vChart->change(a, anl->getListVar(a[0]));
+				connect(viewer, SIGNAL(updateGraph(int)), vChart, SLOT(ecUpdate(int)));
+
 			}
 	}
-	QStringList*  QAnalytics::getListVars() {
-		QStringList *a = new QStringList();
-		//retrieve tracked variables
-		for( const auto& n : varList )
-			a->append(n.first.c_str());
-			return a;
-		}
+
+
+
+
 	void ViewerWindow::saveSettings()
 	{
 	 QSettings settings(m_sSettingsFile, QSettings::NativeFormat);
 	 QString sText = (m_pEdit) ? m_pEdit->text() : "";
 
 	}
+
+
+
 	void ViewerWindow::manageGraphs(){
+
+		QWidget *older;
 		QPushButton *push = qobject_cast<QPushButton*>( sender());
-		// qDebug("Manage Graphs debug: %d",analise->layout()->indexOf(push));
+
+		if(!push)
+				older = qobject_cast<viewerChart*>( sender());
+		else older = push;
+
 		viewerChart *chart = new viewerChart(new eChart, this);
-		qDebug("%s",this->metaObject()->className());
-		chartLayout->layout()->replaceWidget(push, chart);
-		delete push;
+		chartLayout->layout()->replaceWidget(older, chart);
+		delete older;
 		getChoices(chart);
-		qDebug("HJELP MEJ!");
+
+		// qDebug("Manage Graphs debug: %d",analise->layout()->indexOf(push));
+		// qDebug("%s",this->metaObject()->className());
+		// connect(widget, SIGNAL(visibilityChanged(bool)),chart, SLOT(setVisible(bool)));
+		// qDebug("HJELPER MEJ!");
 		//QWidget* widget =
-		//connect(widget, SIGNAL(visibilityChanged(bool)),chart, SLOT(setVisible(bool)));
 		//analise->layout()->replaceWidget(chart, widget);
 		// connect(charts->, SIGNAL(visibilityChanged(bool)),
 		// 				dockSlot, SLOT(setVisible(bool)));
@@ -289,13 +312,18 @@ void ViewerWindow::manageSettings(QString what){
 		 }
 		 else return;
 }
+
+
 void ViewerWindow::changeGraphLayout(QString arg){
 			qDebug("num layouts %d",chartLayout->layout()->count());
 }
+
+
 void ViewerWindow::hideGraph(){
 	//anlCharts->setVisible(anlCharts->isHidden());
 	hideDock->trigger();
 }
+
 
 ViewerWindow::~ViewerWindow()
 {
@@ -308,19 +336,40 @@ ViewerWindow::~ViewerWindow()
 
 }
 
-	void viewerChart::change(int params [] = NULL){
+	void viewerChart::change(const std::string params [], std::vector<double> * _lista){
 
-		Enki::ViewerWindow *parente = qobject_cast<Enki::ViewerWindow*>(parentWidget());
+		//Enki::ViewerWindow *parente = qobject_cast<Enki::ViewerWindow*>(parentWidget());
+		//for param[0] getVar
+		eChart *temp = chart;
+		setChart(new eChart(QString::fromStdString(params[2]+params[1]+params[0])));
+		if(temp!=chart) delete(temp);
+		else  qDebug("son iguais");
+		if (!_lista) {qDebug("Error retrieving list!"); return;}
+		int i = 1, k=i;// k = list->mult
+		//Notify chart when zoom is on not to
+		QObject::connect(this, SIGNAL(zoomSignal(bool)),
+											chart, SLOT(zoomAction(bool)));
+		for (auto const x : *_lista) // Iterate list and fill graph by increments of k
+		{
+	    chart->addPoint(i, x);
+			i+=k;
+		}
+		lista=_lista;
 
-		QDialog *dialog = qobject_cast<QDialog*>( sender());
-		if( params!=NULL)
-		qDebug("%d %d %d", params [0], params [1], params [2]);
-		else qDebug("change NULL");
+		//QDialog *dialog = qobject_cast<QDialog*>( sender());
+		// if( params!=NULL)
+		// qDebug("%d %d %d", params [0], params [1], params [2]);
+		// else qDebug("change NULL");
 
 }
-	viewerChart::viewerChart( eChart *chart, QWidget *parent):
-		QChartView(chart, parent),
-		    m_isTouching(false)
+	void viewerChart::ecUpdate(int it){
+		if(lista) chart->addPoint(it, lista->back());
+	}
+
+	viewerChart::viewerChart( eChart *_chart, QWidget *parent):
+		QChartView(_chart, parent),
+		chart(_chart),
+    m_isTouching(false)
 		{
 
 			QDesktopWidget widget;
@@ -330,7 +379,7 @@ ViewerWindow::~ViewerWindow()
 
 			//Notify chart when zoom is on not to
 			QObject::connect(this, SIGNAL(zoomSignal(bool)),
-												chart, SLOT(zoomAction(bool)));
+												_chart, SLOT(zoomAction(bool)));
 
 			setMinimumWidth(mainScreenSize.width()*0.3);
 						//emit zoomSignal(false);
@@ -395,38 +444,41 @@ ViewerWindow::~ViewerWindow()
 	    switch(event->key()) {
 	    case Qt::Key_Plus:
 					emit zoomSignal(1);
-					chart()->zoomIn();
+					chart->zoomIn();
 	        break;
 	    case Qt::Key_Minus:
 					emit zoomSignal(1);
-					chart()->zoomOut();
+					chart->zoomOut();
 	        break;
 	//![1]
 	    case Qt::Key_Left:
 					emit zoomSignal(1);
-					chart()->scroll(-10, 0);
+					chart->scroll(-10, 0);
 	        break;
-	     case Qt::Key_R:
+	     case Qt::Key_Z:
 		 		  emit zoomSignal(0);
+					break;
+			case Qt::Key_R:
+		 		  emit changeSignal();
 					break;
 			 case Qt::Key_Right:
 					emit zoomSignal(1);
-					chart()->scroll(10, 0);
+					chart->scroll(10, 0);
 	        break;
 	    case Qt::Key_Up:
 					emit zoomSignal(1);
-					chart()->scroll(0, 10);
+					chart->scroll(0, 10);
 	        break;
 	    case Qt::Key_Down:
 					emit zoomSignal(1);
-					chart()->scroll(0, -10);
+					chart->scroll(0, -10);
 	        break;
 	    default:
 	        QGraphicsView::keyPressEvent(event);
 	        break;
 	    }
 	}
-	eChart::eChart(int maxIterations, QString title, QLineSeries* _series, QGraphicsItem *parent, Qt::WindowFlags wFlags  ):
+	eChart::eChart(QString title, QLineSeries* _series, int maxIterations, QGraphicsItem *parent, Qt::WindowFlags wFlags  ):
 		QChart(QChart::ChartTypeCartesian,parent,wFlags),
 		m_series(_series),
     m_axis(new QValueAxis),
@@ -442,7 +494,8 @@ ViewerWindow::~ViewerWindow()
     //setAnimationOptions(QChart::SeriesAnimations); // En linux-Q5.11 mellor sin elas..
 		grabGesture(Qt::PanGesture);
     grabGesture(Qt::PinchGesture);
-
+		//TODO Qt::GlobalColos enum
+		//Qt::PenStyle enum
 		QPen trace(Qt::red);
     trace.setWidth(2);
     m_series->setPen(trace);
@@ -458,6 +511,7 @@ ViewerWindow::~ViewerWindow()
     axisY()->setRange(0, 0.6);
 	  //m_series->append(1, 4.5);
 	}
+
 	void eChart::zoomAction(bool act){
 		m_isZooming = act;
 		if(!act){
@@ -468,9 +522,9 @@ ViewerWindow::~ViewerWindow()
 			axisY()->setRange(0,m_y+0.1);
 		}
 }
-	eChart::~eChart()
-	{
-	}
+	// eChart::~eChart()
+	// {
+	// }
 	bool eChart::sceneEvent(QEvent *event)
 	{
 	    if (event->type() == QEvent::Gesture)
@@ -698,7 +752,7 @@ ViewerWindow::~ViewerWindow()
 				QCheckBox *opcionFollow = new QCheckBox(tr("Seguir zoom"));
 				QCheckBox *opcionTrack = new QCheckBox(tr("Amosar individuos"));
 				QCheckBox *opcionZeta = new QCheckBox(tr("Grafos dinámicos"));
-				QCheckBox *opcionOptativa = new QCheckBox(tr("Algo máis"));
+				QCheckBox *opcionOptativa = new QCheckBox(tr("t_gModif máis"));
 				QCheckBox *opcionOptativa2 = new QCheckBox(tr("Marcar"));
 				QSpinBox *spinGraph = new QSpinBox;
 				spinGraph->setMaximum(6);
@@ -2163,8 +2217,15 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 
 	void ViewerWidget::timerEvent(QTimerEvent * event)
 	{
-		if(!s_paused)
+		if(!s_paused){
 			world->step(mult, double(timerPeriodMs)/1000., 3);
+			//Step for evolutionary
+			//emit anlStep(); //anl->step
+			//Updating data in graphs.
+			world->iterations++;
+			//update graphs
+			emit updateGraph(world->iterations);
+			}
 		updateGL();
 	}
 
