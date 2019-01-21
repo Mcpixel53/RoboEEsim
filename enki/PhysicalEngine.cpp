@@ -1165,10 +1165,6 @@ namespace Enki
 		if (bluetoothBase)
 			bluetoothBase->step(dt, this);
 
-	/*auxIt += (dt/0.03);
-	if (auxIt>=iterations+1)*/
-		iterations+= 1*mult;// (int) auxIt ;
-		//printf("iterations %d : %f",iterations, auxIt);
 	}
 
 	void World::addObject(PhysicalObject *o)

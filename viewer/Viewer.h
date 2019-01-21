@@ -230,6 +230,7 @@ namespace Enki
 
 	signals:
 		void hideGraph();
+		void updateGraph(int iters);
 		//void sliderMove(int ammount);
 	public slots:
 		void setCamera(const QPointF& pos, double altitude, double yaw, double pitch);
@@ -333,8 +334,8 @@ namespace Enki
 		Q_OBJECT
 
 		public:
-		    eChart(int maxIterations = 10000, QString title = "", QLineSeries* _series = new QLineSeries, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
-		    virtual ~eChart();
+		    eChart(QString title = "", QLineSeries* _series = new QLineSeries, int maxIterations = 10000, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+		    //virtual ~eChart();
 
 		public slots:
 				void addPoint(double it, double quality);
@@ -356,31 +357,59 @@ namespace Enki
 				bool m_isZooming;
 
 };
-
+//using namespace std;
 // Widget grafo
 	class viewerChart: public QChartView{
 		Q_OBJECT
 
 	public:
     viewerChart( eChart *chart, QWidget *parent = nullptr);
+		void setChart( eChart *_chart){chart = _chart; QChartView::setChart(_chart); }
 
+				//eChart* chart() {return chart;};
 	protected:
-	    virtual bool viewportEvent(QEvent *event);
+			std::vector<double>* lista;
+			virtual bool viewportEvent(QEvent *event);
 	    virtual void mousePressEvent(QMouseEvent *event);
 	    virtual void mouseMoveEvent(QMouseEvent *event);
 	    virtual void mouseReleaseEvent(QMouseEvent *event);
 	    virtual void keyPressEvent(QKeyEvent *event);
 
 	public slots:
-			void change(int params[]);
+			void change(const std::string params[], std::vector<double>* lista);
+			void ecUpdate(int it);
 
 	signals:
 			void zoomSignal(bool act);
+			void changeSignal();
 
 	private:
 	    bool m_isTouching;
-
+			eChart * chart;
 	};
+
+
+	/*Value RetrieveValue(std::string key)
+	{
+	     //get value
+	      std::string value = get_value(key, etc);
+	      return { value };
+	}
+
+	struct Value
+	{
+	    std::string _value;
+
+	    template<typename T>
+	    operator T() const   //implicitly convert into T
+	    {
+	       std::stringstream ss(_value);
+	       T convertedValue;
+	       if ( ss >> convertedValue ) return convertedValue;
+	       else throw std::runtime_error("conversion failed");
+	    }
+	}
+*/
 
 	/////// Analytics_Module
 
@@ -389,17 +418,18 @@ namespace Enki
 
 	public:
 		QAnalytics(int maxIt){ maxIt=maxIt; internalLogic = 1;}
+		std::unordered_map <std::string, std::vector<double>* > getVarList() {return varList;}
 		// void  getVarList() {qDebug("size: %d; %2.2f ",varList->size(),varList->at(0));}
 
 
 	public slots:
 		QStringList*  getListVars();
-
+		std::vector<double>*  getListVar(const std::string& name ) { return (varList.count(name.c_str())==0)?NULL:varList.at(name.c_str());}//qDebug("Retrieving ''%s'' %d",name.c_str(),varList.at(name.c_str())->size());
 	protected:
 		// std::vector<double> * varList = NULL;
 		std::unordered_map <std::string, std::vector<double>* > varList;
-		template <typename T>
-		void registaer(std::string name, std::vector<T>* list)  {varList[name] = list;};
+	//	template <typename T>
+		void registaer(std::string name, std::vector<double>* list)  {varList[name] = list;};
 		// void registaer(std::string name, std::vector<double> *list){varList = list;};
 		virtual void evController(){qDebug("EvController virtual loaded");};
 
@@ -442,12 +472,12 @@ class ViewerWindow : public QMainWindow
 			QString m_sSettingsFile;
 			QLineEdit *m_pEdit;
 			QStringList *variables;
-
+			const chMAX = 6;
 	protected:
 	    ViewerWidget *viewer;
 			QWidget *chartLayout;
 			QAnalytics *anl;
-			QWidget  *charts[6];  //TODO quitar
+			// QWidget  *charts[6];  //TODO quitar
 			int activeGraphs = 5;
 			// QDockWidget *dockChart2;
 			/*viewerChart *anlChart1;

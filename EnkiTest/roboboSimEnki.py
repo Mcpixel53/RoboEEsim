@@ -29,7 +29,7 @@ maxFitness = np.sqrt(np.power(0 - WIDTH,2)+np.power(0-HEIGHT,2))
 #OBJ_Speed = conf.objectiveSpeed
 
 #w = pyenki.World(wW,wH,pyenki.Color(0.5, 0.5, 0.5))
-w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/area.png", pyenki.Color(0.9, 0.9, 0.9))
+w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/herba.png", pyenki.Color(0.9, 0.9, 0.9))
 
 experimentData = {"Iterations": 0, "Individuals": [], "IndividualFitness": [], "MeanFitness": [] , "TopFitness": []}
 
@@ -40,9 +40,9 @@ class Analise(pyenki.Analytics_Module):
 	def __init__(self, maxIts):
 		super(Analise,self).__init__(maxIts)
 		self.integero = 8
-		self.individuals = []
+		self.Individuals = []
 		self.maxFit =  self.getDoubleList("Max Fitness");
-		self.meanFitness = self.getDoubleList("Mean Fitness");
+		self.meanFitness = self.getDoubleList("Fitness");
 		self.robotList = []
 		self.exitFlag = 0
 		self.varList = {}
@@ -54,6 +54,7 @@ class Analise(pyenki.Analytics_Module):
 
 	def addRobot(self,robot):
 		self.robotList.append(robot)
+		self.FitInd[robot.id].append(getDoubleList(robot.id,'-Fitness'))
 
 	def evController(self):
 		global w
@@ -78,7 +79,7 @@ class Analise(pyenki.Analytics_Module):
 					current.setFitness()
 					#Guardar valores Individuales de los experimentos
 					#if (currentIteration % conf.eachIterationCollection == 0):
-					#experimentData['Individuals'].append(current.individual.genotype.chromosome[:])
+					self.Individuals.append(current.individual.genotype.chromosome[:])
 					#experimentData['IndividualFitness'].append(current.individual.genotype.fitness)
 
 					#Buscar el individuo mas apto
@@ -127,6 +128,7 @@ class Analise(pyenki.Analytics_Module):
 
 
 	def evolve(self):
+		print("Evolving Step!")
 		try:
 		    logicThread = threading._start_new_thread(self.evController, () )
 		except Exception as e:
@@ -254,8 +256,8 @@ class MyRobobo(pyenki.EPuck):
 		#print("Beta: ", beta)
 		#print("Delta: ", delta)
 		output = self.controlSystem.forward([self.rightSpeed,self.leftSpeed,delta])
-		#print (output)
 		(self.leftSpeed,self.rightSpeed) = output*100
+		#print (self.leftSpeed,self.rightSpeed)
 		#output = self.controlSystem.forward(-delta/180)
 		#(self.leftSpeed,self.rightSpeed) = self.controlSystem.forward((leftSpeed, rightSpeed, -delta/180))
 		#print ("Individual %i Neuronal Network Input: %1f, Output: %2f"%(self.individual.id,delta/180, output))
