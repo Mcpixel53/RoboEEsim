@@ -463,7 +463,7 @@ struct EnkiViewer: public ViewerWidget
 
 typedef std::vector<std::string> tvarList;
 
-struct Analytics: public QAnalytics
+struct Analytics: QAnalytics, wrapper<QAnalytics>
 {
 
 	//QSplineSeries *series;
@@ -478,6 +478,7 @@ struct Analytics: public QAnalytics
 	// virtual void registaer(std::string name, std::string type){
 	// 	qDebug("SEH");
 	// }
+
 
 	std::vector<double> * getDoubleList(std::string name, std::string var){
 		std::vector<double>* lista = new std::vector<double>();
@@ -501,19 +502,10 @@ struct Analytics: public QAnalytics
 	//
 	// }
 
-//public:
- void addTopPoint(double iter, double quality){
-		//Signal
-		emit newTopQ(iter,quality);
-		//printf("adding POint!");
-	}
-	void addAVGPoint(double iter, double quality){
-		//Signal
-		emit newAvgQ(iter,quality);
-		//printf("adding POint!");
-	}
 	virtual void evolve(){
-			qDebug("evoolving");
+		if (override evolve = this->get_override("evolve"))
+			evolve();
+			QAnalytics::evolve();
 	}
 };
 
@@ -754,7 +746,7 @@ BOOST_PYTHON_MODULE(pyenki)
 	.def("getDoubleList", &Analytics::getDoubleList, return_internal_reference<>())
 	.def("getQList", &Analytics::getQList,  return_internal_reference<>())// .def("evController", &Analytics::evController)
 	.def("testList", &Analytics::getVarList)
-	// .def("testList2", &Analytics::getVarList2)
+	.def("evolve", &Analytics::evolve)
 
 	//.def(init<>())
 	;

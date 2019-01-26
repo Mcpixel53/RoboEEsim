@@ -77,6 +77,7 @@ namespace Enki
 
 	ViewerWindow::ViewerWindow(ViewerWidget* _viewer,  QAnalytics* _anl)
 	    :viewer(_viewer),
+			chMAX(6),
 			anl(_anl),
 			m_pEdit(NULL),
 			chartLayout(new QWidget)
@@ -104,6 +105,9 @@ namespace Enki
 	    slider->setTickPosition(QSlider::TicksRight);
 			connect(slider, SIGNAL(valueChanged(int)),
 			              _viewer, SLOT(speedSim(int)));
+			connect(_viewer, SIGNAL(anlStep()),
+		              	_anl, SLOT(evolve()));
+
 			//connect(_viewer, SIGNAL(valueChanged(int)),slider, SLOT(setValue(int)));
 
 			m_sSettingsFile =  "/media/Cousas/git/enki/EnkiTest/demosettings.ini";
@@ -138,7 +142,7 @@ namespace Enki
 		QGridLayout *GLayout = new QGridLayout();
 		// QHBoxLayout *HLayout = new QHBoxLayout();
 		QWidget  *charts[chMAX];
-		charts[0] = new viewerChart(new eChart(), this);
+		charts[0] = new viewerChart(new eChart("",1), this);
 		GLayout->addWidget(charts[0],0,0);
 		// VLayout->setStretchFactor(charts[0],2);
 		// HLayout->addLayout(VLayout);
@@ -208,7 +212,7 @@ namespace Enki
 			xVars->insertItem(0,"Iteracións");
 			delete(temp);
 			QComboBox *modificador = new QComboBox;
-			modificador->insertItems(0, {"","maior/es","menor/es","primeiro/a/s"});
+			modificador->insertItems(0, {"unico", "todos", "maior/es", "menor/es", "mellor/es", "peor/es"});
 
 			QSpinBox *t_gAmm = new QSpinBox;
 			t_gAmm->setMaximum(100);
@@ -238,6 +242,7 @@ namespace Enki
 			widget->show();
 			connect(vChart, SIGNAL(changeSignal()), this, SLOT(manageGraphs()));
 			//->setWindowFlags(Qt::Popup|Qt::WindowStaysOnTopHint);
+			// anl->checkVarList();
 			int result = widget->exec();
 			if(result == QDialog::Accepted){
 				const std::string a[3] = {yVars->currentText().toStdString(), QString::number(t_gAmm->value()).toStdString(), modificador->currentText().toStdString()};
@@ -270,32 +275,11 @@ namespace Enki
 				older = qobject_cast<viewerChart*>( sender());
 		else older = push;
 
-		viewerChart *chart = new viewerChart(new eChart, this);
+		viewerChart *chart = new viewerChart(new eChart("",1), this);
 		chartLayout->layout()->replaceWidget(older, chart);
 		delete older;
 		getChoices(chart);
 
-		// qDebug("Manage Graphs debug: %d",analise->layout()->indexOf(push));
-		// qDebug("%s",this->metaObject()->className());
-		// connect(widget, SIGNAL(visibilityChanged(bool)),chart, SLOT(setVisible(bool)));
-		// qDebug("HJELPER MEJ!");
-		//QWidget* widget =
-		//analise->layout()->replaceWidget(chart, widget);
-		// connect(charts->, SIGNAL(visibilityChanged(bool)),
-		// 				dockSlot, SLOT(setVisible(bool)));
-			/*QDockWidget * dockSlot = qobject_cast<QDockWidget*>(sender());
-			QDockWidget * newDock = new QDockWidget;
-			newDock = dockSlot;
-			if (dockSlot == dockChart1){
-				dockChart1 = new QDockWidget;
-				dockChart1->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-				hideDock = dockChart1->toggleViewAction();
-				connect(dockChart1, SIGNAL(visibilityChanged(bool)),
-								dockSlot, SLOT(setVisible(bool)));
-				dockChart1->setWidget(new QPushButton(QIcon(":/plus.png"),""));
-			}else{
-				qDebug("another brick in da wall");
-			}*/
 
 	}
 
@@ -335,37 +319,94 @@ ViewerWindow::~ViewerWindow()
 	//delete customerList;
 
 }
+	std::vector<double> retOrdRoboStats(std::vector<roboStat>  wholeLst, int n, const std::string mod){
+		std::vector<double>  tempIn;
+		//std::vector<roboStat>::iterator robo;
+		if(!mod.compare("menor/es")){
+			for (auto robo: wholeLst)
+				tempIn.push_back(n==-1?robo.vect->back():robo.vect->at(n));
+			std::sort(tempIn.begin(), tempIn.end(), std::less<double>());
+			return tempIn;
+			}
+		else if (!mod.compare("maior/es")){
+			for (auto robo: wholeLst)
+				tempIn.push_back(n==-1?robo.vect->back():robo.vect->at(n));
+			std::sort(tempIn.begin(), tempIn.end(),std::greater<double>());
+			return tempIn;
+			}
+		// else if (!mod.compare("peor/es")){
+		// 	qDebug("SEN IMPLEMENTAR!");
+		// 	return *wholeLst[0].vect;
+		// 	}
+		// else if (!mod.compare("mellor/es")){
+		// 	qDebug("SEN IMPLEMENTAR!");
+		// 	return *wholeLst[0].vect;
+		// 	}
 
-	void viewerChart::change(const std::string params [], std::vector<double> * _lista){
+}
+
+	void viewerChart::change(const std::string params [], std::vector<roboStat>*  _wholeLista){
+		//params[0] = Var to be shown, params [1] = ammount modifier, params [2] = manner modifier
+		// qDebug("%d %d %d", params [0], params [1], params [2]);
 
 		//Enki::ViewerWindow *parente = qobject_cast<Enki::ViewerWindow*>(parentWidget());
 		//for param[0] getVar
 		eChart *temp = chart;
-		setChart(new eChart(QString::fromStdString(params[2]+params[1]+params[0])));
-		if(temp!=chart) delete(temp);
-		else  qDebug("son iguais");
-		if (!_lista) {qDebug("Error retrieving list!"); return;}
+		cant = atoi(params[1].c_str());
+		mod = params[2];
+		int nRob;
+		if (!mod.compare("unico")) nRob =1 ;
+		else if (!mod.compare("todos")) nRob =_wholeLista->size() ;
+		else  nRob= cant;
+
+		setChart(new eChart(QString::fromStdString(mod+" "+params[1]+" "+params[0]), nRob));
+		// if(temp!=chart) delete(temp);
+		// else  qDebug("son iguais!");
+
+		if (_wholeLista==NULL) {qDebug("Error retrieving list!"); return;}
 		int i = 1, k=i;// k = list->mult
 		//Notify chart when zoom is on not to
 		QObject::connect(this, SIGNAL(zoomSignal(bool)),
 											chart, SLOT(zoomAction(bool)));
-		for (auto const x : *_lista) // Iterate list and fill graph by increments of k
-		{
-	    chart->addPoint(i, x);
-			i+=k;
+		lista = _wholeLista;
+		// std::vector<roboStat>::iterator it;
+
+		for (int n=0; n<_wholeLista->at(0).vect->size(); n++){
+			// qDebug("adding n %d & %f",n,_wholeLista->at(cant).vect->at(n));
+			if (!mod.compare("unico"))
+				chart->addPoint(i, _wholeLista->at(cant).vect->at(n)); // Iterate list and fill graph by increments of k{
+			else if (!mod.compare("todos")){
+				for (auto it : *_wholeLista)
+					chart->addPoint(i, it.vect->at(n));
+			}
+			else{
+				std::vector<double> vecTemp = retOrdRoboStats(*_wholeLista, n, mod);// Iterate doubleList and order each time with specific modifier
+				for (int y =0; y<cant; y++)
+					chart->addPoint(i, vecTemp[y]);
+			}
+			i+=k; //keep track of sampling frequency
 		}
-		lista=_lista;
+}// update at world iteration i
 
-		//QDialog *dialog = qobject_cast<QDialog*>( sender());
-		// if( params!=NULL)
-		// qDebug("%d %d %d", params [0], params [1], params [2]);
-		// else qDebug("change NULL");
 
+void viewerChart::ecUpdate(int i){
+
+	// qDebug("back hehe %d (%d) %d	%s",cant,lista==NULL,lista->size(),lista->at(0).id);
+		if(lista){
+			if (!mod.compare("unico")){
+				chart->addPoint(i, lista->at(cant).vect->back()); // Iterate list and fill graph by increments of k{
+				}
+			else if (!mod.compare("todos")){
+				for (auto robo : *lista)
+					chart->addPoint(i, robo.vect->back());
+			}
+			else{
+				std::vector<double> vecTemp = retOrdRoboStats(*lista, -1, mod);// sort and return the back of the list (-1 option) by modifier
+				for (auto y =0; y<cant; y++)
+					chart->addPoint(i, vecTemp[y]);
+			}
+		}
 }
-	void viewerChart::ecUpdate(int it){
-		if(lista) chart->addPoint(it, lista->back());
-	}
-
 	viewerChart::viewerChart( eChart *_chart, QWidget *parent):
 		QChartView(_chart, parent),
 		chart(_chart),
@@ -478,38 +519,63 @@ ViewerWindow::~ViewerWindow()
 	        break;
 	    }
 	}
-	eChart::eChart(QString title, QLineSeries* _series, int maxIterations, QGraphicsItem *parent, Qt::WindowFlags wFlags  ):
+	eChart::eChart(QString title, int nRobo, int maxIterations, QGraphicsItem *parent, Qt::WindowFlags wFlags):
 		QChart(QChart::ChartTypeCartesian,parent,wFlags),
-		m_series(_series),
-    m_axis(new QValueAxis),
     m_step(0),
+		m_axis(new QValueAxis),
     m_x(0.0),
     m_y(0.0)
 		{
-		if (title==NULL) setTitle("Por defeito");
+		if (!title.compare("")) {setTitle("Por defeito"); legend()->hide();}
 		else setTitle(title);
-    legend()->hide();
+    //TODO legend()->hide();
+		int c = 0, p = 1;
 
-		//Todo check how to make it work with animations
-    //setAnimationOptions(QChart::SeriesAnimations); // En linux-Q5.11 mellor sin elas..
+
+		QValueAxis* Yaxis = new QValueAxis;
+		// qDebug("LISTA CORES!:: %d",cor.size());// 148 colours
+		for (int i = 0; i<nRobo; i++){
+			m_series.append(new QLineSeries);
+			//set a different drawing style for each robot//
+			c++;
+			if (c>cor.size()){
+				c = 0;
+				p++;
+				if(p>6){
+					p = 1;
+					qWarning("RUNING OUT OF STYLES!!!");
+					//TODO add random style algorithm
+					/*  QPen pen;
+  				QVector<qreal> dashes;
+					qreal space = 4; //randomize!
+					dashes << 1 << space << 3 << space << 9 << space << 27 << space << 9 << space; //randomize!
+					pen.setDashPattern(dashes);*/
+				}
+			}
+
+			//////////////////////////////////////////
+			QPen trace(cor[c]);
+			trace.setStyle(Qt::PenStyle(p));
+			trace.setWidth(2);
+			// qDebug("YUP %f-%f",(m_series[0])->at(0).x(),(m_series[0])->at(0).y());
+	    m_series[i]->setPen(trace);
+	    m_series[i]->append(m_x, m_y);
+			addSeries(m_series[i]);
+			setAxisX(m_axis,m_series[i]);
+			setAxisY(Yaxis,m_series[i]);
+		}
+		// addAxis(Yaxis, Qt::AlignLeft);
+		// addAxis(m_axis, Qt::AlignBottom);
+		// createDefaultAxes();
+		m_axis->setLabelFormat("%d");
+		m_axis->setTickCount(5);
+		c_series = m_series.constBegin();;//current series, useful for easy adding secuenciated points
+		axisX()->setRange(0, RANGE);
+		axisY()->setRange(0, 1);
+		//TODO Animations not working..
+    //setAnimationOptions(QChart::SeriesAnimations); // En linux-Q5.11 melhor sen elas..
 		grabGesture(Qt::PanGesture);
     grabGesture(Qt::PinchGesture);
-		//TODO Qt::GlobalColos enum
-		//Qt::PenStyle enum
-		QPen trace(Qt::red);
-    trace.setWidth(2);
-    m_series->setPen(trace);
-    m_series->append(m_x, m_y);
-    addSeries(m_series);
-
-		createDefaultAxes();
-    setAxisX(m_axis, m_series);
-		m_axis->setLabelFormat("%d");
-    m_axis->setTickCount(5);
-    axisX()->setRange(0, RANGE);
-		//axisX()->setLabelFormat("i");
-    axisY()->setRange(0, 0.6);
-	  //m_series->append(1, 4.5);
 	}
 
 	void eChart::zoomAction(bool act){
@@ -522,9 +588,11 @@ ViewerWindow::~ViewerWindow()
 			axisY()->setRange(0,m_y+0.1);
 		}
 }
-	// eChart::~eChart()
-	// {
-	// }
+	eChart::~eChart()
+	{
+
+	}
+
 	bool eChart::sceneEvent(QEvent *event)
 	{
 	    if (event->type() == QEvent::Gesture)
@@ -548,23 +616,31 @@ ViewerWindow::~ViewerWindow()
 	    return true;
 	}
 	void eChart::addPoint(double it, double quality){
+		// qDebug("chega %f %f",it, quality);
 		//std::cout << "addddding"<< it <<"+"<<quality;
 		if (quality>m_y){
 			m_y=quality;
 			axisY()->setMax(m_y+0.1);
 			}
 		//qreal x = (m_axis->max() - m_axis->min()) / m_axis->tickCount
-    if (it >= (RANGE)){
-			RANGE += RANGEinc;
-			//qDebug("Zoomed?? %i",isZoomed());
-			if(!m_isZooming){
-					qreal x = plotArea().width() / m_axis->tickCount();
-					scroll(x*5, 0);
-				}
 			//printf("avanzamos %f",x);
 			//printf("XMAX %f",maxx);
-		}
-		m_series->append(it,quality);
+			if (it >= (RANGE)){
+				RANGE += RANGEinc;
+				if(!m_isZooming){
+					qDebug("Zoomed111");
+					qreal x = plotArea().width() / m_axis->tickCount();
+					scroll(x*5, 0);
+					}
+				}
+		(*c_series)->append(it,quality);
+		if (++m_series.constBegin() != m_series.constEnd()){
+			c_series++;
+			if (c_series == m_series.constEnd()){
+				c_series = m_series.constBegin();
+
+				}
+			}
 }
 
 	// simple display list, one per instance
@@ -2220,7 +2296,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		if(!s_paused){
 			world->step(mult, double(timerPeriodMs)/1000., 3);
 			//Step for evolutionary
-			//emit anlStep(); //anl->step
+			emit anlStep(); //anl->step
 			//Updating data in graphs.
 			world->iterations++;
 			//update graphs
