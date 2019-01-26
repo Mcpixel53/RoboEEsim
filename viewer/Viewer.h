@@ -231,6 +231,7 @@ namespace Enki
 	signals:
 		void hideGraph();
 		void updateGraph(int iters);
+		void anlStep();
 		//void sliderMove(int ammount);
 	public slots:
 		void setCamera(const QPointF& pos, double altitude, double yaw, double pitch);
@@ -295,6 +296,8 @@ namespace Enki
 		// Internal event handling
 		virtual void helpActivated();
 	};
+
+
 //Settings
 	class Settings : public QDialog
 	{
@@ -328,14 +331,61 @@ namespace Enki
 	    QMenu *fileMenu;
 	    QAction *exitAction;
 	};
+
+
+	/////// Analytics_Module
+	struct roboStat{
+	std::string id;
+	std::vector<double>* vect;
+	roboStat(std::string name, std::vector<double>* list):vect(list),id(name){}
+	//	roboStat():id("NULL"){}
+
+	};
+
+
+	class QAnalytics: public QObject {
+		Q_OBJECT
+
+	public:
+		QAnalytics(int maxIt){ maxIt=maxIt; internalLogic = 1;}
+		std::unordered_map <std::string, std::vector<roboStat> > getVarList() {return varList;}
+		// void  getVarList() {qDebug("size: %d; %2.2f ",varList->size(),varList->at(0));}
+
+	public slots:
+		QStringList*  getListVars();
+		std::vector<roboStat>*  getListVar(const std::string& name ) { if (varList.count(name.c_str())==0) return NULL; else return &varList.at(name.c_str());}//qDebug("Retrieving ''%s'' %d",name.c_str(),varList.at(name.c_str())->size());
+		virtual void evolve(){};
+		void checkVarList(){
+			qDebug("CAGONDIOLAAAAA %d %s",varList["Fitness"][0].vect->size(),varList["Fitness"][0].id.c_str());
+		}
+	protected:
+		// std::vector<double> * varList = NULL;
+		std::unordered_map <std::string, std::vector<roboStat> > varList;
+	//	template <typename T>
+		void registaer(std::string name, std::vector<double>* list, std::string var) { varList[var].push_back(roboStat(name, list));};
+		// void registaer(std::string name, std::vector<double> *list){varList = list;};
+
+
+	signals:
+		void newTopQ(double iter, double quality);
+		void newAvgQ(double iter, double quality);
+
+	private:
+		int internalLogic;
+		int maxIt;
+	};
+
+/////////////////////////////////////////////////////////TODO move to another class
+
 /////// Grafo
 	class eChart : public QChart
 	{
 		Q_OBJECT
 
 		public:
-		    eChart(QString title = "", QLineSeries* _series = new QLineSeries, int maxIterations = 10000, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
-		    //virtual ~eChart();
+		    eChart(QString title , int nRobo, int maxIterations = 10000, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+		    //eChart( QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0):QChart(QChart::ChartTypeCartesian,parent,wFlags);
+				~eChart();
 
 		public slots:
 				void addPoint(double it, double quality);
@@ -345,13 +395,15 @@ namespace Enki
 			bool sceneEvent(QEvent *event);
 
 		private:
-				QLineSeries *m_series;
+			const QStringList cor= {"black","aqua","blue","blueviolet","brown","chartreuse","chocolate","coral","cornflowerblue","cornsilk","cyan","darkblue","darkcyan","darkgoldenrod","darkgray","darkgreen","darkmagenta","darkolivegreen","darkorange","darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet","deeppink","deepskyblue","dimgray","dimgrey","dodgerblue","firebrick","floralwhite","forestgreen","fuchsia","gainsboro","ghostwhite","gold","goldenrod","gray","green","greenyellow","grey","honeydew","hotpink","indianred","indigo","ivory","khaki","lavender","lavenderblush","lawngreen","lemonchiffon","lightblue","lightcoral","lightcyan","lightgoldenrodyellow","lightgray","lightgreen","lightgrey","lightpink","lightsalmon","lightseagreen","lightskyblue","lightslategray","lightslategrey","lightsteelblue","lightyellow","lime","limegreen","linen","magenta","maroon","mediumaquamarine","mediumblue","mediumorchid","mediumpurple","mediumseagreen","mediumslateblue","mediumspringgreen","mediumturquoise","mediumvioletred","midnightblue","mintcream","mistyrose","moccasin","navajowhite","navy","oldlace","olive","olivedrab","orange","orangered","orchid","palegoldenrod","palegreen","paleturquoise","palevioletred","papayawhip","peachpuff","peru","pink","plum","powderblue","purple","red","rosybrown","royalblue","saddlebrown","salmon","sandybrown","seagreen","seashell","sienna","silver","skyblue","slateblue","slategray","slategrey","snow","springgreen","steelblue","tan","teal","thistle","tomato","transparent","turquoise","violet","wheat","white","whitesmoke","yellow","yellowgreen"};
+				QList<QLineSeries*> m_series;
+				QList<QLineSeries*>::const_iterator c_series;
 				QStringList m_titles;
 				QValueAxis *m_axis;
 				qreal m_step;
 				qreal m_x;
 				qreal m_y;
-				int	RANGEinc = 1500;
+				int	RANGEinc = 10000;
 				int RANGE = RANGEinc;
 				bool gestureEvent(QGestureEvent *event);
 				bool m_isZooming;
@@ -368,7 +420,10 @@ namespace Enki
 
 				//eChart* chart() {return chart;};
 	protected:
-			std::vector<double>* lista;
+			std::vector<roboStat>* lista;
+			std::string mod;
+
+			int cant; // ammount of robots to show or index
 			virtual bool viewportEvent(QEvent *event);
 	    virtual void mousePressEvent(QMouseEvent *event);
 	    virtual void mouseMoveEvent(QMouseEvent *event);
@@ -376,7 +431,7 @@ namespace Enki
 	    virtual void keyPressEvent(QKeyEvent *event);
 
 	public slots:
-			void change(const std::string params[], std::vector<double>* lista);
+			void change(const std::string params[], std::vector<roboStat>* lista);
 			void ecUpdate(int it);
 
 	signals:
@@ -411,37 +466,6 @@ namespace Enki
 	}
 */
 
-	/////// Analytics_Module
-
-	class QAnalytics: public QObject {
-		Q_OBJECT
-
-	public:
-		QAnalytics(int maxIt){ maxIt=maxIt; internalLogic = 1;}
-		std::unordered_map <std::string, std::vector<double>* > getVarList() {return varList;}
-		// void  getVarList() {qDebug("size: %d; %2.2f ",varList->size(),varList->at(0));}
-
-
-	public slots:
-		QStringList*  getListVars();
-		std::vector<double>*  getListVar(const std::string& name ) { return (varList.count(name.c_str())==0)?NULL:varList.at(name.c_str());}//qDebug("Retrieving ''%s'' %d",name.c_str(),varList.at(name.c_str())->size());
-	protected:
-		// std::vector<double> * varList = NULL;
-		std::unordered_map <std::string, std::vector<double>* > varList;
-	//	template <typename T>
-		void registaer(std::string name, std::vector<double>* list)  {varList[name] = list;};
-		// void registaer(std::string name, std::vector<double> *list){varList = list;};
-		virtual void evController(){qDebug("EvController virtual loaded");};
-
-	signals:
-		void newTopQ(double iter, double quality);
-		void newAvgQ(double iter, double quality);
-
-	private:
-		int internalLogic;
-		int maxIt;
-	};
-
 
 ///// Main viewer
 class ViewerWindow : public QMainWindow
@@ -472,13 +496,13 @@ class ViewerWindow : public QMainWindow
 			QString m_sSettingsFile;
 			QLineEdit *m_pEdit;
 			QStringList *variables;
-			const chMAX = 6;
+			const int chMAX;
 	protected:
 	    ViewerWidget *viewer;
 			QWidget *chartLayout;
 			QAnalytics *anl;
 			// QWidget  *charts[6];  //TODO quitar
-			int activeGraphs = 5;
+			int activeGraphs = 3;
 			// QDockWidget *dockChart2;
 			/*viewerChart *anlChart1;
 			viewerChart *anlChart2;*/

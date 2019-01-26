@@ -39,83 +39,90 @@ class Analise(pyenki.Analytics_Module):
 
 	def __init__(self, maxIts):
 		super(Analise,self).__init__(maxIts)
-		self.integero = 8
-		self.Individuals = []
-		self.maxFit =  self.getDoubleList("Max Fitness");
-		self.meanFitness = self.getDoubleList("Fitness");
+		# self.integero = 8
 		self.robotList = []
-		self.exitFlag = 0
-		self.varList = {}
+		self.varList = {} #dict which contains all the variables wanted to show
+		# self.varName = []
+		self.Individuals = self.register("Chromosome");
+		self.Age =  self.register("Age");
+		self.Fitness = self.register("Fitness");
+		# self.exitFlag = 0
 		#self.maxFitInd
 
-	def register(self,lep,lop):
-		print("debugging py",lop,type(lop[0]))
-		super(Analise,self).registaer(lep,lop)
+	def register(self,nome):
+		lista = []
+		self.varList[nome] = lista
+		return lista
+		# super(Analise,self).registaer(lep,lop
 
 	def addRobot(self,robot):
 		self.robotList.append(robot)
-		self.FitInd[robot.id].append(getDoubleList(robot.id,'-Fitness'))
+		for nome in self.varList.keys():
+			self.varList[nome].append(self.getDoubleList(robot.id, nome))
+
+	def vlAdd(self, nome, robo, value):
+		self.varList[nome][robo].append(value);
 
 	def evController(self):
 		global w
-		print("initiated EvController")
+		#print("initiated EvController")
 	#	experimentData['Size'] = conf.populationSize
 		veryBest = 0.0
-		running = True
-		#currentIteration = 0
 		#time.sleep(conf.startTime)
 		try:
 			currentIteration = w.iterations
 			#print(running,(w.iterations<conf.maxIterations))
-			while (running and currentIteration < conf.maxIterations):
-				iterationMeanFitness = 0
-				iterationMaxFitness = 0
-				bestFitted = None
+			iterationMeanFitness = 0
+			iterationMaxFitness = 0
 
-				if self.exitFlag:
-					running = False
-
-				for current in self.robotList:
-					current.setFitness()
-					#Guardar valores Individuales de los experimentos
-					#if (currentIteration % conf.eachIterationCollection == 0):
-					self.Individuals.append(current.individual.genotype.chromosome[:])
-					#experimentData['IndividualFitness'].append(current.individual.genotype.fitness)
-
-					#Buscar el individuo mas apto
-					if current.individual.genotype.fitness > iterationMaxFitness:
-						iterationMaxFitness = current.individual.genotype.fitness
-						bestFitted = current
-
-					iterationMeanFitness += current.individual.genotype.fitness
-
-					current.individual.incrementAge()
-					current.individual.checkStatus()
-					if current.individual.age == 0:
-						current.changeWeights()
-					if current.individual.matingOperator.isMating:
-						checkMatings(self.robotList,current)
-
-				#Guardar valores Globales de los experimentos
+			i = 0
+			for current in self.robotList:
+				current.setFitness()
+				#Guardar valores Individuales de los experimentos
 				#if (currentIteration % conf.eachIterationCollection == 0):
-				#print(iterationMeanFitness,len(self.robotList))
-				iterationMeanFitness = iterationMeanFitness/len(self.robotList)
-				self.meanFitness.append(iterationMeanFitness)
-				self.maxFit.append(iterationMaxFitness)
-				# if (currentIteration >= 20):
-				# 	if (currentIteration <=50):
-				# 		self.testList()
-				# 		print(self.meanFitness[0])
-				# 	elif (currentIteration <=80):
-				# 		self.testList2()
-				#bestFittedList.append(bestFitted)
+			#self.Individuals.append(current.individual.genotype.chromosome[:])
+				#experimentData['IndividualFitness'].append(current.individual.genotype.fitness)
+
+				#Buscar el individuo mas apto
+				if current.individual.genotype.fitness > iterationMaxFitness:
+					iterationMaxFitness = current.individual.genotype.fitness
+					bestFitted = current
+
+				iterationMeanFitness += current.individual.genotype.fitness
+				current.individual.incrementAge()
+				current.individual.checkStatus()
+				if current.individual.age == 0:
+					current.changeWeights()
+				if current.individual.matingOperator.isMating:
+					checkMatings(self.robotList,current)
+
+				self.vlAdd("Fitness",i,current.individual.genotype.fitness)
+				self.vlAdd("Chromosome",i,current.individual.genotype.fitness)
+				self.vlAdd("Age",i,current.individual.age)
+
+				i+=1
+			#Guardar valores Globales de los experimentos
+			#if (currentIteration % conf.eachIterationCollection == 0):
+			#print(iterationMeanFitness,len(self.robotList))
+
+			# iterationMeanFitness = iterationMeanFitness/len(self.robotList)
+			self.Fitness.append(iterationMeanFitness/len(self.robotList))
+
+			# self.maxFit.append(iterationMaxFitness)
+			# if (currentIteration >= 20):
+			# 	if (currentIteration <=50):
+			# 		self.testList()
+			# 		print(self.meanFitness[0])
+			# 	elif (currentIteration <=80):
+			# 		self.testList2()
+			#bestFittedList.append(bestFitted)
 
 
-				#Notify right before waiting
-				while currentIteration >= w.iterations:
-					time.sleep(0.05)
-				currentIteration = w.iterations
-				#experimentData['Iterations'] = currentIteration
+			#Notify right before waiting
+			# while currentIteration >= w.iterations:
+			# 	time.sleep(0.05)
+			# currentIteration = w.iterations
+			#experimentData['Iterations'] = currentIteration
 
 		except Exception as e:
 			print(e)
@@ -123,12 +130,11 @@ class Analise(pyenki.Analytics_Module):
 	#	experimentData['MeanFitness'] = fitnessList
 	#	experimentData['TopFitness'] = maxFitnessList
 		#gm.experimentDataToCSVs(conf.experimentName,experimentData)
-		self.exitFlag = True
 
 
 
 	def evolve(self):
-		print("Evolving Step!")
+		# print("Evolving Step!")
 		try:
 		    logicThread = threading._start_new_thread(self.evController, () )
 		except Exception as e:
@@ -298,7 +304,7 @@ for i in range(conf.populationSize):
 
 w.addObject(ball)
 
-anl.evolve()
+# anl.evolve()
 	#//runSimulation(Enki::World, AnalyticsModule, camPos, camAltitude, camYaw, camPitch, wallsHeight)
 #pyenki.EnkiViewer.runSimulation(w, anl, (wW/2,wH/2),wH*1.05, 0, Math.radians(-89.9), 10)
 pyenki.EnkiViewer.runSimulation(w, anl, 10)

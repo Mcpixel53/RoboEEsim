@@ -43,6 +43,12 @@ class Genotype:
         self.chromosome = [None for j in range(pDimensions)]
         self.fitness = 0.0
 
+    def returnChromosomeD(self):
+        ch = 0
+        for i in self.chromosome:
+            ch+=i
+            ch*=10
+        return ch
 
 class RecombinationOperators:
 
