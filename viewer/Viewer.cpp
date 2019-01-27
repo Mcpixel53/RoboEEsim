@@ -142,11 +142,11 @@ namespace Enki
 		QGridLayout *GLayout = new QGridLayout();
 		// QHBoxLayout *HLayout = new QHBoxLayout();
 		QWidget  *charts[chMAX];
-		charts[0] = new viewerChart(new eChart("",1), this);
-		GLayout->addWidget(charts[0],0,0);
+		//charts[0] = new viewerChart(new eChart("",1), this);
+		// GLayout->addWidget(charts[0],0,0);
 		// VLayout->setStretchFactor(charts[0],2);
 		// HLayout->addLayout(VLayout);
-		int i, t = i = 1;
+		int i, t = i = 0;
 		for(i; i<activeGraphs;i++){
 			QPushButton *PlusIcon = new QPushButton(this);
 			PlusIcon->setIcon(QPixmap(":/widgets/plus.png"));
@@ -319,31 +319,7 @@ ViewerWindow::~ViewerWindow()
 	//delete customerList;
 
 }
-	std::vector<double> retOrdRoboStats(std::vector<roboStat>  wholeLst, int n, const std::string mod){
-		std::vector<double>  tempIn;
-		//std::vector<roboStat>::iterator robo;
-		if(!mod.compare("menor/es")){
-			for (auto robo: wholeLst)
-				tempIn.push_back(n==-1?robo.vect->back():robo.vect->at(n));
-			std::sort(tempIn.begin(), tempIn.end(), std::less<double>());
-			return tempIn;
-			}
-		else if (!mod.compare("maior/es")){
-			for (auto robo: wholeLst)
-				tempIn.push_back(n==-1?robo.vect->back():robo.vect->at(n));
-			std::sort(tempIn.begin(), tempIn.end(),std::greater<double>());
-			return tempIn;
-			}
-		// else if (!mod.compare("peor/es")){
-		// 	qDebug("SEN IMPLEMENTAR!");
-		// 	return *wholeLst[0].vect;
-		// 	}
-		// else if (!mod.compare("mellor/es")){
-		// 	qDebug("SEN IMPLEMENTAR!");
-		// 	return *wholeLst[0].vect;
-		// 	}
 
-}
 
 	void viewerChart::change(const std::string params [], std::vector<roboStat>*  _wholeLista){
 		//params[0] = Var to be shown, params [1] = ammount modifier, params [2] = manner modifier
@@ -363,50 +339,142 @@ ViewerWindow::~ViewerWindow()
 		// if(temp!=chart) delete(temp);
 		// else  qDebug("son iguais!");
 
-		if (_wholeLista==NULL) {qDebug("Error retrieving list!"); return;}
-		int i = 1, k=i;// k = list->mult
+		if (_wholeLista==NULL) {qWarning("Error retrieving list!"); return;}
 		//Notify chart when zoom is on not to
 		QObject::connect(this, SIGNAL(zoomSignal(bool)),
 											chart, SLOT(zoomAction(bool)));
-		lista = _wholeLista;
-		// std::vector<roboStat>::iterator it;
 
-		for (int n=0; n<_wholeLista->at(0).vect->size(); n++){
-			// qDebug("adding n %d & %f",n,_wholeLista->at(cant).vect->at(n));
-			if (!mod.compare("unico"))
-				chart->addPoint(i, _wholeLista->at(cant).vect->at(n)); // Iterate list and fill graph by increments of k{
-			else if (!mod.compare("todos")){
-				for (auto it : *_wholeLista)
-					chart->addPoint(i, it.vect->at(n));
-			}
-			else{
-				std::vector<double> vecTemp = retOrdRoboStats(*_wholeLista, n, mod);// Iterate doubleList and order each time with specific modifier
-				for (int y =0; y<cant; y++)
-					chart->addPoint(i, vecTemp[y]);
-			}
-			i+=k; //keep track of sampling frequency
+//initiate thread & graph fill
+		gthread.initiate(chart, _wholeLista, cant, mod);
+}
+
+
+///GRAPH THREAD
+GThread::GThread(QObject *parent)
+    : QThread(parent)
+{
+    restart = false;
+    aborta = false;
+		// condition.wait(&mutex);
+	}
+
+GThread::~GThread(){
+	mutex.lock();
+	aborta = true;
+	condition.wakeOne();
+	mutex.unlock();
+	wait();
+	// qDebug("Thread %d Dying!!",QThread::currentThreadId());
+}
+
+void GThread::initiate(eChart * _chart, std::vector<roboStat>* _lista, int n, std::string _mod){
+	// qDebug("initiaitng Thread %d",QThread::currentThreadId());
+	QMutexLocker locker(&mutex);
+	chart = _chart;
+	lista = _lista;
+	cant = n;
+	mod = _mod;
+	state =0;
+
+if (!isRunning()){
+		start(LowPriority);
+	}else{
+		restart = true;
+		condition.wakeOne();
+	}
+}
+std::vector<double> GThread::retOrdRoboStats(int n){
+	std::vector<double>  tempIn;
+	//std::vector<roboStat>::iterator robo;
+	if(!mod.compare("menor/es")){
+		for (auto robo: *lista)
+			tempIn.push_back(n==-1?robo.vect->back():robo.vect->at(n));
+		std::sort(tempIn.begin(), tempIn.end(), std::less<double>());
+		return tempIn;
 		}
-}// update at world iteration i
+	else if (!mod.compare("maior/es")){
+		for (auto robo: *lista)
+			tempIn.push_back(n==-1?robo.vect->back():robo.vect->at(n));
+		std::sort(tempIn.begin(), tempIn.end(),std::greater<double>());
+		return tempIn;
+		}
+	// else if (!mod.compare("peor/es")){
+	// 	qDebug("SEN IMPLEMENTAR!");
+	// 	return *wholeLst[0].vect;
+	// 	}
+	// else if (!mod.compare("mellor/es")){
+	// 	qDebug("SEN IMPLEMENTAR!");
+	// 	return *wholeLst[0].vect;
+	// 	}
+
+}
+void GThread::iniLoop(){
+	int i = 1, k=i;// k = list->mult
+	for (int n=0; n<lista->at(0).vect->size(); n++){
+		if (restart) break;
+		if (!mod.compare("unico")){
+			chart->addPoint(i, lista->at(cant).vect->at(n)); // Iterate list and fill graph by increments of k{
+			}
+		else if (!mod.compare("todos")){
+			for (auto it : *lista)
+				chart->addPoint(i, it.vect->at(n));
+		}
+		else{
+			std::vector<double> vecTemp = retOrdRoboStats(n);// Iterate doubleList and order each time with specific modifier
+			for (int y =0; y<cant; y++)
+				chart->addPoint(i, vecTemp[y]);
+		}
+		i+=k; //keep track of sampling frequency
+	}
+	state = 1;
+	restart = false;
+}
+
+void GThread::g_Step(){
+	// qDebug("STEPPING %f",lista->at(cant).vect->back());
+	if (!mod.compare("unico")){
+		chart->addPoint(it, lista->at(cant).vect->back()); // Iterate list and fill graph by increments of k{
+		}
+	else if (!mod.compare("todos")){
+		for (auto robo : *lista)
+			chart->addPoint(it, robo.vect->back());
+	}
+	else{
+		std::vector<double> vecTemp = retOrdRoboStats(-1);// sort and return the back of the list (-1 option) by modifier
+		for (auto y =0; y<cant; y++)
+			chart->addPoint(it, vecTemp[y]);
+		}
+}
+
+void GThread::threadUpdate(float x){
+	QMutexLocker locker(&mutex);
+	// mutex.lock();
+	it = x;
+	// mutex.unlock();
+	condition.wakeOne();
+}
+
+void GThread::run(){
+	// qDebug("back hehe %d (%d) %d	%s",cant,lista==NULL,lista->size(),lista->at(0).id);
+	forever{
+			bool algo = mutex.tryLock(10);//deathlock... not sure why
+			// qDebug("MUTAO! %d",algo);
+
+			if(state == 0)
+				iniLoop();
+			else
+{
+					g_Step();
+}			if (aborta) return; // exit the thread for destruction
+			condition.wait(&mutex); //waits until new signal
+	}
+}
 
 
 void viewerChart::ecUpdate(int i){
+	gthread.threadUpdate(i);///
+ }
 
-	// qDebug("back hehe %d (%d) %d	%s",cant,lista==NULL,lista->size(),lista->at(0).id);
-		if(lista){
-			if (!mod.compare("unico")){
-				chart->addPoint(i, lista->at(cant).vect->back()); // Iterate list and fill graph by increments of k{
-				}
-			else if (!mod.compare("todos")){
-				for (auto robo : *lista)
-					chart->addPoint(i, robo.vect->back());
-			}
-			else{
-				std::vector<double> vecTemp = retOrdRoboStats(*lista, -1, mod);// sort and return the back of the list (-1 option) by modifier
-				for (auto y =0; y<cant; y++)
-					chart->addPoint(i, vecTemp[y]);
-			}
-		}
-}
 	viewerChart::viewerChart( eChart *_chart, QWidget *parent):
 		QChartView(_chart, parent),
 		chart(_chart),
@@ -417,7 +485,7 @@ void viewerChart::ecUpdate(int i){
 			QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen()); // or screenGeometry(), depending on your needs
 			setRenderHint(QPainter::Antialiasing);
 			setRubberBand(QChartView::RectangleRubberBand);
-
+			// thread.stop();
 			//Notify chart when zoom is on not to
 			QObject::connect(this, SIGNAL(zoomSignal(bool)),
 												_chart, SLOT(zoomAction(bool)));
@@ -628,7 +696,7 @@ void viewerChart::ecUpdate(int i){
 			if (it >= (RANGE)){
 				RANGE += RANGEinc;
 				if(!m_isZooming){
-					qDebug("Zoomed111");
+					// qDebug("Zoomed111");
 					qreal x = plotArea().width() / m_axis->tickCount();
 					scroll(x*5, 0);
 					}
@@ -2296,7 +2364,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		if(!s_paused){
 			world->step(mult, double(timerPeriodMs)/1000., 3);
 			//Step for evolutionary
-			emit anlStep(); //anl->step
+			// emit anlStep(); //anl->step
 			//Updating data in graphs.
 			world->iterations++;
 			//update graphs
