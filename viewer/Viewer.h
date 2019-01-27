@@ -332,7 +332,7 @@ namespace Enki
 	    QAction *exitAction;
 	};
 
-
+class eChart;
 	/////// Analytics_Module
 	struct roboStat{
 	std::string id;
@@ -342,6 +342,34 @@ namespace Enki
 
 	};
 
+	class GThread: public QThread{
+		Q_OBJECT
+		public:
+			GThread(QObject *parent = 0);
+			~GThread();
+
+			void threadUpdate(float x);
+			void initiate(eChart * chart, std::vector<roboStat>* lista, int n, const std::string mod);
+
+		protected:
+			void run() override;
+			void g_Step();
+			void iniLoop();
+			std::vector<double> retOrdRoboStats(int n);
+
+
+		private:
+			QMutex mutex;
+			QWaitCondition condition;
+			float it;
+			eChart * chart;
+			std::vector<roboStat>* lista;
+			int cant, state;
+			std::string mod;
+			bool restart;
+    	bool aborta;
+
+};
 
 	class QAnalytics: public QObject {
 		Q_OBJECT
@@ -439,6 +467,7 @@ namespace Enki
 			void changeSignal();
 
 	private:
+			GThread gthread;
 	    bool m_isTouching;
 			eChart * chart;
 	};
