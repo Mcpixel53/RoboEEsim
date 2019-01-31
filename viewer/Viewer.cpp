@@ -80,7 +80,9 @@ namespace Enki
 			chMAX(6),
 			anl(_anl),
 			m_pEdit(NULL),
-			chartLayout(new QWidget)
+			chartLayout(new QWidget),
+			timerPeriodMs(30),
+			s_paused(false)
 	{
 			setWindowIcon(QIcon(":/appicon.png"));
 			QDesktopWidget widget;
@@ -90,9 +92,12 @@ namespace Enki
 
 			this->resize(x,y);
 			connect(_viewer, SIGNAL(hideGraph()),
-												this, SLOT(hideGraph()) );
+									this, SLOT(hideGraph()) );
+			connect(_viewer, SIGNAL(pause()),
+									this, SLOT(pauseRun()));
 			connect(_viewer->getSettings(), SIGNAL(settingsChanged(QString)),
-			              this, SLOT(manageSettings(QString)));
+		              this, SLOT(manageSettings(QString)));
+
 			QWidget *w = new QWidget;
 			QHBoxLayout *container = new QHBoxLayout;
 
@@ -133,6 +138,8 @@ namespace Enki
 			createDockWindows();
 	//    newLetter();
 	//    setUnifiedTitleAndToolBarOnMac(true);
+	startTimer(timerPeriodMs);
+
 	}
 
 	void ViewerWindow::createDockWindows()
@@ -330,12 +337,12 @@ ViewerWindow::~ViewerWindow()
 		eChart *temp = chart;
 		cant = atoi(params[1].c_str());
 		mod = params[2];
-		int nRob;
-		if (!mod.compare("unico")) nRob =1 ;
+		int nRob, unic = 0;
+		if (!mod.compare("unico")) {nRob =1; unic = cant;}
 		else if (!mod.compare("todos")) nRob =_wholeLista->size() ;
 		else  nRob= cant;
 
-		setChart(new eChart(QString::fromStdString(mod+" "+params[1]+" "+params[0]), nRob));
+		setChart(new eChart(QString::fromStdString(mod+" "+params[1]+" "+params[0]), nRob, unic));
 		// if(temp!=chart) delete(temp);
 		// else  qDebug("son iguais!");
 
@@ -344,45 +351,64 @@ ViewerWindow::~ViewerWindow()
 		QObject::connect(this, SIGNAL(zoomSignal(bool)),
 											chart, SLOT(zoomAction(bool)));
 
-//initiate thread & graph fill
-		gthread.initiate(chart, _wholeLista, cant, mod);
+//initiate thread & worker
+		gthread = new GThread(_wholeLista, cant, mod);
+		// gthread->initiate();
+		QThread* thread = new QThread();
+		gthread->moveToThread(thread);
+		// connect(gthread, SIGNAL (error(QString)), this, SLOT (errorString(QString)));
+		connect(thread, SIGNAL (started()), gthread, SLOT (iniLoop()));
+		connect(this, SIGNAL (threadUpdate(float)), gthread, SLOT (threadUpdate(float)));
+		connect(gthread, SIGNAL (finished()), thread, SLOT (quit()));
+		connect(gthread, SIGNAL (finished()), gthread, SLOT (deleteLater()));
+		connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+		connect(gthread, SIGNAL(addpoints(float, float)), chart, SLOT(addPoint(float, float)));
+		thread->start();
+		// gthread.init();
 }
 
 
 ///GRAPH THREAD
-GThread::GThread(QObject *parent)
-    : QThread(parent)
+GThread::GThread(std::vector<roboStat>* _lista, int n, std::string _mod, QObject *parent)
+    : QObject(parent)
 {
     restart = false;
     aborta = false;
+		lista = _lista;
+		cant = n;
+		mod = _mod;
+		state = 0;
 		// condition.wait(&mutex);
 	}
 
 GThread::~GThread(){
-	mutex.lock();
-	aborta = true;
-	condition.wakeOne();
-	mutex.unlock();
-	wait();
+qDebug("DYING WORKER");
+	emit finished();
+
+	// QThread::~QThread();
+	// mutex.lock();/
+	// aborta = true;
+	// mutex.unlock();
+	// condition.wakeOne();
+	// wait();
+	// this->exit();
 	// qDebug("Thread %d Dying!!",QThread::currentThreadId());
 }
 
-void GThread::initiate(eChart * _chart, std::vector<roboStat>* _lista, int n, std::string _mod){
-	// qDebug("initiaitng Thread %d",QThread::currentThreadId());
-	QMutexLocker locker(&mutex);
-	chart = _chart;
-	lista = _lista;
-	cant = n;
-	mod = _mod;
-	state =0;
-
-if (!isRunning()){
-		start(LowPriority);
-	}else{
-		restart = true;
-		condition.wakeOne();
-	}
-}
+// void GThread::initiate(std::vector<roboStat>* _lista, int n, std::string _mod){
+// 	// qDebug("initiaitng Thread %d",QThread::currentThreadId());
+// 	//qDebug() << "Hello" << "Initiate THREAD" << "from" << QThread::currentThread();
+// 	// QMutexLocker locker(&mutex);
+// 	// chart = _chart;
+//
+// 	// iniLoop();
+// 	// if (!isRunning()) start(NormalPriority);
+// 		// condition.wakeOne();
+//
+// 	// disconnect(SIGNAL(addpoint(float, float)));
+// 	// connect(this, SIGNAL(addpoint(float, float)),chart, SLOT(addPoint(float, float)));
+//
+// }
 std::vector<double> GThread::retOrdRoboStats(int n){
 	std::vector<double>  tempIn;
 	//std::vector<roboStat>::iterator robo;
@@ -409,20 +435,23 @@ std::vector<double> GThread::retOrdRoboStats(int n){
 
 }
 void GThread::iniLoop(){
+	qDebug() << "Hello" << "RUN THREAD" << "from" << QThread::currentThread();
+
 	int i = 1, k=i;// k = list->mult
+	// qDebug("init i %d",i);
 	for (int n=0; n<lista->at(0).vect->size(); n++){
 		if (restart) break;
 		if (!mod.compare("unico")){
-			chart->addPoint(i, lista->at(cant).vect->at(n)); // Iterate list and fill graph by increments of k{
+			emit addpoints(i, lista->at(cant).vect->at(n)); // Iterate list and fill graph by increments of k{emit addpointchart->addPoint
 			}
 		else if (!mod.compare("todos")){
 			for (auto it : *lista)
-				chart->addPoint(i, it.vect->at(n));
+				emit addpoints(i, it.vect->at(n));
 		}
 		else{
-			std::vector<double> vecTemp = retOrdRoboStats(n);// Iterate doubleList and order each time with specific modifier
+			std::vector<double> vecTemp = retOrdRoboStats(n);// Iterate doubleList and order each time with specific modifieremit addpoints
 			for (int y =0; y<cant; y++)
-				chart->addPoint(i, vecTemp[y]);
+				emit addpoints(i, vecTemp[y]);
 		}
 		i+=k; //keep track of sampling frequency
 	}
@@ -433,46 +462,48 @@ void GThread::iniLoop(){
 void GThread::g_Step(){
 	// qDebug("STEPPING %f",lista->at(cant).vect->back());
 	if (!mod.compare("unico")){
-		chart->addPoint(it, lista->at(cant).vect->back()); // Iterate list and fill graph by increments of k{
+		emit addpoints(it, lista->at(cant).vect->back()); // Iterate list and fill graph by increments of k{
 		}
 	else if (!mod.compare("todos")){
 		for (auto robo : *lista)
-			chart->addPoint(it, robo.vect->back());
+			emit addpoints(it, robo.vect->back());
 	}
 	else{
 		std::vector<double> vecTemp = retOrdRoboStats(-1);// sort and return the back of the list (-1 option) by modifier
 		for (auto y =0; y<cant; y++)
-			chart->addPoint(it, vecTemp[y]);
+			emit addpoints(it, vecTemp[y]);
 		}
 }
 
 void GThread::threadUpdate(float x){
-	QMutexLocker locker(&mutex);
+	// QMutexLocker locker(&mutex);
 	// mutex.lock();
 	it = x;
+	g_Step();
 	// mutex.unlock();
-	condition.wakeOne();
+	// condition.wakeOne();
 }
 
-void GThread::run(){
-	// qDebug("back hehe %d (%d) %d	%s",cant,lista==NULL,lista->size(),lista->at(0).id);
-	forever{
-			bool algo = mutex.tryLock(10);//deathlock... not sure why
-			// qDebug("MUTAO! %d",algo);
-
-			if(state == 0)
-				iniLoop();
-			else
-{
-					g_Step();
-}			if (aborta) return; // exit the thread for destruction
-			condition.wait(&mutex); //waits until new signal
-	}
-}
+// void GThread::run(){
+// 	// qDebug("back hehe %d (%d) %d	%s",cant,lista==NULL,lista->size(),lista->at(0).id);
+// 	//forever{
+// 			//bool done = mutex.tryLock(2);//deathlock... not sure why
+// 			// qDebug("MUTAO! %d",done);
+// 			// qDebug() << "Hello" << "RUN THREAD" << "from" << QThread::currentThread();
+//
+// 		//	if(state == 0)
+// 				// iniLoop();
+// 		//	else
+// 		//		g_Step();
+// 		//		if (aborta) return; // exit the thread for its destruction
+// 		//	condition.wait(&mutex); //waits until new signal
+// 		 exec(); //creating thread loop
+// 	// }
+// }
 
 
 void viewerChart::ecUpdate(int i){
-	gthread.threadUpdate(i);///
+	emit threadUpdate(i);///
  }
 
 	viewerChart::viewerChart( eChart *_chart, QWidget *parent):
@@ -568,6 +599,7 @@ void viewerChart::ecUpdate(int i){
 		 		  emit zoomSignal(0);
 					break;
 			case Qt::Key_R:
+					// delete gthread();
 		 		  emit changeSignal();
 					break;
 			 case Qt::Key_Right:
@@ -587,7 +619,7 @@ void viewerChart::ecUpdate(int i){
 	        break;
 	    }
 	}
-	eChart::eChart(QString title, int nRobo, int maxIterations, QGraphicsItem *parent, Qt::WindowFlags wFlags):
+	eChart::eChart(QString title, int nRobo, int unic, QGraphicsItem *parent, Qt::WindowFlags wFlags):
 		QChart(QChart::ChartTypeCartesian,parent,wFlags),
     m_step(0),
 		m_axis(new QValueAxis),
@@ -596,15 +628,21 @@ void viewerChart::ecUpdate(int i){
 		{
 		if (!title.compare("")) {setTitle("Por defeito"); legend()->hide();}
 		else setTitle(title);
-    //TODO legend()->hide();
-		int c = 0, p = 1;
-
+    //TODO legend() handling;
+		int c = unic>0?unic:0;
+		int p = 1;
 
 		QValueAxis* Yaxis = new QValueAxis;
 		// qDebug("LISTA CORES!:: %d",cor.size());// 148 colours
 		for (int i = 0; i<nRobo; i++){
 			m_series.append(new QLineSeries);
 			//set a different drawing style for each robot//
+
+			//////////////////////////////////////////
+			QPen trace(cor[c]);
+			trace.setStyle(Qt::PenStyle(p));
+			trace.setWidth(2);
+
 			c++;
 			if (c>cor.size()){
 				c = 0;
@@ -614,17 +652,12 @@ void viewerChart::ecUpdate(int i){
 					qWarning("RUNING OUT OF STYLES!!!");
 					//TODO add random style algorithm
 					/*  QPen pen;
-  				QVector<qreal> dashes;
+					QVector<qreal> dashes;
 					qreal space = 4; //randomize!
 					dashes << 1 << space << 3 << space << 9 << space << 27 << space << 9 << space; //randomize!
 					pen.setDashPattern(dashes);*/
 				}
 			}
-
-			//////////////////////////////////////////
-			QPen trace(cor[c]);
-			trace.setStyle(Qt::PenStyle(p));
-			trace.setWidth(2);
 			// qDebug("YUP %f-%f",(m_series[0])->at(0).x(),(m_series[0])->at(0).y());
 	    m_series[i]->setPen(trace);
 	    m_series[i]->append(m_x, m_y);
@@ -683,8 +716,9 @@ void viewerChart::ecUpdate(int i){
 
 	    return true;
 	}
-	void eChart::addPoint(double it, double quality){
-		// qDebug("chega %f %f",it, quality);
+	void eChart::addPoint(float it, float quality){
+		// qDebug() << "Hello" << "ADDPOINT" << "from" << QThread::currentThread();
+// qDebug("chega %f %f",it, quality);
 		//std::cout << "addddding"<< it <<"+"<<quality;
 		if (quality>m_y){
 			m_y=quality;
@@ -977,7 +1011,6 @@ void viewerChart::ecUpdate(int i){
 		mouseRightButtonRobot(0),
 		mouseMiddleButtonRobot(0),
 		s_paused(false)
-
 	{
 		initTexturesResources();
 		//qDebug("oarent: %s", parentWidget());
@@ -988,7 +1021,6 @@ void viewerChart::ecUpdate(int i){
 
 // elapsed time currently used in help messages
 		elapsedTime = double(30)/1000.; // average second between two frames, can be updated each frame to better precision
-		startTimer(timerPeriodMs);
 	}
 	void  ViewerWidget::speedSim(int timerSpeed){
 		mult = timerSpeed;
@@ -2011,7 +2043,8 @@ bool ViewerWidget::clickWidget(QMouseEvent *event)
 
 bool ViewerWidget::clickWidgetBottom(QMouseEvent *event){
 	if (event->y() > height()-72 && event->y() < height()-24){
-		s_paused=!s_paused;
+		emit pause();
+		s_paused != s_paused;
 		}
 		else
 			return false;
@@ -2147,6 +2180,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 				helpActivated();
 				break;
 			case Qt::Key_Space	:
+				emit pause();
 				s_paused=!s_paused;
 				break;
 			case Qt::Key_Up:
@@ -2358,19 +2392,26 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 	}
 
 
+	void ViewerWidget::step()
+	{
+			world->step(mult, double(timerPeriodMs)/1000., 3);
+			world->iterations++;
+			//Step for evolutionary
+			//update graphs
+			if (!(world->iterations%20)) emit updateGraph(world->iterations);
 
-	void ViewerWidget::timerEvent(QTimerEvent * event)
+	}
+
+
+	void ViewerWindow::timerEvent(QTimerEvent * event)
 	{
 		if(!s_paused){
-			world->step(mult, double(timerPeriodMs)/1000., 3);
+			viewer->step();
 			//Step for evolutionary
-			// emit anlStep(); //anl->step
-			//Updating data in graphs.
-			world->iterations++;
-			//update graphs
-			emit updateGraph(world->iterations);
+			anl->evolve(); //anl->step
 			}
-		updateGL();
+		viewer->updateGL();
+
 	}
 
 	//! Help button or F1 have been pressed

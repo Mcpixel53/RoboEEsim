@@ -142,11 +142,11 @@ namespace Enki
 			void update();
 			void updateTracking(double targetAngle, const QVector3D& targetPosition = QVector3D(), double zNear = 2.f);
 		};
-		bool s_paused;
 
 	public:
 		bool doDumpFrames;
 		unsigned dumpFramesCounter;
+		void step();
 
 	protected:
 		World *world;
@@ -211,7 +211,7 @@ namespace Enki
 		Robot* mouseMiddleButtonRobot;
 
 		double elapsedTime;
-
+		bool s_paused;
 	public:
 		ViewerWidget(World *world, QWidget *parent = 0);
 		~ViewerWidget();
@@ -232,6 +232,7 @@ namespace Enki
 		void hideGraph();
 		void updateGraph(int iters);
 		void anlStep();
+		void pause();
 		//void sliderMove(int ammount);
 	public slots:
 		void setCamera(const QPointF& pos, double altitude, double yaw, double pitch);
@@ -290,9 +291,8 @@ namespace Enki
 		virtual void mouseMoveEvent(QMouseEvent *event);
 		virtual void mouseDoubleClickEvent(QMouseEvent *event);
 		virtual void wheelEvent(QWheelEvent * event);
-		public:
-		virtual void timerEvent(QTimerEvent * event);
 
+	public:
 		// Internal event handling
 		virtual void helpActivated();
 	};
@@ -342,25 +342,35 @@ class eChart;
 
 	};
 
-	class GThread: public QThread{
+	class GThread: public QObject{
 		Q_OBJECT
 		public:
-			GThread(QObject *parent = 0);
+			GThread(std::vector<roboStat>* _lista, int n, std::string _mod, QObject *parent = 0);
 			~GThread();
 
-			void threadUpdate(float x);
-			void initiate(eChart * chart, std::vector<roboStat>* lista, int n, const std::string mod);
+			// void initiate(std::vector<roboStat>* lista, int n, const std::string mod);
+			// void init(){};
+
+
+		signals:
+
+			void addpoints(float x, float y);
+			void finished();
+
+		public slots:
+				void threadUpdate(float x);
+				void iniLoop();
 
 		protected:
-			void run() override;
 			void g_Step();
-			void iniLoop();
+			// void run() override;
+			void finish();
 			std::vector<double> retOrdRoboStats(int n);
 
 
 		private:
-			QMutex mutex;
-			QWaitCondition condition;
+			// QMutex mutex;
+			// QWaitCondition condition;
 			float it;
 			eChart * chart;
 			std::vector<roboStat>* lista;
@@ -411,19 +421,19 @@ class eChart;
 		Q_OBJECT
 
 		public:
-		    eChart(QString title , int nRobo, int maxIterations = 10000, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+			eChart(QString title , int nRobo, int unic = 0, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
 		    //eChart( QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0):QChart(QChart::ChartTypeCartesian,parent,wFlags);
 				~eChart();
 
 		public slots:
-				void addPoint(double it, double quality);
+				void addPoint(float it, float quality);
 				void zoomAction(bool enabled);
 
 		protected:
 			bool sceneEvent(QEvent *event);
 
 		private:
-			const QStringList cor= {"black","aqua","blue","blueviolet","brown","chartreuse","chocolate","coral","cornflowerblue","cornsilk","cyan","darkblue","darkcyan","darkgoldenrod","darkgray","darkgreen","darkmagenta","darkolivegreen","darkorange","darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet","deeppink","deepskyblue","dimgray","dimgrey","dodgerblue","firebrick","floralwhite","forestgreen","fuchsia","gainsboro","ghostwhite","gold","goldenrod","gray","green","greenyellow","grey","honeydew","hotpink","indianred","indigo","ivory","khaki","lavender","lavenderblush","lawngreen","lemonchiffon","lightblue","lightcoral","lightcyan","lightgoldenrodyellow","lightgray","lightgreen","lightgrey","lightpink","lightsalmon","lightseagreen","lightskyblue","lightslategray","lightslategrey","lightsteelblue","lightyellow","lime","limegreen","linen","magenta","maroon","mediumaquamarine","mediumblue","mediumorchid","mediumpurple","mediumseagreen","mediumslateblue","mediumspringgreen","mediumturquoise","mediumvioletred","midnightblue","mintcream","mistyrose","moccasin","navajowhite","navy","oldlace","olive","olivedrab","orange","orangered","orchid","palegoldenrod","palegreen","paleturquoise","palevioletred","papayawhip","peachpuff","peru","pink","plum","powderblue","purple","red","rosybrown","royalblue","saddlebrown","salmon","sandybrown","seagreen","seashell","sienna","silver","skyblue","slateblue","slategray","slategrey","snow","springgreen","steelblue","tan","teal","thistle","tomato","transparent","turquoise","violet","wheat","white","whitesmoke","yellow","yellowgreen"};
+			const QStringList cor= {"black","aqua","blue","blueviolet","brown","chartreuse","chocolate","coral","cornflowerblue","cyan","darkblue","darkcyan","darkgoldenrod","darkgray","darkgreen","darkmagenta","darkolivegreen","darkorange","darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet","deeppink","deepskyblue","dimgray","dimgrey","dodgerblue","firebrick","floralwhite","forestgreen","fuchsia","gainsboro","ghostwhite","gold","goldenrod","gray","green","greenyellow","grey","honeydew","hotpink","indianred","indigo","ivory","khaki","lavender","lavenderblush","lawngreen","lemonchiffon","lightblue","lightcoral","lightcyan","lightgoldenrodyellow","lightgray","lightgreen","lightgrey","lightpink","lightsalmon","lightseagreen","lightskyblue","lightslategray","lightslategrey","lightsteelblue","lightyellow","lime","limegreen","linen","magenta","maroon","mediumaquamarine","mediumblue","mediumorchid","mediumpurple","mediumseagreen","mediumslateblue","mediumspringgreen","mediumturquoise","mediumvioletred","midnightblue","mintcream","mistyrose","moccasin","navajowhite","navy","oldlace","olive","olivedrab","orange","orangered","orchid","palegoldenrod","palegreen","paleturquoise","palevioletred","papayawhip","peachpuff","peru","pink","plum","powderblue","purple","red","rosybrown","royalblue","saddlebrown","salmon","sandybrown","seagreen","seashell","sienna","silver","skyblue","slateblue","slategray","slategrey","snow","springgreen","steelblue","tan","teal","thistle","tomato","transparent","turquoise","violet","wheat","white","whitesmoke","yellow","yellowgreen"};
 				QList<QLineSeries*> m_series;
 				QList<QLineSeries*>::const_iterator c_series;
 				QStringList m_titles;
@@ -465,9 +475,9 @@ class eChart;
 	signals:
 			void zoomSignal(bool act);
 			void changeSignal();
-
+			void threadUpdate(float i);
 	private:
-			GThread gthread;
+			GThread* gthread;
 	    bool m_isTouching;
 			eChart * chart;
 	};
@@ -511,7 +521,8 @@ class ViewerWindow : public QMainWindow
 			void hideGraph();
 			void manageSettings(QString);
 			void manageGraphs();
-			QStringList * getVariables(){ return new QStringList("variables"); };
+			void pauseRun(){ s_paused =! s_paused; };
+			// QStringList * getVariables(){ return new QStringList("variables"); };
 
 	private:
 	    void createActions();
@@ -526,10 +537,16 @@ class ViewerWindow : public QMainWindow
 			QLineEdit *m_pEdit;
 			QStringList *variables;
 			const int chMAX;
+			bool s_paused;
+
 	protected:
+			virtual void timerEvent(QTimerEvent * event);
+
 	    ViewerWidget *viewer;
 			QWidget *chartLayout;
 			QAnalytics *anl;
+			int timerPeriodMs;
+
 			// QWidget  *charts[6];  //TODO quitar
 			int activeGraphs = 3;
 			// QDockWidget *dockChart2;
