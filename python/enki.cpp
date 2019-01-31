@@ -429,36 +429,10 @@ struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
 	}
 };
 
-struct EnkiViewer: public ViewerWidget
-{
-	PyThreadState *pythonSavedState;
 
-
-	EnkiViewer(World& world, Vector camPos, double camAltitude, double camYaw, double camPitch, double _wallsHeight):
-		ViewerWidget(&world),
-		pythonSavedState(0)
-	{
-		camera.pos.setX(camPos.x);
-		camera.pos.setY(camPos.y);
-		camera.altitude = camAltitude;
-		camera.yaw = camYaw;
-		camera.pitch = camPitch;
-		managedObjectsAliases[&typeid(EPuckWrap)] = &typeid(EPuck);
-	}
 	//~EnkiViewer{}
 
-	void timerEvent(QTimerEvent * event)
-	{
-		// get back Python lock
-		if (pythonSavedState)
-		PyEval_RestoreThread(pythonSavedState);
-		// touch Python objects while locked
-		ViewerWidget::timerEvent(event);
-		// release Python lock
-		if (pythonSavedState)
-		pythonSavedState = PyEval_SaveThread();
-	}
-};
+
 
 
 typedef std::vector<std::string> tvarList;
@@ -509,19 +483,48 @@ struct Analytics: QAnalytics, wrapper<QAnalytics>
 	}
 };
 
+struct EnkiViewer: public ViewerWidget{
 
-struct PythonViewer //static Class to call simulation
+
+	EnkiViewer(World& world, Vector camPos, double camAltitude, double camYaw, double camPitch, double _wallsHeight):
+		ViewerWidget(&world)
+	{
+		camera.pos.setX(camPos.x);
+		camera.pos.setY(camPos.y);
+		camera.altitude = camAltitude;
+		camera.yaw = camYaw;
+		camera.pitch = camPitch;
+		managedObjectsAliases[&typeid(EPuckWrap)] = &typeid(EPuck);
+	}
+
+};
+
+struct PythonViewer:public ViewerWindow //static Class to call simulation
 {
 	//ViewerWindow vWindow;
 	/*Analytics anl;
 	World world; World _world, Analytics _anl
 */
-	PythonViewer()
-	/*world(_world),
-	anl(_anl)*/
+PyThreadState *pythonSavedState;
+
+	PythonViewer(EnkiViewer& _viewer, Analytics& _anl):
+	ViewerWindow( &_viewer, &_anl),
+	pythonSavedState(0)
+
 	{
 		//init Params
 
+	}
+	void timerEvent(QTimerEvent * event)
+	{
+		// get back Python lock
+		if (pythonSavedState)
+		PyEval_RestoreThread(pythonSavedState);
+		// touch Python objects while locked
+		ViewerWindow::timerEvent(event);
+		// release Python lock
+		if (pythonSavedState)
+		pythonSavedState = PyEval_SaveThread();
 	}
 
 };
@@ -535,7 +538,7 @@ void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector c
 	EnkiViewer viewer(world, camPos, camAltitude, camYaw, camPitch, wallsHeight);
 	app.setWindowIcon(QIcon("appicon.png"));
 
-	ViewerWindow wViewer(&viewer, &anl);
+	PythonViewer wViewer(viewer, anl);
 	wViewer.setWindowTitle("eRoboSim!");
 	//viewer.setWindowTitle("PyEnki Viewer");
 	//viewer.show();
@@ -543,10 +546,11 @@ void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector c
 	wViewer.grabGesture(Qt::PinchGesture);
 	viewer.centerCameraWorld();
 	wViewer.show();
-	viewer.pythonSavedState = PyEval_SaveThread();
+
+	wViewer.pythonSavedState = PyEval_SaveThread();
 	app.exec();
-	if (viewer.pythonSavedState)
-		PyEval_RestoreThread(viewer.pythonSavedState);
+	if (wViewer.pythonSavedState)
+		PyEval_RestoreThread(wViewer.pythonSavedState);
 
 }
 

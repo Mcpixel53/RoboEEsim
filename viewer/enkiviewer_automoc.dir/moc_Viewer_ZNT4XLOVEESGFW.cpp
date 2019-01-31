@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Enki__ViewerWidget_t {
-    QByteArrayData data[33];
-    char stringdata0[344];
+    QByteArrayData data[34];
+    char stringdata0[350];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -37,39 +37,40 @@ QT_MOC_LITERAL(2, 29, 0), // ""
 QT_MOC_LITERAL(3, 30, 11), // "updateGraph"
 QT_MOC_LITERAL(4, 42, 5), // "iters"
 QT_MOC_LITERAL(5, 48, 7), // "anlStep"
-QT_MOC_LITERAL(6, 56, 9), // "setCamera"
-QT_MOC_LITERAL(7, 66, 3), // "pos"
-QT_MOC_LITERAL(8, 70, 8), // "altitude"
-QT_MOC_LITERAL(9, 79, 3), // "yaw"
-QT_MOC_LITERAL(10, 83, 5), // "pitch"
-QT_MOC_LITERAL(11, 89, 1), // "x"
-QT_MOC_LITERAL(12, 91, 1), // "y"
-QT_MOC_LITERAL(13, 93, 13), // "setWallHeight"
-QT_MOC_LITERAL(14, 107, 12), // "_wallsHeight"
-QT_MOC_LITERAL(15, 120, 27), // "setManagedObjectsAliasesMap"
-QT_MOC_LITERAL(16, 148, 24), // "ManagedObjectsAliasesMap"
-QT_MOC_LITERAL(17, 173, 3), // "map"
-QT_MOC_LITERAL(18, 177, 17), // "centerCameraWorld"
-QT_MOC_LITERAL(19, 195, 17), // "restartDumpFrames"
-QT_MOC_LITERAL(20, 213, 13), // "setDumpFrames"
-QT_MOC_LITERAL(21, 227, 6), // "doDump"
-QT_MOC_LITERAL(22, 234, 11), // "setTracking"
-QT_MOC_LITERAL(23, 246, 7), // "doTrack"
-QT_MOC_LITERAL(24, 254, 14), // "toggleTracking"
-QT_MOC_LITERAL(25, 269, 14), // "addInfoMessage"
-QT_MOC_LITERAL(26, 284, 7), // "message"
-QT_MOC_LITERAL(27, 292, 11), // "persistance"
-QT_MOC_LITERAL(28, 304, 5), // "color"
-QT_MOC_LITERAL(29, 310, 4), // "link"
-QT_MOC_LITERAL(30, 315, 8), // "showHelp"
-QT_MOC_LITERAL(31, 324, 8), // "speedSim"
-QT_MOC_LITERAL(32, 333, 10) // "timerSpeed"
+QT_MOC_LITERAL(6, 56, 5), // "pause"
+QT_MOC_LITERAL(7, 62, 9), // "setCamera"
+QT_MOC_LITERAL(8, 72, 3), // "pos"
+QT_MOC_LITERAL(9, 76, 8), // "altitude"
+QT_MOC_LITERAL(10, 85, 3), // "yaw"
+QT_MOC_LITERAL(11, 89, 5), // "pitch"
+QT_MOC_LITERAL(12, 95, 1), // "x"
+QT_MOC_LITERAL(13, 97, 1), // "y"
+QT_MOC_LITERAL(14, 99, 13), // "setWallHeight"
+QT_MOC_LITERAL(15, 113, 12), // "_wallsHeight"
+QT_MOC_LITERAL(16, 126, 27), // "setManagedObjectsAliasesMap"
+QT_MOC_LITERAL(17, 154, 24), // "ManagedObjectsAliasesMap"
+QT_MOC_LITERAL(18, 179, 3), // "map"
+QT_MOC_LITERAL(19, 183, 17), // "centerCameraWorld"
+QT_MOC_LITERAL(20, 201, 17), // "restartDumpFrames"
+QT_MOC_LITERAL(21, 219, 13), // "setDumpFrames"
+QT_MOC_LITERAL(22, 233, 6), // "doDump"
+QT_MOC_LITERAL(23, 240, 11), // "setTracking"
+QT_MOC_LITERAL(24, 252, 7), // "doTrack"
+QT_MOC_LITERAL(25, 260, 14), // "toggleTracking"
+QT_MOC_LITERAL(26, 275, 14), // "addInfoMessage"
+QT_MOC_LITERAL(27, 290, 7), // "message"
+QT_MOC_LITERAL(28, 298, 11), // "persistance"
+QT_MOC_LITERAL(29, 310, 5), // "color"
+QT_MOC_LITERAL(30, 316, 4), // "link"
+QT_MOC_LITERAL(31, 321, 8), // "showHelp"
+QT_MOC_LITERAL(32, 330, 8), // "speedSim"
+QT_MOC_LITERAL(33, 339, 10) // "timerSpeed"
 
     },
     "Enki::ViewerWidget\0hideGraph\0\0updateGraph\0"
-    "iters\0anlStep\0setCamera\0pos\0altitude\0"
-    "yaw\0pitch\0x\0y\0setWallHeight\0_wallsHeight\0"
-    "setManagedObjectsAliasesMap\0"
+    "iters\0anlStep\0pause\0setCamera\0pos\0"
+    "altitude\0yaw\0pitch\0x\0y\0setWallHeight\0"
+    "_wallsHeight\0setManagedObjectsAliasesMap\0"
     "ManagedObjectsAliasesMap\0map\0"
     "centerCameraWorld\0restartDumpFrames\0"
     "setDumpFrames\0doDump\0setTracking\0"
@@ -85,56 +86,58 @@ static const uint qt_meta_data_Enki__ViewerWidget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      19,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       3,       // signalCount
+       4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  104,    2, 0x06 /* Public */,
-       3,    1,  105,    2, 0x06 /* Public */,
-       5,    0,  108,    2, 0x06 /* Public */,
+       1,    0,  109,    2, 0x06 /* Public */,
+       3,    1,  110,    2, 0x06 /* Public */,
+       5,    0,  113,    2, 0x06 /* Public */,
+       6,    0,  114,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       6,    4,  109,    2, 0x0a /* Public */,
-       6,    5,  118,    2, 0x0a /* Public */,
-      13,    1,  129,    2, 0x0a /* Public */,
-      15,    1,  132,    2, 0x0a /* Public */,
-      18,    0,  135,    2, 0x0a /* Public */,
-      19,    0,  136,    2, 0x0a /* Public */,
-      20,    1,  137,    2, 0x0a /* Public */,
-      22,    1,  140,    2, 0x0a /* Public */,
-      24,    0,  143,    2, 0x0a /* Public */,
-      25,    4,  144,    2, 0x0a /* Public */,
-      25,    3,  153,    2, 0x2a /* Public | MethodCloned */,
-      25,    2,  160,    2, 0x2a /* Public | MethodCloned */,
-      25,    1,  165,    2, 0x2a /* Public | MethodCloned */,
-      30,    0,  168,    2, 0x0a /* Public */,
-      31,    1,  169,    2, 0x0a /* Public */,
+       7,    4,  115,    2, 0x0a /* Public */,
+       7,    5,  124,    2, 0x0a /* Public */,
+      14,    1,  135,    2, 0x0a /* Public */,
+      16,    1,  138,    2, 0x0a /* Public */,
+      19,    0,  141,    2, 0x0a /* Public */,
+      20,    0,  142,    2, 0x0a /* Public */,
+      21,    1,  143,    2, 0x0a /* Public */,
+      23,    1,  146,    2, 0x0a /* Public */,
+      25,    0,  149,    2, 0x0a /* Public */,
+      26,    4,  150,    2, 0x0a /* Public */,
+      26,    3,  159,    2, 0x2a /* Public | MethodCloned */,
+      26,    2,  166,    2, 0x2a /* Public | MethodCloned */,
+      26,    1,  171,    2, 0x2a /* Public | MethodCloned */,
+      31,    0,  174,    2, 0x0a /* Public */,
+      32,    1,  175,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    4,
     QMetaType::Void,
+    QMetaType::Void,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QPointF, QMetaType::Double, QMetaType::Double, QMetaType::Double,    7,    8,    9,   10,
-    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,   11,   12,    8,    9,   10,
-    QMetaType::Void, QMetaType::Double,   14,
-    QMetaType::Void, 0x80000000 | 16,   17,
+    QMetaType::Void, QMetaType::QPointF, QMetaType::Double, QMetaType::Double, QMetaType::Double,    8,    9,   10,   11,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,   12,   13,    9,   10,   11,
+    QMetaType::Void, QMetaType::Double,   15,
+    QMetaType::Void, 0x80000000 | 17,   18,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Bool,   21,
-    QMetaType::Void, QMetaType::Bool,   23,
+    QMetaType::Void, QMetaType::Bool,   22,
+    QMetaType::Void, QMetaType::Bool,   24,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString, QMetaType::Double, QMetaType::QColor, QMetaType::QUrl,   26,   27,   28,   29,
-    QMetaType::Void, QMetaType::QString, QMetaType::Double, QMetaType::QColor,   26,   27,   28,
-    QMetaType::Void, QMetaType::QString, QMetaType::Double,   26,   27,
-    QMetaType::Void, QMetaType::QString,   26,
+    QMetaType::Void, QMetaType::QString, QMetaType::Double, QMetaType::QColor, QMetaType::QUrl,   27,   28,   29,   30,
+    QMetaType::Void, QMetaType::QString, QMetaType::Double, QMetaType::QColor,   27,   28,   29,
+    QMetaType::Void, QMetaType::QString, QMetaType::Double,   27,   28,
+    QMetaType::Void, QMetaType::QString,   27,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,   32,
+    QMetaType::Void, QMetaType::Int,   33,
 
        0        // eod
 };
@@ -148,21 +151,22 @@ void Enki::ViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
         case 0: _t->hideGraph(); break;
         case 1: _t->updateGraph((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: _t->anlStep(); break;
-        case 3: _t->setCamera((*reinterpret_cast< const QPointF(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4]))); break;
-        case 4: _t->setCamera((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4])),(*reinterpret_cast< double(*)>(_a[5]))); break;
-        case 5: _t->setWallHeight((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 6: _t->setManagedObjectsAliasesMap((*reinterpret_cast< ManagedObjectsAliasesMap(*)>(_a[1]))); break;
-        case 7: _t->centerCameraWorld(); break;
-        case 8: _t->restartDumpFrames(); break;
-        case 9: _t->setDumpFrames((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 10: _t->setTracking((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 11: _t->toggleTracking(); break;
-        case 12: _t->addInfoMessage((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< const QColor(*)>(_a[3])),(*reinterpret_cast< const QUrl(*)>(_a[4]))); break;
-        case 13: _t->addInfoMessage((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< const QColor(*)>(_a[3]))); break;
-        case 14: _t->addInfoMessage((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 15: _t->addInfoMessage((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 16: _t->showHelp(); break;
-        case 17: _t->speedSim((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: _t->pause(); break;
+        case 4: _t->setCamera((*reinterpret_cast< const QPointF(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4]))); break;
+        case 5: _t->setCamera((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4])),(*reinterpret_cast< double(*)>(_a[5]))); break;
+        case 6: _t->setWallHeight((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 7: _t->setManagedObjectsAliasesMap((*reinterpret_cast< ManagedObjectsAliasesMap(*)>(_a[1]))); break;
+        case 8: _t->centerCameraWorld(); break;
+        case 9: _t->restartDumpFrames(); break;
+        case 10: _t->setDumpFrames((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 11: _t->setTracking((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 12: _t->toggleTracking(); break;
+        case 13: _t->addInfoMessage((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< const QColor(*)>(_a[3])),(*reinterpret_cast< const QUrl(*)>(_a[4]))); break;
+        case 14: _t->addInfoMessage((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< const QColor(*)>(_a[3]))); break;
+        case 15: _t->addInfoMessage((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 16: _t->addInfoMessage((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 17: _t->showHelp(); break;
+        case 18: _t->speedSim((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -185,6 +189,13 @@ void Enki::ViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
             using _t = void (ViewerWidget::*)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ViewerWidget::anlStep)) {
                 *result = 2;
+                return;
+            }
+        }
+        {
+            using _t = void (ViewerWidget::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ViewerWidget::pause)) {
+                *result = 3;
                 return;
             }
         }
@@ -216,13 +227,13 @@ int Enki::ViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 19)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 19;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 18)
+        if (_id < 19)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 18;
+        _id -= 19;
     }
     return _id;
 }
@@ -244,6 +255,12 @@ void Enki::ViewerWidget::updateGraph(int _t1)
 void Enki::ViewerWidget::anlStep()
 {
     QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+}
+
+// SIGNAL 3
+void Enki::ViewerWidget::pause()
+{
+    QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 struct qt_meta_stringdata_Enki__Settings_t {
     QByteArrayData data[4];
@@ -352,8 +369,8 @@ void Enki::Settings::settingsChanged(QString _t1)
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 struct qt_meta_stringdata_Enki__GThread_t {
-    QByteArrayData data[1];
-    char stringdata0[14];
+    QByteArrayData data[8];
+    char stringdata0[59];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -362,10 +379,18 @@ struct qt_meta_stringdata_Enki__GThread_t {
     )
 static const qt_meta_stringdata_Enki__GThread_t qt_meta_stringdata_Enki__GThread = {
     {
-QT_MOC_LITERAL(0, 0, 13) // "Enki::GThread"
+QT_MOC_LITERAL(0, 0, 13), // "Enki::GThread"
+QT_MOC_LITERAL(1, 14, 9), // "addpoints"
+QT_MOC_LITERAL(2, 24, 0), // ""
+QT_MOC_LITERAL(3, 25, 1), // "x"
+QT_MOC_LITERAL(4, 27, 1), // "y"
+QT_MOC_LITERAL(5, 29, 8), // "finished"
+QT_MOC_LITERAL(6, 38, 12), // "threadUpdate"
+QT_MOC_LITERAL(7, 51, 7) // "iniLoop"
 
     },
-    "Enki::GThread"
+    "Enki::GThread\0addpoints\0\0x\0y\0finished\0"
+    "threadUpdate\0iniLoop"
 };
 #undef QT_MOC_LITERAL
 
@@ -375,26 +400,65 @@ static const uint qt_meta_data_Enki__GThread[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       2,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    2,   34,    2, 0x06 /* Public */,
+       5,    0,   39,    2, 0x06 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags
+       6,    1,   40,    2, 0x0a /* Public */,
+       7,    0,   43,    2, 0x0a /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::Float, QMetaType::Float,    3,    4,
+    QMetaType::Void,
+
+ // slots: parameters
+    QMetaType::Void, QMetaType::Float,    3,
+    QMetaType::Void,
 
        0        // eod
 };
 
 void Enki::GThread::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
-    Q_UNUSED(_a);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        GThread *_t = static_cast<GThread *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->addpoints((*reinterpret_cast< float(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
+        case 1: _t->finished(); break;
+        case 2: _t->threadUpdate((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 3: _t->iniLoop(); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (GThread::*)(float , float );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&GThread::addpoints)) {
+                *result = 0;
+                return;
+            }
+        }
+        {
+            using _t = void (GThread::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&GThread::finished)) {
+                *result = 1;
+                return;
+            }
+        }
+    }
 }
 
 QT_INIT_METAOBJECT const QMetaObject Enki::GThread::staticMetaObject = {
-    { &QThread::staticMetaObject, qt_meta_stringdata_Enki__GThread.data,
+    { &QObject::staticMetaObject, qt_meta_stringdata_Enki__GThread.data,
       qt_meta_data_Enki__GThread,  qt_static_metacall, nullptr, nullptr}
 };
 
@@ -409,13 +473,37 @@ void *Enki::GThread::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_Enki__GThread.stringdata0))
         return static_cast<void*>(this);
-    return QThread::qt_metacast(_clname);
+    return QObject::qt_metacast(_clname);
 }
 
 int Enki::GThread::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QThread::qt_metacall(_c, _id, _a);
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 4)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 4;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 4)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 4;
+    }
     return _id;
+}
+
+// SIGNAL 0
+void Enki::GThread::addpoints(float _t1, float _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void Enki::GThread::finished()
+{
+    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 struct qt_meta_stringdata_Enki__QAnalytics_t {
     QByteArrayData data[14];
@@ -614,7 +702,7 @@ static const uint qt_meta_data_Enki__eChart[] = {
        5,    1,   29,    2, 0x0a /* Public */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Double, QMetaType::Double,    3,    4,
+    QMetaType::Void, QMetaType::Float, QMetaType::Float,    3,    4,
     QMetaType::Void, QMetaType::Bool,    6,
 
        0        // eod
@@ -626,7 +714,7 @@ void Enki::eChart::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         eChart *_t = static_cast<eChart *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->addPoint((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 0: _t->addPoint((*reinterpret_cast< float(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
         case 1: _t->zoomAction((*reinterpret_cast< bool(*)>(_a[1]))); break;
         default: ;
         }
@@ -669,8 +757,8 @@ int Enki::eChart::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     return _id;
 }
 struct qt_meta_stringdata_Enki__viewerChart_t {
-    QByteArrayData data[12];
-    char stringdata0[122];
+    QByteArrayData data[14];
+    char stringdata0[137];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -684,19 +772,22 @@ QT_MOC_LITERAL(1, 18, 10), // "zoomSignal"
 QT_MOC_LITERAL(2, 29, 0), // ""
 QT_MOC_LITERAL(3, 30, 3), // "act"
 QT_MOC_LITERAL(4, 34, 12), // "changeSignal"
-QT_MOC_LITERAL(5, 47, 6), // "change"
-QT_MOC_LITERAL(6, 54, 19), // "const std::string[]"
-QT_MOC_LITERAL(7, 74, 6), // "params"
-QT_MOC_LITERAL(8, 81, 22), // "std::vector<roboStat>*"
-QT_MOC_LITERAL(9, 104, 5), // "lista"
-QT_MOC_LITERAL(10, 110, 8), // "ecUpdate"
-QT_MOC_LITERAL(11, 119, 2) // "it"
+QT_MOC_LITERAL(5, 47, 12), // "threadUpdate"
+QT_MOC_LITERAL(6, 60, 1), // "i"
+QT_MOC_LITERAL(7, 62, 6), // "change"
+QT_MOC_LITERAL(8, 69, 19), // "const std::string[]"
+QT_MOC_LITERAL(9, 89, 6), // "params"
+QT_MOC_LITERAL(10, 96, 22), // "std::vector<roboStat>*"
+QT_MOC_LITERAL(11, 119, 5), // "lista"
+QT_MOC_LITERAL(12, 125, 8), // "ecUpdate"
+QT_MOC_LITERAL(13, 134, 2) // "it"
 
     },
     "Enki::viewerChart\0zoomSignal\0\0act\0"
-    "changeSignal\0change\0const std::string[]\0"
-    "params\0std::vector<roboStat>*\0lista\0"
-    "ecUpdate\0it"
+    "changeSignal\0threadUpdate\0i\0change\0"
+    "const std::string[]\0params\0"
+    "std::vector<roboStat>*\0lista\0ecUpdate\0"
+    "it"
 };
 #undef QT_MOC_LITERAL
 
@@ -706,28 +797,30 @@ static const uint qt_meta_data_Enki__viewerChart[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       2,       // signalCount
+       3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   34,    2, 0x06 /* Public */,
-       4,    0,   37,    2, 0x06 /* Public */,
+       1,    1,   39,    2, 0x06 /* Public */,
+       4,    0,   42,    2, 0x06 /* Public */,
+       5,    1,   43,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    2,   38,    2, 0x0a /* Public */,
-      10,    1,   43,    2, 0x0a /* Public */,
+       7,    2,   46,    2, 0x0a /* Public */,
+      12,    1,   51,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Bool,    3,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Float,    6,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 6, 0x80000000 | 8,    7,    9,
-    QMetaType::Void, QMetaType::Int,   11,
+    QMetaType::Void, 0x80000000 | 8, 0x80000000 | 10,    9,   11,
+    QMetaType::Void, QMetaType::Int,   13,
 
        0        // eod
 };
@@ -740,8 +833,9 @@ void Enki::viewerChart::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         switch (_id) {
         case 0: _t->zoomSignal((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 1: _t->changeSignal(); break;
-        case 2: _t->change((*reinterpret_cast< const std::string(*)[]>(_a[1])),(*reinterpret_cast< std::vector<roboStat>*(*)>(_a[2]))); break;
-        case 3: _t->ecUpdate((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->threadUpdate((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 3: _t->change((*reinterpret_cast< const std::string(*)[]>(_a[1])),(*reinterpret_cast< std::vector<roboStat>*(*)>(_a[2]))); break;
+        case 4: _t->ecUpdate((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -757,6 +851,13 @@ void Enki::viewerChart::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
             using _t = void (viewerChart::*)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&viewerChart::changeSignal)) {
                 *result = 1;
+                return;
+            }
+        }
+        {
+            using _t = void (viewerChart::*)(float );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&viewerChart::threadUpdate)) {
+                *result = 2;
                 return;
             }
         }
@@ -788,13 +889,13 @@ int Enki::viewerChart::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }
@@ -811,9 +912,16 @@ void Enki::viewerChart::changeSignal()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
+
+// SIGNAL 2
+void Enki::viewerChart::threadUpdate(float _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
+}
 struct qt_meta_stringdata_Enki__ViewerWindow_t {
-    QByteArrayData data[7];
-    char stringdata0[84];
+    QByteArrayData data[6];
+    char stringdata0[67];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -827,13 +935,11 @@ QT_MOC_LITERAL(1, 19, 9), // "hideGraph"
 QT_MOC_LITERAL(2, 29, 0), // ""
 QT_MOC_LITERAL(3, 30, 14), // "manageSettings"
 QT_MOC_LITERAL(4, 45, 12), // "manageGraphs"
-QT_MOC_LITERAL(5, 58, 12), // "getVariables"
-QT_MOC_LITERAL(6, 71, 12) // "QStringList*"
+QT_MOC_LITERAL(5, 58, 8) // "pauseRun"
 
     },
     "Enki::ViewerWindow\0hideGraph\0\0"
-    "manageSettings\0manageGraphs\0getVariables\0"
-    "QStringList*"
+    "manageSettings\0manageGraphs\0pauseRun"
 };
 #undef QT_MOC_LITERAL
 
@@ -860,7 +966,7 @@ static const uint qt_meta_data_Enki__ViewerWindow[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void,
-    0x80000000 | 6,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -874,8 +980,7 @@ void Enki::ViewerWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
         case 0: _t->hideGraph(); break;
         case 1: _t->manageSettings((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 2: _t->manageGraphs(); break;
-        case 3: { QStringList* _r = _t->getVariables();
-            if (_a[0]) *reinterpret_cast< QStringList**>(_a[0]) = std::move(_r); }  break;
+        case 3: _t->pauseRun(); break;
         default: ;
         }
     }
