@@ -63,9 +63,9 @@ class Config:
     fitnessBarHeight = 20
 
     objectiveSize = 10
-    objectiveSpeed = 30
+    objectiveSpeed = 100
 
-    distanceBufferSize = 50
+    distanceBufferSize = 40
 
     fastForwardToIterarion = 1
     eachIterationCollection = 1

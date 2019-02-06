@@ -87,6 +87,10 @@ QVector3D
 -
 QUrl
 -
+QException
+-
+QtConcurrent/QtConcurrentRun
+-
 enki/Geometry.h
 -
 enki/PhysicalEngine.h
@@ -120,6 +124,8 @@ enkiviewer_automoc.dir/moc_Viewer_ZNT4XLOVEESGFW.cpp
 QtCore/qbytearray.h
 -
 QtCore/qmetatype.h
+-
+QtCore/QVector
 -
 
 /media/Cousas/git/enki/viewer/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp
@@ -290,6 +296,42 @@ QtGui/QPen
 QtGui/QBrush
 -
 
+/opt/Qt/5.11.2/gcc_64/include/QtConcurrent/QtConcurrentRun
+qtconcurrentrun.h
+/opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentrun.h
+
+/opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrent_global.h
+QtCore/qglobal.h
+-
+
+/opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentcompilertest.h
+QtConcurrent/qtconcurrent_global.h
+-
+
+/opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentrun.h
+QtConcurrent/qtconcurrentcompilertest.h
+-
+QtConcurrent/qtconcurrentrunbase.h
+-
+QtConcurrent/qtconcurrentstoredfunctioncall.h
+-
+
+/opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentrunbase.h
+QtConcurrent/qtconcurrent_global.h
+-
+QtCore/qfuture.h
+-
+QtCore/qrunnable.h
+-
+QtCore/qthreadpool.h
+-
+
+/opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentstoredfunctioncall.h
+QtConcurrent/qtconcurrent_global.h
+-
+QtConcurrent/qtconcurrentrunbase.h
+-
+
 /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
 qdebug.h
 /opt/Qt/5.11.2/gcc_64/include/QtCore/qdebug.h
@@ -297,6 +339,10 @@ qdebug.h
 /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
 qcoreevent.h
 /opt/Qt/5.11.2/gcc_64/include/QtCore/qcoreevent.h
+
+/opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+qexception.h
+/opt/Qt/5.11.2/gcc_64/include/QtCore/qexception.h
 
 /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
 qlist.h
@@ -357,6 +403,10 @@ qurl.h
 /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
 qvariant.h
 /opt/Qt/5.11.2/gcc_64/include/QtCore/qvariant.h
+
+/opt/Qt/5.11.2/gcc_64/include/QtCore/QVector
+qvector.h
+/opt/Qt/5.11.2/gcc_64/include/QtCore/qvector.h
 
 /opt/Qt/5.11.2/gcc_64/include/QtCore/QtCore
 QtCore/QtCoreDepends

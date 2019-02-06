@@ -396,6 +396,8 @@ namespace Enki
 		//! Quality meassure
 		float fitness;
 
+		std::string id;
+
 	public:
 		//! Add a new local interaction, re-sort interaction vector from long ranged to short ranged.
 		void addLocalInteraction(LocalInteraction *li);
@@ -415,11 +417,18 @@ namespace Enki
 		//! Sort local interactions. Called by addLocalInteraction ; can be called by subclasses in case of interaction radius change.
 		void sortLocalInteractions(void);
 
-		void setFitness(float);
+		void setFitness(float fit){fitness = fit;};
 
-		float getFitness();
+		float getFitness(){return fitness;};
 
-		int getIntFitness();
+		int getIntFitness(){ return (int) 100*fitness+0.5;};
+
+		std::string getId(){return id;}
+
+		const std::string setId(const std::string _id){
+			id = _id;
+			return _id;
+		}
 	};
 
 	//! The world is the container of all objects and robots.

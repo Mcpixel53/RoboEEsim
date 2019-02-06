@@ -51,7 +51,7 @@
 
 using namespace boost::python;
 using namespace Enki;
-//using namespace QtCharts;
+
 
 tuple getColorComponents(const Color& color)
 {
@@ -437,16 +437,22 @@ struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
 
 typedef std::vector<std::string> tvarList;
 
+
 struct Analytics: QAnalytics, wrapper<QAnalytics>
 {
 
 	//QSplineSeries *series;
 	//ViewerChart *chart;
+	QThread *thread;
 	QList<double> * listaa = NULL;
 	Analytics(int _itMax = 5000):
+		thread(new QThread),
 		QAnalytics(_itMax)
 		//*chart ( new Chart),
 	{
+		this->moveToThread(thread);
+		connect(this, SIGNAL (finished()), thread, SLOT (deleteLater()));
+		connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
 		//series->append(0, 0);
 	}
 	// virtual void registaer(std::string name, std::string type){
@@ -476,10 +482,10 @@ struct Analytics: QAnalytics, wrapper<QAnalytics>
 	//
 	// }
 
-	virtual void evolve(){
-		if (override evolve = this->get_override("evolve"))
-			evolve();
-			QAnalytics::evolve();
+	virtual void step(){
+		if (override step = this->get_override("step"))
+			step();
+		QAnalytics::step();
 	}
 };
 
@@ -668,6 +674,7 @@ BOOST_PYTHON_MODULE(pyenki)
 
 	class_<Robot, bases<PhysicalObject> >("PhysicalObject", no_init)
 	.def("setFitnessVar", &Robot::setFitness)
+	.def("setId", &Robot::setId)
 	;
 
 	class_<DifferentialWheeled, bases<Robot> >("DifferentialWheeled", no_init)
@@ -750,7 +757,7 @@ BOOST_PYTHON_MODULE(pyenki)
 	.def("getDoubleList", &Analytics::getDoubleList, return_internal_reference<>())
 	.def("getQList", &Analytics::getQList,  return_internal_reference<>())// .def("evController", &Analytics::evController)
 	.def("testList", &Analytics::getVarList)
-	.def("evolve", &Analytics::evolve)
+	.def("step", &Analytics::step)
 
 	//.def(init<>())
 	;

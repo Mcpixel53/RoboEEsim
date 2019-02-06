@@ -31,8 +31,15 @@ python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/
 python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
 python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
 python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
+python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/QtConcurrentRun
+python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrent_global.h
+python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentcompilertest.h
+python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentrun.h
+python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentrunbase.h
+python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentstoredfunctioncall.h
 python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
 python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
+python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
 python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
 python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
 python/CMakeFiles/pyenki.dir/enki.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
