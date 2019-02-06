@@ -81,7 +81,7 @@ namespace Enki
 			anl(_anl),
 			m_pEdit(NULL),
 			chartLayout(new QWidget),
-			timerPeriodMs(30),
+			timerPeriodMs(20),
 			s_paused(false)
 	{
 			setWindowIcon(QIcon(":/appicon.png"));
@@ -111,7 +111,7 @@ namespace Enki
 			connect(slider, SIGNAL(valueChanged(int)),
 			              _viewer, SLOT(speedSim(int)));
 			connect(_viewer, SIGNAL(anlStep()),
-		              	_anl, SLOT(evolve()));
+		              	_anl, SLOT(step()));
 
 			//connect(_viewer, SIGNAL(valueChanged(int)),slider, SLOT(setValue(int)));
 
@@ -198,7 +198,11 @@ namespace Enki
 			return a;
 		}
 
-
+	void  QAnalytics::registaer(std::string name, std::vector<double>* list, std::string var) {
+		varList[var].push_back(roboStat(name, list));
+		int num = varList[var].size();//.vect->size();
+		if (num>numRobots) numRobots=num;
+	}
 
 
 	void ViewerWindow::getChoices(viewerChart *vChart){
@@ -222,7 +226,7 @@ namespace Enki
 			modificador->insertItems(0, {"unico", "todos", "maior/es", "menor/es", "mellor/es", "peor/es"});
 
 			QSpinBox *t_gAmm = new QSpinBox;
-			t_gAmm->setMaximum(100);
+			t_gAmm->setRange(1,anl->robots());
 			t_gAmm->setSingleStep(1);
 
 			QSlider *calidadeSpin = new QSlider(Qt::Horizontal);
@@ -340,11 +344,16 @@ ViewerWindow::~ViewerWindow()
 		int nRob, unic = 0;
 		if (!mod.compare("unico")) {nRob =1; unic = cant;}
 		else if (!mod.compare("todos")) nRob =_wholeLista->size() ;
-		else  nRob= cant;
-
-		setChart(new eChart(QString::fromStdString(mod+" "+params[1]+" "+params[0]), nRob, unic));
+		else  {
+			nRob = cant-1;
+			if (nRob == 0){
+				QMessageBox::warning(NULL,QString("Oops"),QString("Non podo mostrar os 0 ")+QString::fromStdString(mod));
+				return;
+			}
+		}
+		setChart(new eChart(QString::fromStdString("["+params[1]+"] "+mod+" "+params[0]), nRob, unic));
 		// if(temp!=chart) delete(temp);
-		// else  qDebug("son iguais!");
+		// else  qDebug("son iguais!");[]
 
 		if (_wholeLista==NULL) {qWarning("Error retrieving list!"); return;}
 		//Notify chart when zoom is on not to
@@ -363,6 +372,7 @@ ViewerWindow::~ViewerWindow()
 		connect(gthread, SIGNAL (finished()), gthread, SLOT (deleteLater()));
 		connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
 		connect(gthread, SIGNAL(addpoints(float, float)), chart, SLOT(addPoint(float, float)));
+		connect(gthread, SIGNAL(addpoints(QVector<QPointF>*)), chart, SLOT(addPoint(QVector<QPointF>*)));
 		thread->start();
 		// gthread.init();
 }
@@ -375,14 +385,14 @@ GThread::GThread(std::vector<roboStat>* _lista, int n, std::string _mod, QObject
     restart = false;
     aborta = false;
 		lista = _lista;
-		cant = n;
+		cant = n; //ammount of robots
+		num = cant-1; // robot num in list
 		mod = _mod;
 		state = 0;
 		// condition.wait(&mutex);
 	}
 
 GThread::~GThread(){
-qDebug("DYING WORKER");
 	emit finished();
 
 	// QThread::~QThread();
@@ -435,34 +445,46 @@ std::vector<double> GThread::retOrdRoboStats(int n){
 
 }
 void GThread::iniLoop(){
-	qDebug() << "Hello" << "RUN THREAD" << "from" << QThread::currentThread();
+	// qDebug() << "Hello" << "RUN THREAD" << "from" << QThread::currentThread();
+	QList<QVector<QPointF>*> Vlist;
 
 	int i = 1, k=i;// k = list->mult
 	// qDebug("init i %d",i);
 	for (int n=0; n<lista->at(0).vect->size(); n++){
-		if (restart) break;
+		int t = 0; //aux for robot num
 		if (!mod.compare("unico")){
-			emit addpoints(i, lista->at(cant).vect->at(n)); // Iterate list and fill graph by increments of k{emit addpointchart->addPoint
-			}
+			if(Vlist.size()<1) Vlist.append(new QVector<QPointF>);
+			Vlist[t]->append(QPointF(i, lista->at(num).vect->at(n)));
+		}
 		else if (!mod.compare("todos")){
-			for (auto it : *lista)
-				emit addpoints(i, it.vect->at(n));
+			for (auto it : *lista){
+				if(Vlist.size()<lista->size()) Vlist.append(new QVector<QPointF>);//qDebug("Adding %d",t);
+				Vlist[t]->append(QPointF(i,it.vect->at(n)));
+				t++;
+				}
 		}
 		else{
 			std::vector<double> vecTemp = retOrdRoboStats(n);// Iterate doubleList and order each time with specific modifieremit addpoints
-			for (int y =0; y<cant; y++)
-				emit addpoints(i, vecTemp[y]);
+			for (int y =0; y<cant; y++){
+				if(Vlist.size()<cant) Vlist.append(new QVector<QPointF>);
+				Vlist[t]->append(QPointF(i,vecTemp[y]));
+				t++;
+				}
 		}
 		i+=k; //keep track of sampling frequency
 	}
-	state = 1;
-	restart = false;
+
+	for (auto aVtemp : Vlist)
+	{
+		// qDebug("sending one %d",aVtemp->size());
+		emit addpoints(aVtemp);
+	}
 }
 
 void GThread::g_Step(){
 	// qDebug("STEPPING %f",lista->at(cant).vect->back());
 	if (!mod.compare("unico")){
-		emit addpoints(it, lista->at(cant).vect->back()); // Iterate list and fill graph by increments of k{
+		emit addpoints(it, lista->at(num).vect->back()); // Iterate list and fill graph by increments of k{
 		}
 	else if (!mod.compare("todos")){
 		for (auto robo : *lista)
@@ -629,8 +651,8 @@ void viewerChart::ecUpdate(int i){
 		if (!title.compare("")) {setTitle("Por defeito"); legend()->hide();}
 		else setTitle(title);
     //TODO legend() handling;
-		int c = unic>0?unic:0;
-		int p = 1;
+		int c = unic>0?unic-1:0;
+		int p = 2;
 
 		QValueAxis* Yaxis = new QValueAxis;
 		// qDebug("LISTA CORES!:: %d",cor.size());// 148 colours
@@ -646,9 +668,9 @@ void viewerChart::ecUpdate(int i){
 			c++;
 			if (c>cor.size()){
 				c = 0;
-				p++;
-				if(p>6){
-					p = 1;
+				// p++;
+				// if(p>6){
+				// 	p = 1;
 					qWarning("RUNING OUT OF STYLES!!!");
 					//TODO add random style algorithm
 					/*  QPen pen;
@@ -656,9 +678,10 @@ void viewerChart::ecUpdate(int i){
 					qreal space = 4; //randomize!
 					dashes << 1 << space << 3 << space << 9 << space << 27 << space << 9 << space; //randomize!
 					pen.setDashPattern(dashes);*/
-				}
+				// }
 			}
 			// qDebug("YUP %f-%f",(m_series[0])->at(0).x(),(m_series[0])->at(0).y());
+			m_series[i]->clear();
 	    m_series[i]->setPen(trace);
 	    m_series[i]->append(m_x, m_y);
 			addSeries(m_series[i]);
@@ -715,6 +738,18 @@ void viewerChart::ecUpdate(int i){
 	    }
 
 	    return true;
+	}
+	void eChart::addPoint(QVector<QPointF>* vector){
+		// qDebug("lets seee! %d",letsSee->size());
+		(*c_series)->replace(*vector);
+		if (++m_series.constBegin() != m_series.constEnd()){
+			c_series++;
+			if (c_series == m_series.constEnd()){
+				c_series = m_series.constBegin();
+
+				}
+			}
+			delete vector;
 	}
 	void eChart::addPoint(float it, float quality){
 		// qDebug() << "Hello" << "ADDPOINT" << "from" << QThread::currentThread();
@@ -1162,12 +1197,12 @@ void viewerChart::ecUpdate(int i){
 			nonTrackingCamera = camera;
 			camera.userYaw = 0;
 			camera.radius = selectedObject->getRadius() * 4;
-			fitnessBar.setEnabled(true);
+			// fitnessBar.setEnabled(true);
 			//qDebug("tracking");
 		}
 		else if (trackingView && !willTrack)
 		{
-			fitnessBar.setEnabled(false);
+			// fitnessBar.setEnabled(false);
 			camera = nonTrackingCamera;
 		}
 		trackingView = willTrack;
@@ -1710,10 +1745,10 @@ void viewerChart::ecUpdate(int i){
 		pauseWidget = bindTexture(QPixmap(QString(":/widgets/pause.png")), GL_TEXTURE_2D, GL_RGBA);
 		settingsWidget = bindTexture(QPixmap(QString(":/widgets/settings.png")), GL_TEXTURE_2D, GL_RGBA);
 
-		fitnessBar.setOrientation(Qt::Horizontal);
-		fitnessBar.setRange(0,100);
-		fitnessBar.setValue(0);
-		fitnessBar.setEnabled(false);
+		// fitnessBar.setOrientation(Qt::Horizontal);
+		// fitnessBar.se/tRange(0,100);
+		// fitnessBar.setValue(0);
+		// fitnessBar.setEnabled(false);
 
 		selectionTexture = bindTexture(QPixmap(QString(":/textures/selection.png")), GL_TEXTURE_2D, GL_RGBA);
 		worldTexture = bindTexture(QPixmap(QString(":/textures/world.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
@@ -2044,7 +2079,7 @@ bool ViewerWidget::clickWidget(QMouseEvent *event)
 bool ViewerWidget::clickWidgetBottom(QMouseEvent *event){
 	if (event->y() > height()-72 && event->y() < height()-24){
 		emit pause();
-		s_paused != s_paused;
+		s_paused = !s_paused;
 		}
 		else
 			return false;
@@ -2125,10 +2160,47 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 			messageListHeight += 20;
 	}
 
+	void ViewerWidget::paintBar(int fitness, float _x, float y){
+		float bwidth = 150;
+		float bheight = 15;
+		float x = _x-bwidth/2;
+		float progress = fitness/bwidth;
+		// qDebug("progress %f", progress);
+		// y = 150.;
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		glOrtho(0.0, width(), height(), 0.0, -1.0, 10.0);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glDisable(GL_CULL_FACE);
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glBegin(GL_QUADS);
+		  glColor3f(1,1,1);
+		  glVertex2f(x, y);
+		  glVertex2f(x + bwidth, y);
+		  glVertex2f(x + bwidth, y + bheight);
+		  glVertex2f(x, y + bheight);
+		glEnd();
+
+		y+=2;
+		bheight-=4;
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glBegin(GL_QUADS);
+		  glColor3f(0,1,0);
+		  glVertex2f(x,y);
+		  glVertex2f(x+progress*bwidth, y);
+		  glVertex2f(x+progress*bwidth, y+bheight);
+		  glVertex2f(x, y+bheight);
+		glEnd();
+
+}
 	void ViewerWidget::paintGL()
 	{
 		bool drawBar = false;
-		int Ifitness = 0;
+		// Ifitness = 0;
+		QString roboId = "";
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		const double znear = 0.5;
 		if (trackingView && selectedObject){
@@ -2138,12 +2210,14 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 			Bola* ball = dynamic_cast<Bola*>(selectedObject);
 			if (robot && !ball){
 				Ifitness = robot->getIntFitness();
-					fitnessBar.setValue(Ifitness);
-					drawBar = fitnessBar.isEnabled();
-					//qDebug("fitnessEnabledinRobot");
+				// fitnessBar.setValue(Ifitness);
+				drawBar = true;
+				roboId = QString(robot->getId().c_str());
+				//qDebug("fitnessEnabledinRobot");
 	  		//else renderText(5, 15, QString("Not Fitness MAaan"));
 				//printf("found robot fitness");
-			}camera.updateTracking(selectedObject->angle, QVector3D(selectedObject->pos.x, selectedObject->pos.y, selectedObject->getHeight()), znear);
+			}
+			camera.updateTracking(selectedObject->angle, QVector3D(selectedObject->pos.x, selectedObject->pos.y, selectedObject->getHeight()), znear);
 		}else
 			camera.update();
 
@@ -2154,9 +2228,13 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		int ww = (int) width()+0.5;
 		int offsetX = 80, offsetY = 15 ;
 		//printf("wea %d$%d ",ww,wh);
-		glColor3d(0,0,0);
-		if (drawBar)
-			renderText(((width()/2)-30), 15, QString("Fitness robot, %0 %").arg(Ifitness));
+		if (drawBar){
+			// qDebug("fitness %d",Ifitness);
+			paintBar(Ifitness, width()/2, 0);
+			glColor3d(0,0,0);
+			renderText(((width()/4)-30), 15, QString("ID - %1").arg(roboId));
+		}
+		glColor3d(0,0,1);
 		renderText(ww-offsetX,wh-offsetY, ("Iter:"+std::to_string((int) getWorld()->iterations)).c_str());
 		picking(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
 
@@ -2408,8 +2486,8 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		if(!s_paused){
 			viewer->step();
 			//Step for evolutionary
-			anl->evolve(); //anl->step
-			}
+			anl->step();
+		}
 		viewer->updateGL();
 
 	}

@@ -96,7 +96,7 @@ collisionElasticity(0)
 			-maxSpeed,maxSpeed
 		);
 		// set non slipping, override speed
-		cmdSpeed = realSpeed*40;// (realLeftSpeed + realRightSpeed) * 0.5;
+		cmdSpeed = realSpeed;// (realLeftSpeed + realRightSpeed) * 0.5;
 		cmdAngSpeed = 0;
 		//printf("UEHA! %f %f SPEDA:  %f \n ",realSpeed, noiseFactor,speed);
 
@@ -113,7 +113,7 @@ collisionElasticity(0)
 				 cmdSpeed * sin(angle)
 			);
 			angSpeed = cmdAngSpeed;
-			speed = cmdVelocity/10;
+			speed = cmdVelocity;
 			// printf("UEHA! %f %f ",angle,speed);
 			//Robot::applyForces(dt);
 		}

@@ -280,7 +280,7 @@ namespace Enki
 
 		dirtyUserData();
 	}
-        void PhysicalObject::setSpheric(double radius, double mass)
+  void PhysicalObject::setSpheric(double radius, double mass)
         {
                 // assign a new hull
                 hull.clear();
@@ -684,22 +684,7 @@ namespace Enki
 		}
 	}
 
-//***** Fitness intended for quality meassure
-	void Robot::setFitness(float fit)
-	{
-		fitness = fit;
-	}
 
-	float Robot::getFitness()
-	{
-		return fitness;
-	}
-
-	int Robot::getIntFitness()
-	{
-		return (int) 100*fitness+0.5;
-	}
-//*****
 	void Robot::doLocalInteractions(double dt, World *w, PhysicalObject *po)
 	{
 		for (size_t i=0; i<localInteractions.size(); i++)

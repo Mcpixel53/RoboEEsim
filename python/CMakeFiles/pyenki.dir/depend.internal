@@ -32,8 +32,15 @@ python/CMakeFiles/pyenki.dir/enki.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
+ /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/QtConcurrentRun
+ /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrent_global.h
+ /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentcompilertest.h
+ /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentrun.h
+ /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentrunbase.h
+ /opt/Qt/5.11.2/gcc_64/include/QtConcurrent/qtconcurrentstoredfunctioncall.h
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins

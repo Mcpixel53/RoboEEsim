@@ -29,7 +29,7 @@ maxFitness = np.sqrt(np.power(0 - WIDTH,2)+np.power(0-HEIGHT,2))
 #OBJ_Speed = conf.objectiveSpeed
 
 #w = pyenki.World(wW,wH,pyenki.Color(0.5, 0.5, 0.5))
-w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/herba.png", pyenki.Color(0.9, 0.9, 0.9))
+w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/terra.png", pyenki.Color(0.9, 0.9, 0.9))
 
 experimentData = {"Iterations": 0, "Individuals": [], "IndividualFitness": [], "MeanFitness": [] , "TopFitness": []}
 
@@ -133,13 +133,15 @@ class Analise(pyenki.Analytics_Module):
 
 
 
-	def evolve(self):
+	def step(self):
 		# print("Evolving Step!")
-		try:
-		    logicThread = threading._start_new_thread(self.evController, () )
+#		try:
+#	    logicThread = threading._start_new_thread(
+		self.evController()
+''' 	)
 		except Exception as e:
 			print ("Error: unable to start thread",str(e))
-
+'''
 
 class MyBall(pyenki.Bola):
 	#Radius = 2
@@ -186,7 +188,7 @@ class MyRobobo(pyenki.EPuck):
 	def __init__(self, pos, id):
 		super(MyRobobo, self).__init__()
 		self.timeout = 10
-		self.id = "rBobo "+str(id)
+		self.id = self.setId("rBobo "+str(id))
 		self.pos = pos
 		# self.speed is reserved by the engine
 		self.Speed = conf.roboboSpeed
@@ -198,6 +200,7 @@ class MyRobobo(pyenki.EPuck):
 		self.setFitnessVar(0)
 		self.changeWeights()
 
+
 	def changeWeights(self):
 		self.resetDistanceBuffer()
 		self.controlSystem.updateWeights(self.individual.genotype.chromosome)
@@ -208,7 +211,7 @@ class MyRobobo(pyenki.EPuck):
 		fitness = 0
 		if self.distanceBuffer.getSize() > 1:
 			fitness = (self.distanceBuffer.getTail() - self.distanceBuffer.getHead())
-			speed = (conf.roboboSpeed+conf.objectiveSpeed*10)
+			speed = (3 + conf.objectiveSpeed*0.03)#(conf.roboboSpeed+conf.objectiveSpeed)
 			fitness = fitness/((self.distanceBuffer.getSize()-1)*speed)
 			fitness = (1+fitness)/2
 		else:
@@ -218,6 +221,7 @@ class MyRobobo(pyenki.EPuck):
 			print("debugging fitness distance over time Speed \n")
 			print("tail",self.distanceBuffer.getTail(),"head",self.distanceBuffer.getHead())
 			print("buffer",self.distanceBuffer.getSize(),"distance: ",distance, " speed ",speed, "fitness: ",fitness)
+			#print()
 		return fitness
 
 	def fitnessAlg(self):

@@ -44,6 +44,10 @@
 #include <QVector3D>
 #include <QUrl>
 
+#include <QException>
+// #include <QtConcurrent>
+#include <QtConcurrent/QtConcurrentRun>
+
 #include <enki/Geometry.h>
 #include <enki/PhysicalEngine.h>
 
@@ -57,7 +61,10 @@
 #include <QtCharts/QAbstractSeries>
 #include <QtWidgets/QRubberBand>
 
+
+
 using namespace QtCharts;
+// using namespace QtConcurrent;
 
 	/*!	\file Viewer.h
 	\brief Definition of the Qt-based viewer widget
@@ -200,7 +207,7 @@ namespace Enki
 		bool trackingView; //!< to know if camera is in tracking mode
 		CameraPose nonTrackingCamera; //!< copy of global camera when in tracking view
 
-		QProgressBar fitnessBar ; //!<shows quality meassure
+		int Ifitness; //selected robot actual fitness
 
 		PhysicalObject *pointedObject, *selectedObject;
 		QVector3D pointedPoint;
@@ -258,6 +265,7 @@ namespace Enki
 		void renderWorld();
 		void renderShape(const Polygon& shape, const double height, const Color& color);
 		void renderSimpleObject(PhysicalObject *object);
+		void paintBar(int fitness, float _x, float y);
 
 		// helper functions for coordinates
 		void glVertex2Screen(int x, int y);
@@ -355,6 +363,8 @@ class eChart;
 		signals:
 
 			void addpoints(float x, float y);
+			void addpoints(QVector<QPointF> *);
+
 			void finished();
 
 		public slots:
@@ -374,7 +384,7 @@ class eChart;
 			float it;
 			eChart * chart;
 			std::vector<roboStat>* lista;
-			int cant, state;
+			int cant, state, num;
 			std::string mod;
 			bool restart;
     	bool aborta;
@@ -392,15 +402,18 @@ class eChart;
 	public slots:
 		QStringList*  getListVars();
 		std::vector<roboStat>*  getListVar(const std::string& name ) { if (varList.count(name.c_str())==0) return NULL; else return &varList.at(name.c_str());}//qDebug("Retrieving ''%s'' %d",name.c_str(),varList.at(name.c_str())->size());
-		virtual void evolve(){};
-		void checkVarList(){
-			qDebug("CAGONDIOLAAAAA %d %s",varList["Fitness"][0].vect->size(),varList["Fitness"][0].id.c_str());
-		}
+		virtual void step(){};
+
+
+		int robots(){return numRobots;}
+
+
 	protected:
 		// std::vector<double> * varList = NULL;
-		std::unordered_map <std::string, std::vector<roboStat> > varList;
+		int numRobots = 0;
+		std::unordered_map <std::string, std::vector<roboStat>> varList;
 	//	template <typename T>
-		void registaer(std::string name, std::vector<double>* list, std::string var) { varList[var].push_back(roboStat(name, list));};
+		void registaer(std::string name, std::vector<double>* list, std::string var);
 		// void registaer(std::string name, std::vector<double> *list){varList = list;};
 
 
@@ -427,6 +440,7 @@ class eChart;
 
 		public slots:
 				void addPoint(float it, float quality);
+				void addPoint(QVector<QPointF>*);
 				void zoomAction(bool enabled);
 
 		protected:
