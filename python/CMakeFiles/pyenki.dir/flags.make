@@ -6,5 +6,5 @@ CXX_FLAGS = -fPIC   -fPIC -std=gnu++11
 
 CXX_DEFINES = -DQT_CHARTS_LIB -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dpyenki_EXPORTS
 
-CXX_INCLUDES = -I/media/Cousas/git/enki -I/usr/include/python2.7 -isystem /opt/Qt/5.11.2/gcc_64/include -isystem /opt/Qt/5.11.2/gcc_64/include/QtWidgets -isystem /opt/Qt/5.11.2/gcc_64/include/QtGui -isystem /opt/Qt/5.11.2/gcc_64/include/QtCore -isystem /opt/Qt/5.11.2/gcc_64/./mkspecs/linux-g++ -isystem /opt/Qt/5.11.2/gcc_64/include/QtCharts -isystem /opt/Qt/5.11.2/gcc_64/include/QtOpenGL 
+CXX_INCLUDES = -I/media/Cousas/git/robosim -I/usr/include/python2.7 -isystem /opt/Qt/5.11.2/gcc_64/include -isystem /opt/Qt/5.11.2/gcc_64/include/QtWidgets -isystem /opt/Qt/5.11.2/gcc_64/include/QtGui -isystem /opt/Qt/5.11.2/gcc_64/include/QtCore -isystem /opt/Qt/5.11.2/gcc_64/./mkspecs/linux-g++ -isystem /opt/Qt/5.11.2/gcc_64/include/QtCharts -isystem /opt/Qt/5.11.2/gcc_64/include/QtOpenGL 
 

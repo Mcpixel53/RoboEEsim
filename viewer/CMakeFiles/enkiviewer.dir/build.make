@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /media/Cousas/git/enki
+CMAKE_SOURCE_DIR = /media/Cousas/git/robosim
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /media/Cousas/git/enki
+CMAKE_BINARY_DIR = /media/Cousas/git/robosim
 
 # Include any dependencies generated for this target.
 include viewer/CMakeFiles/enkiviewer.dir/depend.make
@@ -59,16 +59,16 @@ include viewer/CMakeFiles/enkiviewer.dir/flags.make
 
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: viewer/Viewer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/Viewer.cpp.o -c /media/Cousas/git/enki/viewer/Viewer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/Viewer.cpp.o -c /media/Cousas/git/robosim/viewer/Viewer.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/Viewer.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/Viewer.cpp > CMakeFiles/enkiviewer.dir/Viewer.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/Viewer.cpp > CMakeFiles/enkiviewer.dir/Viewer.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/Viewer.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/Viewer.cpp -o CMakeFiles/enkiviewer.dir/Viewer.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/Viewer.cpp -o CMakeFiles/enkiviewer.dir/Viewer.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o.requires:
 
@@ -83,16 +83,16 @@ viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o.provides.build: viewer/CMakeFiles/
 
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: viewer/EPuckModel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o -c /media/Cousas/git/enki/viewer/EPuckModel.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o -c /media/Cousas/git/robosim/viewer/EPuckModel.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/EPuckModel.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/EPuckModel.cpp > CMakeFiles/enkiviewer.dir/EPuckModel.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/EPuckModel.cpp > CMakeFiles/enkiviewer.dir/EPuckModel.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/EPuckModel.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/EPuckModel.cpp -o CMakeFiles/enkiviewer.dir/EPuckModel.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/EPuckModel.cpp -o CMakeFiles/enkiviewer.dir/EPuckModel.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o.requires:
 
@@ -107,16 +107,16 @@ viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o.provides.build: viewer/CMakeFi
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.o: viewer/objects/EPuckBody.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.o -c /media/Cousas/git/enki/viewer/objects/EPuckBody.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.o -c /media/Cousas/git/robosim/viewer/objects/EPuckBody.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/objects/EPuckBody.cpp > CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/objects/EPuckBody.cpp > CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/objects/EPuckBody.cpp -o CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/objects/EPuckBody.cpp -o CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.o.requires:
 
@@ -131,16 +131,16 @@ viewer/CMakeFiles/enkiviewer.dir/objects/EPuckBody.cpp.o.provides.build: viewer/
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.o: viewer/objects/EPuckRest.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.o -c /media/Cousas/git/enki/viewer/objects/EPuckRest.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.o -c /media/Cousas/git/robosim/viewer/objects/EPuckRest.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/objects/EPuckRest.cpp > CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/objects/EPuckRest.cpp > CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/objects/EPuckRest.cpp -o CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/objects/EPuckRest.cpp -o CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.o.requires:
 
@@ -155,16 +155,16 @@ viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRest.cpp.o.provides.build: viewer/
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.o: viewer/objects/EPuckRing.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.o -c /media/Cousas/git/enki/viewer/objects/EPuckRing.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.o -c /media/Cousas/git/robosim/viewer/objects/EPuckRing.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/objects/EPuckRing.cpp > CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/objects/EPuckRing.cpp > CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/objects/EPuckRing.cpp -o CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/objects/EPuckRing.cpp -o CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.o.requires:
 
@@ -179,16 +179,16 @@ viewer/CMakeFiles/enkiviewer.dir/objects/EPuckRing.cpp.o.provides.build: viewer/
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.o: viewer/objects/EPuckWheelLeft.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.o -c /media/Cousas/git/enki/viewer/objects/EPuckWheelLeft.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.o -c /media/Cousas/git/robosim/viewer/objects/EPuckWheelLeft.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/objects/EPuckWheelLeft.cpp > CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/objects/EPuckWheelLeft.cpp > CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/objects/EPuckWheelLeft.cpp -o CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/objects/EPuckWheelLeft.cpp -o CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.o.requires:
 
@@ -203,16 +203,16 @@ viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelLeft.cpp.o.provides.build: vi
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.o: viewer/objects/EPuckWheelRight.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.o -c /media/Cousas/git/enki/viewer/objects/EPuckWheelRight.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.o -c /media/Cousas/git/robosim/viewer/objects/EPuckWheelRight.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/objects/EPuckWheelRight.cpp > CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/objects/EPuckWheelRight.cpp > CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/objects/EPuckWheelRight.cpp -o CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/objects/EPuckWheelRight.cpp -o CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.o.requires:
 
@@ -227,16 +227,16 @@ viewer/CMakeFiles/enkiviewer.dir/objects/EPuckWheelRight.cpp.o.provides.build: v
 
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: viewer/MarxbotModel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o -c /media/Cousas/git/enki/viewer/MarxbotModel.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o -c /media/Cousas/git/robosim/viewer/MarxbotModel.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/MarxbotModel.cpp > CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/MarxbotModel.cpp > CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/MarxbotModel.cpp -o CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/MarxbotModel.cpp -o CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o.requires:
 
@@ -251,16 +251,16 @@ viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o.provides.build: viewer/CMake
 
 viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.o: viewer/objects/MarxbotBase.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.o -c /media/Cousas/git/enki/viewer/objects/MarxbotBase.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.o -c /media/Cousas/git/robosim/viewer/objects/MarxbotBase.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/objects/MarxbotBase.cpp > CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/objects/MarxbotBase.cpp > CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/objects/MarxbotBase.cpp -o CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/objects/MarxbotBase.cpp -o CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.o.requires:
 
@@ -275,16 +275,16 @@ viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotBase.cpp.o.provides.build: viewe
 
 viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.o: viewer/objects/MarxbotWheel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.o -c /media/Cousas/git/enki/viewer/objects/MarxbotWheel.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.o -c /media/Cousas/git/robosim/viewer/objects/MarxbotWheel.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/objects/MarxbotWheel.cpp > CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/objects/MarxbotWheel.cpp > CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/objects/MarxbotWheel.cpp -o CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/objects/MarxbotWheel.cpp -o CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.o.requires:
 
@@ -299,16 +299,16 @@ viewer/CMakeFiles/enkiviewer.dir/objects/MarxbotWheel.cpp.o.provides.build: view
 
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: viewer/Thymio2Model.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o -c /media/Cousas/git/enki/viewer/Thymio2Model.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o -c /media/Cousas/git/robosim/viewer/Thymio2Model.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/Thymio2Model.cpp > CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/Thymio2Model.cpp > CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/Thymio2Model.cpp -o CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/Thymio2Model.cpp -o CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o.requires:
 
@@ -323,16 +323,16 @@ viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o.provides.build: viewer/CMake
 
 viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.o: viewer/objects/Thymio2Body.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.o -c /media/Cousas/git/enki/viewer/objects/Thymio2Body.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.o -c /media/Cousas/git/robosim/viewer/objects/Thymio2Body.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/objects/Thymio2Body.cpp > CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/objects/Thymio2Body.cpp > CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/objects/Thymio2Body.cpp -o CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/objects/Thymio2Body.cpp -o CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.o.requires:
 
@@ -347,16 +347,16 @@ viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Body.cpp.o.provides.build: viewe
 
 viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.o: viewer/objects/Thymio2Wheel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.o -c /media/Cousas/git/enki/viewer/objects/Thymio2Wheel.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.o -c /media/Cousas/git/robosim/viewer/objects/Thymio2Wheel.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/objects/Thymio2Wheel.cpp > CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/objects/Thymio2Wheel.cpp > CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/objects/Thymio2Wheel.cpp -o CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/objects/Thymio2Wheel.cpp -o CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.o.requires:
 
@@ -371,16 +371,16 @@ viewer/CMakeFiles/enkiviewer.dir/objects/Thymio2Wheel.cpp.o.provides.build: view
 
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: viewer/enkiviewer_automoc.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o -c /media/Cousas/git/enki/viewer/enkiviewer_automoc.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o -c /media/Cousas/git/robosim/viewer/enkiviewer_automoc.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/enkiviewer_automoc.cpp > CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/enkiviewer_automoc.cpp > CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/enkiviewer_automoc.cpp -o CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/enkiviewer_automoc.cpp -o CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o.requires:
 
@@ -395,16 +395,16 @@ viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o.provides.build: viewer
 
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.o: viewer/CMakeFiles/enkiviewer.dir/flags.make
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.o: viewer/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.o"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.o -c /media/Cousas/git/enki/viewer/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.o"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.o -c /media/Cousas/git/robosim/viewer/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp
 
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.i"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/enki/viewer/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp > CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.i
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /media/Cousas/git/robosim/viewer/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp > CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.i
 
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.s"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/enki/viewer/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp -o CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.s
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /media/Cousas/git/robosim/viewer/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp -o CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.s
 
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.o.requires:
 
@@ -455,9 +455,9 @@ viewer/libenkiviewer.a: viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.
 viewer/libenkiviewer.a: viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.dir/qrc_enki-viewer-te_EHT2WBQNQC37TS.cpp.o
 viewer/libenkiviewer.a: viewer/CMakeFiles/enkiviewer.dir/build.make
 viewer/libenkiviewer.a: viewer/CMakeFiles/enkiviewer.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX static library libenkiviewer.a"
-	cd /media/Cousas/git/enki/viewer && $(CMAKE_COMMAND) -P CMakeFiles/enkiviewer.dir/cmake_clean_target.cmake
-	cd /media/Cousas/git/enki/viewer && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/enkiviewer.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX static library libenkiviewer.a"
+	cd /media/Cousas/git/robosim/viewer && $(CMAKE_COMMAND) -P CMakeFiles/enkiviewer.dir/cmake_clean_target.cmake
+	cd /media/Cousas/git/robosim/viewer && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/enkiviewer.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 viewer/CMakeFiles/enkiviewer.dir/build: viewer/libenkiviewer.a
@@ -483,10 +483,10 @@ viewer/CMakeFiles/enkiviewer.dir/requires: viewer/CMakeFiles/enkiviewer.dir/enki
 .PHONY : viewer/CMakeFiles/enkiviewer.dir/requires
 
 viewer/CMakeFiles/enkiviewer.dir/clean:
-	cd /media/Cousas/git/enki/viewer && $(CMAKE_COMMAND) -P CMakeFiles/enkiviewer.dir/cmake_clean.cmake
+	cd /media/Cousas/git/robosim/viewer && $(CMAKE_COMMAND) -P CMakeFiles/enkiviewer.dir/cmake_clean.cmake
 .PHONY : viewer/CMakeFiles/enkiviewer.dir/clean
 
 viewer/CMakeFiles/enkiviewer.dir/depend:
-	cd /media/Cousas/git/enki && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /media/Cousas/git/enki /media/Cousas/git/enki/viewer /media/Cousas/git/enki /media/Cousas/git/enki/viewer /media/Cousas/git/enki/viewer/CMakeFiles/enkiviewer.dir/DependInfo.cmake --color=$(COLOR)
+	cd /media/Cousas/git/robosim && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /media/Cousas/git/robosim /media/Cousas/git/robosim/viewer /media/Cousas/git/robosim /media/Cousas/git/robosim/viewer /media/Cousas/git/robosim/viewer/CMakeFiles/enkiviewer.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : viewer/CMakeFiles/enkiviewer.dir/depend
 

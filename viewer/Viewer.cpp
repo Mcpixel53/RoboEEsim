@@ -81,7 +81,7 @@ namespace Enki
 			anl(_anl),
 			m_pEdit(NULL),
 			chartLayout(new QWidget),
-			timerPeriodMs(20),
+			timerPeriodMs(1),
 			s_paused(false)
 	{
 			setWindowIcon(QIcon(":/appicon.png"));
@@ -102,14 +102,16 @@ namespace Enki
 			QHBoxLayout *container = new QHBoxLayout;
 
 			QSlider *slider = new QSlider(Qt::Vertical);
-	    slider->setRange(0.95, 20);
+	    slider->setRange(1, 30);
 	    slider->setSingleStep(1);
-	    slider->setPageStep(5);
+	    slider->setPageStep(4);
 	    slider->setTickInterval(5);
-			slider->setValue(1);
+			slider->setValue(timerPeriodMs);
+			slider->setInvertedAppearance(true);
+			slider->setInvertedControls(true);
 	    slider->setTickPosition(QSlider::TicksRight);
 			connect(slider, SIGNAL(valueChanged(int)),
-			              _viewer, SLOT(speedSim(int)));
+			              this, SLOT(speedSim(int)));
 			connect(_viewer, SIGNAL(anlStep()),
 		              	_anl, SLOT(step()));
 
@@ -138,7 +140,8 @@ namespace Enki
 			createDockWindows();
 	//    newLetter();
 	//    setUnifiedTitleAndToolBarOnMac(true);
-	startTimer(timerPeriodMs);
+ 	timer = startTimer(timerPeriodMs);
+	// qDebug("%d",timer);
 
 	}
 
@@ -345,11 +348,11 @@ ViewerWindow::~ViewerWindow()
 		if (!mod.compare("unico")) {nRob =1; unic = cant;}
 		else if (!mod.compare("todos")) nRob =_wholeLista->size() ;
 		else  {
-			nRob = cant-1;
-			if (nRob == 0){
-				QMessageBox::warning(NULL,QString("Oops"),QString("Non podo mostrar os 0 ")+QString::fromStdString(mod));
-				return;
-			}
+			nRob = cant;
+			// if (nRob == 0){
+			// 	QMessageBox::warning(NULL,QString("Oops"),QString("Non podo mostrar os 0 ")+QString::fromStdString(mod));
+			// 	return;
+			// }
 		}
 		setChart(new eChart(QString::fromStdString("["+params[1]+"] "+mod+" "+params[0]), nRob, unic));
 		// if(temp!=chart) delete(temp);
@@ -483,6 +486,7 @@ void GThread::iniLoop(){
 
 void GThread::g_Step(){
 	// qDebug("STEPPING %f",lista->at(cant).vect->back());
+	// float points[lista->size()]
 	if (!mod.compare("unico")){
 		emit addpoints(it, lista->at(num).vect->back()); // Iterate list and fill graph by increments of k{
 		}
@@ -652,7 +656,7 @@ void viewerChart::ecUpdate(int i){
 		else setTitle(title);
     //TODO legend() handling;
 		int c = unic>0?unic-1:0;
-		int p = 2;
+		int p = 3;
 
 		QValueAxis* Yaxis = new QValueAxis;
 		// qDebug("LISTA CORES!:: %d",cor.size());// 148 colours
@@ -1026,7 +1030,7 @@ void viewerChart::ecUpdate(int i){
 	//viewer constructor
 	ViewerWidget::ViewerWidget(World *world, QWidget *parent) :
 		QGLWidget(parent),
-		timerPeriodMs(30),
+		msStep(120),
 		mult(1),
 		camera(world),
 		doDumpFrames(false),
@@ -1056,9 +1060,16 @@ void viewerChart::ecUpdate(int i){
 
 // elapsed time currently used in help messages
 		elapsedTime = double(30)/1000.; // average second between two frames, can be updated each frame to better precision
+		QTimer *timer = new QTimer(this);
+		connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
+		timer->start(100);
+
 	}
-	void  ViewerWidget::speedSim(int timerSpeed){
-		mult = timerSpeed;
+	void  ViewerWindow::speedSim(int timerSpeed){
+		timerPeriodMs = timerSpeed*timerSpeed;
+		killTimer(timer);
+		timer = startTimer(timerPeriodMs);
+
 	}
 
 	//Somehow ViewerWidget stoped receiving KeyPress events, probablt after docking or adding layout to centralWidget.
@@ -1196,7 +1207,7 @@ void viewerChart::ecUpdate(int i){
 		{
 			nonTrackingCamera = camera;
 			camera.userYaw = 0;
-			camera.radius = selectedObject->getRadius() * 4;
+			camera.radius = selectedObject->getRadius() * 10;
 			// fitnessBar.setEnabled(true);
 			//qDebug("tracking");
 		}
@@ -2217,6 +2228,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 	  		//else renderText(5, 15, QString("Not Fitness MAaan"));
 				//printf("found robot fitness");
 			}
+			// int followingOffset = 10; //Following the robot from higher
 			camera.updateTracking(selectedObject->angle, QVector3D(selectedObject->pos.x, selectedObject->pos.y, selectedObject->getHeight()), znear);
 		}else
 			camera.update();
@@ -2230,7 +2242,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		//printf("wea %d$%d ",ww,wh);
 		if (drawBar){
 			// qDebug("fitness %d",Ifitness);
-			paintBar(Ifitness, width()/2, 0);
+			paintBar(Ifitness, width()/2, 2);
 			glColor3d(0,0,0);
 			renderText(((width()/4)-30), 15, QString("ID - %1").arg(roboId));
 		}
@@ -2472,11 +2484,11 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 
 	void ViewerWidget::step()
 	{
-			world->step(mult, double(timerPeriodMs)/1000., 3);
+			world->step(double(msStep)/1000., 3);
 			world->iterations++;
 			//Step for evolutionary
 			//update graphs
-			if (!(world->iterations%20)) emit updateGraph(world->iterations);
+			if (!(world->iterations%100)) emit updateGraph(world->iterations);
 
 	}
 
@@ -2488,8 +2500,6 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 			//Step for evolutionary
 			anl->step();
 		}
-		viewer->updateGL();
-
 	}
 
 	//! Help button or F1 have been pressed

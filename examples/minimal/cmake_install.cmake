@@ -1,4 +1,4 @@
-# Install script for directory: /media/Cousas/git/enki/examples/minimal
+# Install script for directory: /media/Cousas/git/robosim/examples/minimal
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

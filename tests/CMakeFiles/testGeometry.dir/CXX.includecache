@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/media/Cousas/git/enki/enki/Geometry.h
+/media/Cousas/git/robosim/enki/Geometry.h
 math.h
 -
 cmath
@@ -20,9 +20,9 @@ ostream
 algorithm
 -
 
-/media/Cousas/git/enki/tests/testGeometry.cpp
+/media/Cousas/git/robosim/tests/testGeometry.cpp
 ../enki/Geometry.h
-/media/Cousas/git/enki/enki/Geometry.h
+/media/Cousas/git/robosim/enki/Geometry.h
 iostream
 -
 

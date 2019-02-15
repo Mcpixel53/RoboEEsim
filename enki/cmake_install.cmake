@@ -1,4 +1,4 @@
-# Install script for directory: /media/Cousas/git/enki/enki
+# Install script for directory: /media/Cousas/git/robosim/enki
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,10 +33,10 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/enki/" TYPE DIRECTORY FILES "/media/Cousas/git/enki/enki/." FILES_MATCHING REGEX "/[^/]*\\.h$")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/enki/" TYPE DIRECTORY FILES "/media/Cousas/git/robosim/enki/." FILES_MATCHING REGEX "/[^/]*\\.h$")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/media/Cousas/git/enki/enki/libenki.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/media/Cousas/git/robosim/enki/libenki.a")
 endif()
 

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /media/Cousas/git/enki
+CMAKE_SOURCE_DIR = /media/Cousas/git/robosim
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /media/Cousas/git/enki
+CMAKE_BINARY_DIR = /media/Cousas/git/robosim
 
 # Utility rule file for enkiplayground_automoc.
 
@@ -54,8 +54,8 @@ CMAKE_BINARY_DIR = /media/Cousas/git/enki
 include examples/playground/CMakeFiles/enkiplayground_automoc.dir/progress.make
 
 examples/playground/CMakeFiles/enkiplayground_automoc:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic moc for target enkiplayground"
-	cd /media/Cousas/git/enki/examples/playground && /usr/bin/cmake -E cmake_autogen /media/Cousas/git/enki/examples/playground/CMakeFiles/enkiplayground_automoc.dir/ ""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic moc for target enkiplayground"
+	cd /media/Cousas/git/robosim/examples/playground && /usr/bin/cmake -E cmake_autogen /media/Cousas/git/robosim/examples/playground/CMakeFiles/enkiplayground_automoc.dir/ ""
 
 enkiplayground_automoc: examples/playground/CMakeFiles/enkiplayground_automoc
 enkiplayground_automoc: examples/playground/CMakeFiles/enkiplayground_automoc.dir/build.make
@@ -68,10 +68,10 @@ examples/playground/CMakeFiles/enkiplayground_automoc.dir/build: enkiplayground_
 .PHONY : examples/playground/CMakeFiles/enkiplayground_automoc.dir/build
 
 examples/playground/CMakeFiles/enkiplayground_automoc.dir/clean:
-	cd /media/Cousas/git/enki/examples/playground && $(CMAKE_COMMAND) -P CMakeFiles/enkiplayground_automoc.dir/cmake_clean.cmake
+	cd /media/Cousas/git/robosim/examples/playground && $(CMAKE_COMMAND) -P CMakeFiles/enkiplayground_automoc.dir/cmake_clean.cmake
 .PHONY : examples/playground/CMakeFiles/enkiplayground_automoc.dir/clean
 
 examples/playground/CMakeFiles/enkiplayground_automoc.dir/depend:
-	cd /media/Cousas/git/enki && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /media/Cousas/git/enki /media/Cousas/git/enki/examples/playground /media/Cousas/git/enki /media/Cousas/git/enki/examples/playground /media/Cousas/git/enki/examples/playground/CMakeFiles/enkiplayground_automoc.dir/DependInfo.cmake --color=$(COLOR)
+	cd /media/Cousas/git/robosim && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /media/Cousas/git/robosim /media/Cousas/git/robosim/examples/playground /media/Cousas/git/robosim /media/Cousas/git/robosim/examples/playground /media/Cousas/git/robosim/examples/playground/CMakeFiles/enkiplayground_automoc.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : examples/playground/CMakeFiles/enkiplayground_automoc.dir/depend
 

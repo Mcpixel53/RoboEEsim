@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /media/Cousas/git/enki
+CMAKE_SOURCE_DIR = /media/Cousas/git/robosim
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /media/Cousas/git/enki
+CMAKE_BINARY_DIR = /media/Cousas/git/robosim
 
 # Utility rule file for enkiviewer_automoc.
 
@@ -54,8 +54,8 @@ CMAKE_BINARY_DIR = /media/Cousas/git/enki
 include viewer/CMakeFiles/enkiviewer_automoc.dir/progress.make
 
 viewer/CMakeFiles/enkiviewer_automoc:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/media/Cousas/git/enki/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic moc and rcc for target enkiviewer"
-	cd /media/Cousas/git/enki/viewer && /usr/bin/cmake -E cmake_autogen /media/Cousas/git/enki/viewer/CMakeFiles/enkiviewer_automoc.dir/ ""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/media/Cousas/git/robosim/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic moc and rcc for target enkiviewer"
+	cd /media/Cousas/git/robosim/viewer && /usr/bin/cmake -E cmake_autogen /media/Cousas/git/robosim/viewer/CMakeFiles/enkiviewer_automoc.dir/ ""
 
 enkiviewer_automoc: viewer/CMakeFiles/enkiviewer_automoc
 enkiviewer_automoc: viewer/CMakeFiles/enkiviewer_automoc.dir/build.make
@@ -68,10 +68,10 @@ viewer/CMakeFiles/enkiviewer_automoc.dir/build: enkiviewer_automoc
 .PHONY : viewer/CMakeFiles/enkiviewer_automoc.dir/build
 
 viewer/CMakeFiles/enkiviewer_automoc.dir/clean:
-	cd /media/Cousas/git/enki/viewer && $(CMAKE_COMMAND) -P CMakeFiles/enkiviewer_automoc.dir/cmake_clean.cmake
+	cd /media/Cousas/git/robosim/viewer && $(CMAKE_COMMAND) -P CMakeFiles/enkiviewer_automoc.dir/cmake_clean.cmake
 .PHONY : viewer/CMakeFiles/enkiviewer_automoc.dir/clean
 
 viewer/CMakeFiles/enkiviewer_automoc.dir/depend:
-	cd /media/Cousas/git/enki && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /media/Cousas/git/enki /media/Cousas/git/enki/viewer /media/Cousas/git/enki /media/Cousas/git/enki/viewer /media/Cousas/git/enki/viewer/CMakeFiles/enkiviewer_automoc.dir/DependInfo.cmake --color=$(COLOR)
+	cd /media/Cousas/git/robosim && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /media/Cousas/git/robosim /media/Cousas/git/robosim/viewer /media/Cousas/git/robosim /media/Cousas/git/robosim/viewer /media/Cousas/git/robosim/viewer/CMakeFiles/enkiviewer_automoc.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : viewer/CMakeFiles/enkiviewer_automoc.dir/depend
 

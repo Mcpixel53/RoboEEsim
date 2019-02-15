@@ -36,12 +36,12 @@ class Config:
     percentOfGenes = 0.60
 
     #Neuronal Network
-    hidden_LayerSize = 3
     maxWeight = 1.0
     minWeight = -1.0
 
-    inputSize = 3
-    outputSize = 2
+    inputSize = 1
+    hidden_LayerSize = 2
+    outputSize = 1
 
     #Simulation
 

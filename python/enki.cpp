@@ -367,7 +367,13 @@ struct EPuckWrap: EPuck, wrapper<EPuck>
 	}
 };
 
+// Robot
 
+struct RoboWrap: Robot, wrapper<Robot>
+{
+
+
+};
 // Bola Máxica
 struct BolaWrap: Bola, wrapper<Bola>
 {	//radius, maxSpeed, noise
@@ -450,9 +456,9 @@ struct Analytics: QAnalytics, wrapper<QAnalytics>
 		QAnalytics(_itMax)
 		//*chart ( new Chart),
 	{
-		this->moveToThread(thread);
-		connect(this, SIGNAL (finished()), thread, SLOT (deleteLater()));
-		connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+		this->moveToThread(thread); //TODO check if thread dies!
+		// connect(this, SIGNAL (finished()), thread, SLOT (deleteLater()));
+		// connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
 		//series->append(0, 0);
 	}
 	// virtual void registaer(std::string name, std::string type){
@@ -563,11 +569,69 @@ void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector c
 void run(World& world, unsigned steps)
 {
 	for (unsigned i = 0; i < steps; ++i)
-		world.step(1, 1./30., 3);
+		world.step(1./30., 3);
 }
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(step_overloads, step, 2, 3)
+void addWorldItem(World& world, const std::string& item, Vector pos, int mass =-1){
+
+	PhysicalObject* o = new PhysicalObject;
+
+	if(!item.compare("prisma")){
+		const double amount = 9;
+		const double radius = 5;
+		const double height = 20;
+		Enki::Polygon p;
+		for (double a = 0; a < 2*M_PI; a += 2*M_PI/amount)
+			p.push_back(Point(radius * cos(a), radius * sin(a)));
+		PhysicalObject::Hull hull(Enki::PhysicalObject::Part(p, height));
+		o->setCustomHull(hull, mass);
+		o->setColor(Color(0.4,0.6,0.8));
+	}
+	else if(!item.compare("minibola")){
+		o->setCylindric(1, 1, 10);
+		o->setColor(Color(0.9, 0.2, 0.2));
+		o->dryFrictionCoefficient = 0.01;
+	}
+	else if(!item.compare("recta")){
+		Enki::Polygon p2;
+		p2.push_back(Point(2.5,1));
+		p2.push_back(Point(-2.5,1));
+		p2.push_back(Point(-2.5,-1));
+		p2.push_back(Point(2.5,-1));
+		for (int i = 0; i < 5; i++)
+		{
+			PhysicalObject::Hull hull(Enki::PhysicalObject::Part(p2, 3));
+			o->setCustomHull(hull, mass);
+			o->setColor(Color(0.2, 0.1, 0.6));
+			o->collisionElasticity = 0.2;
+		}
+	}
+	else if(!item.compare("cruz")){
+		PhysicalObject::Hull hull;
+		hull.push_back(Enki::PhysicalObject::Part(Enki::Polygon() << Point(5,1) << Point(-5,1) << Point(-5,-1) << Point(5,-1), 2));
+		hull.push_back(Enki::PhysicalObject::Part(Enki::Polygon() << Point(1,5) << Point(-1,5) << Point(-1,-5) << Point(1,-5), 2));
+		o->setCustomHull(hull, mass);
+		o->setColor(Color(0.2, 0.4, 0.6));
+		o->collisionElasticity = 0.2;
+	}
+	else if(!item.compare("alga")){
+		o->setCylindric(4, 2, 10);
+		o->setColor(Color(0.2, 0.2, 0.6));
+		o->dryFrictionCoefficient = 0.;
+		}
+	else if(!item.compare("SpanskiAloes")){
+
+	}
+
+	o->pos = pos;
+	world.addObject(o);
+
+}
+
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(step_overloads, step, 1, 2)
 BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 3, 7)
+BOOST_PYTHON_FUNCTION_OVERLOADS(addWorldItem_overloads, addWorldItem, 2, 3)
 
 BOOST_PYTHON_MODULE(pyenki)
 {
@@ -711,7 +775,10 @@ BOOST_PYTHON_MODULE(pyenki)
 
 	//, with_custodian_and_ward<1,2>())
 	class_<World>("WorldBase", no_init)
+	.def("addItem", addWorldItem)
+	// .def("step", &World::step, addWorldItem_overloads(args("objexe", "pos", "physicsOversampling")))
 	;
+
 
 	class_<WorldWithoutObjectsOwnership, bases<World> >("World",
         "The world is the container of all objects and robots.\n"
