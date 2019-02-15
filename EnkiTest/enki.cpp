@@ -42,12 +42,16 @@
 #include "../enki/robots/thymio2/Thymio2.h"
 #include "../enki/robots/Bola.h"
 #include "../viewer/Viewer.h"
-#include <QApplication>
 #include <QImage>
-#include <QGLWidget>
+//#include <QGLWidget>
+#include <QApplication>
+#include <QtGui>
+
+
 
 using namespace boost::python;
 using namespace Enki;
+
 
 tuple getColorComponents(const Color& color)
 {
@@ -85,6 +89,66 @@ struct Vector_to_python_tuple
 		return incref(make_tuple(value.x, value.y).ptr());
 	}
 };
+// struct iterable_converter
+// {
+//   /// @note Registers converter from a python interable type to the
+//   ///       provided type.
+//   template <typename Container>
+//   iterable_converter&
+//   from_python()
+//   {
+//     boost::python::converter::registry::push_back(
+//       &iterable_converter::convertible,
+//       &iterable_converter::construct<Container>,
+//       boost::python::type_id<Container>());
+//
+//     // Support chaining.
+//     return *this;
+//   }
+
+  /// @brief Check if PyObject is iterable.
+  static void* convertible(PyObject* object)
+  {
+    return PyObject_GetIter(object) ? object : NULL;
+  }
+
+  /// @brief Convert iterable PyObject to C++ container type.
+  ///
+  /// Container Concept requirements:
+  ///
+  ///   * Container::value_type is CopyConstructable.
+  ///   * Container can be constructed and populated with two iterators.
+  ///     I.e. Container(begin, end)
+//   template <typename Container>
+//   static void construct(
+//     PyObject* object,
+//     boost::python::converter::rvalue_from_python_stage1_data* data)
+//   {
+//     namespace python = boost::python;
+//     // Object is a borrowed reference, so create a handle indicting it is
+//     // borrowed for proper reference counting.
+//     python::handle<> handle(python::borrowed(object));
+//
+//     // Obtain a handle to the memory block that the converter has allocated
+//     // for the C++ type.
+//     typedef python::converter::rvalue_from_python_storage<Container>
+//                                                                 storage_type;
+//     void* storage = reinterpret_cast<storage_type*>(data)->storage.bytes;
+//
+//     typedef python::stl_input_iterator<typename Container::value_type>
+//                                                                     iterator;
+//
+//     // Allocate the C++ type into the converter's memory block, and assign
+//     // its handle to the converter's convertible variable.  The C++
+//     // container is populated by passing the begin and end iterators of
+//     // the python object to the container's constructor.
+//     new (storage) Container(
+//       iterator(python::object(handle)), // begin
+//       iterator());                      // end
+//     data->convertible = storage;
+//   }
+// };
+
 struct Vector_from_python
 {
 	Vector_from_python()
@@ -302,10 +366,18 @@ struct EPuckWrap: EPuck, wrapper<EPuck>
 		return texture;
 	}
 };
+
+// Robot
+
+struct RoboWrap: Robot, wrapper<Robot>
+{
+
+
+};
 // Bola Máxica
 struct BolaWrap: Bola, wrapper<Bola>
-{
-	BolaWrap():Bola(3,1,5){};
+{	//radius, maxSpeed, noise
+	BolaWrap():Bola(3,102,0.05){};
 	virtual void controlStep(double dt)
 	{
 		if (override controlStep = this->get_override("controlStep"))
@@ -363,49 +435,135 @@ struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
 	}
 };
 
-struct PythonViewer: public ViewerWidget
-{
-	PyThreadState *pythonSavedState;
 
-	PythonViewer(World& world, Vector camPos, double camAltitude, double camYaw, double camPitch, double _wallsHeight):
-		ViewerWidget(&world),
-		pythonSavedState(0)
+	//~EnkiViewer{}
+
+
+
+
+typedef std::vector<std::string> tvarList;
+
+
+struct Analytics: QAnalytics, wrapper<QAnalytics>
+{
+
+	//QSplineSeries *series;
+	//ViewerChart *chart;
+	QThread *thread;
+	QList<double> * listaa = NULL;
+	Analytics(int _itMax = 5000):
+		thread(new QThread),
+		QAnalytics(_itMax)
+		//*chart ( new Chart),
+	{
+		this->moveToThread(thread); //TODO check if thread dies!
+		// connect(this, SIGNAL (finished()), thread, SLOT (deleteLater()));
+		// connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+		//series->append(0, 0);
+	}
+	// virtual void registaer(std::string name, std::string type){
+	// 	qDebug("SEH");
+	// }
+
+
+	std::vector<double> * getDoubleList(std::string name, std::string var){
+		std::vector<double>* lista = new std::vector<double>();
+		registaer(name, lista, var);
+		return lista;
+		}
+
+	QList<double> * getQList(std::string name){
+		QList<double>* lista = new QList<double>;
+		listaa = lista;
+		return lista;
+	}
+	void getVarList(){
+		qDebug("sizeListaa %d",listaa->size());
+	}
+	// void getVarList2(){
+	// 	qDebug("[");
+	// 		for(int i = 0; i < varList->size(); i++)
+	// 		qDebug("%3.4f ,",varList->at(i));
+	// 	qDebug("]");
+	//
+	// }
+
+	virtual void step(){
+		if (override step = this->get_override("step"))
+			step();
+		QAnalytics::step();
+	}
+};
+
+struct EnkiViewer: public ViewerWidget{
+
+
+	EnkiViewer(World& world, Vector camPos, double camAltitude, double camYaw, double camPitch, double _wallsHeight):
+		ViewerWidget(&world)
 	{
 		camera.pos.setX(camPos.x);
 		camera.pos.setY(camPos.y);
 		camera.altitude = camAltitude;
 		camera.yaw = camYaw;
 		camera.pitch = camPitch;
-		wallsHeight = _wallsHeight;
-
 		managedObjectsAliases[&typeid(EPuckWrap)] = &typeid(EPuck);
 	}
 
+};
+
+struct PythonViewer:public ViewerWindow //static Class to call simulation
+{
+	//ViewerWindow vWindow;
+	/*Analytics anl;
+	World world; World _world, Analytics _anl
+*/
+PyThreadState *pythonSavedState;
+
+	PythonViewer(EnkiViewer& _viewer, Analytics& _anl):
+	ViewerWindow( &_viewer, &_anl),
+	pythonSavedState(0)
+
+	{
+		//init Params
+
+	}
 	void timerEvent(QTimerEvent * event)
 	{
 		// get back Python lock
 		if (pythonSavedState)
-			PyEval_RestoreThread(pythonSavedState);
+		PyEval_RestoreThread(pythonSavedState);
 		// touch Python objects while locked
-		ViewerWidget::timerEvent(event);
+		ViewerWindow::timerEvent(event);
 		// release Python lock
 		if (pythonSavedState)
-			pythonSavedState = PyEval_SaveThread();
+		pythonSavedState = PyEval_SaveThread();
 	}
+
 };
 
-void runInViewer(World& world, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0, double wallsHeight = 10)
+
+void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0)
 {
 	int argc(1);
-	char* argv[1] = {(char*)"dummy"}; // FIXME: recovery sys.argv
+	char* argv[1] = {(char*)"eRoboSim!"}; // FIXME: recovery sys.argv
 	QApplication app(argc, argv);
-	PythonViewer viewer(world, camPos, camAltitude, camYaw, camPitch, wallsHeight);
-	viewer.setWindowTitle("PyEnki Viewer");
-	viewer.show();
-	viewer.pythonSavedState = PyEval_SaveThread();
+	EnkiViewer viewer(world, camPos, camAltitude, camYaw, camPitch, wallsHeight);
+	app.setWindowIcon(QIcon("appicon.png"));
+
+	PythonViewer wViewer(viewer, anl);
+	wViewer.setWindowTitle("eRoboSim!");
+	//viewer.setWindowTitle("PyEnki Viewer");
+	//viewer.show();
+	wViewer.grabGesture(Qt::PanGesture);
+	wViewer.grabGesture(Qt::PinchGesture);
+	viewer.centerCameraWorld();
+	wViewer.show();
+
+	wViewer.pythonSavedState = PyEval_SaveThread();
 	app.exec();
-	if (viewer.pythonSavedState)
-		PyEval_RestoreThread(viewer.pythonSavedState);
+	if (wViewer.pythonSavedState)
+		PyEval_RestoreThread(wViewer.pythonSavedState);
+
 }
 
 void run(World& world, unsigned steps)
@@ -414,18 +572,83 @@ void run(World& world, unsigned steps)
 		world.step(1./30., 3);
 }
 
+void addWorldItem(World& world, const std::string& item, Vector pos){
+
+	PhysicalObject* o = new PhysicalObject;
+
+	if(item.compare("bola")){
+		Enki::Polygon p;
+		for (double a = 0; a < 2*M_PI; a += 2*M_PI/amount)
+			p.push_back(Point(radius * cos(a), radius * sin(a)));
+		PhysicalObject::Hull hull(Enki::PhysicalObject::Part(p, height));
+		o->setCustomHull(hull, -1);
+		o->setColor(Color(0.4,0.6,0.8));
+	}
+	else if(item.compare("bola?")){
+		o->setCylindric(1, 1, 10);
+		o->setColor(Color(0.9, 0.2, 0.2));
+		o->dryFrictionCoefficient = 0.01;
+	}
+	else if(item.compare("algo")){
+		Enki::Polygon p2;
+		p2.push_back(Point(5,1));
+		p2.push_back(Point(-5,1));
+		p2.push_back(Point(-5,-1));
+		p2.push_back(Point(5,-1));
+		for (int i = 0; i < 5; i++)
+		{
+			PhysicalObject::Hull hull(Enki::PhysicalObject::Part(p2, 3));
+			o->setCustomHull(hull, 30);
+			o->setColor(Color(0.2, 0.1, 0.6));
+			o->collisionElasticity = 0.2;
+	}
+	else if(item.compare("cruz")){
+		PhysicalObject::Hull hull;
+		hull.push_back(Enki::PhysicalObject::Part(Enki::Polygon() << Point(5,1) << Point(-5,1) << Point(-5,-1) << Point(5,-1), 2));
+		hull.push_back(Enki::PhysicalObject::Part(Enki::Polygon() << Point(1,5) << Point(-1,5) << Point(-1,-5) << Point(1,-5), 2));
+		o->setCustomHull(hull, 60);
+		o->setColor(Color(0.2, 0.4, 0.6));
+		o->collisionElasticity = 0.2;
+	}
+	else if(item.compare("alga")){
+		o->setCylindric(4, 2, 10);
+		o->setColor(Color(0.2, 0.2, 0.6));
+		o->dryFrictionCoefficient = 0.;
+	}
+	else if(item.compare("SpanskiAloes")){
+
+	}
+
+	o->pos = pos;
+	world.addObject(o);
+
+}
+
+
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(step_overloads, step, 1, 2)
-BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 1, 6)
+BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 3, 7)
 
 BOOST_PYTHON_MODULE(pyenki)
 {
+	using namespace boost::python;
 	// setup converters
 	to_python_converter<Vector, Vector_to_python_tuple>();
 	Vector_from_python();
 
 	// TODO: complete doc
+	// Register interable conversions.
 
+	// iterable_converter()
+	//     // Build-in type.
+	//     .from_python<std::vector<double> >()
+	//     // Each dimension needs to be convertable.
+	//     .from_python<std::vector<std::string> >()
+	//     .from_python<std::vector<std::vector<std::string> > >()
+	//     // User type.
+	//     .from_python<std::list<std::string> >()
+	//     ;
 	// Color and texture
+	class_<QString>("QString");
 
 	class_<Color>("Color",
 		"A color in RGBA",
@@ -491,8 +714,8 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def_readwrite("viscousFrictionCoefficient", &PhysicalObject::viscousFrictionCoefficient)
 		.def_readwrite("viscousMomentFrictionCoefficient", &PhysicalObject::viscousMomentFrictionCoefficient)
 		.def_readwrite_by_value("pos", &PhysicalObject::pos)
-		.def_readwrite("angle", &PhysicalObject::angle)
 		.def_readwrite_by_value("speed", &PhysicalObject::speed)
+		.def_readwrite("angle", &PhysicalObject::angle)
 		.def_readwrite("angSpeed", &PhysicalObject::angSpeed)
 		.add_property("color",  make_function(&PhysicalObject::getColor, return_value_policy<copy_const_reference>()), &PhysicalObject::setColor)
 		// warning setting the "color" property at run time using the viewer from the non-gui thread will lead to a crash because it will do an OpenGL call from that thread
@@ -509,6 +732,8 @@ BOOST_PYTHON_MODULE(pyenki)
 	// Robots
 
 	class_<Robot, bases<PhysicalObject> >("PhysicalObject", no_init)
+	.def("setFitnessVar", &Robot::setFitness)
+	.def("setId", &Robot::setId)
 	;
 
 	class_<DifferentialWheeled, bases<Robot> >("DifferentialWheeled", no_init)
@@ -525,6 +750,7 @@ BOOST_PYTHON_MODULE(pyenki)
 	.def("controlStep", &BolaWrap::controlStep)
 	.def("getWall",&BolaWrap::getWall)
 	.def_readwrite("collide", &BolaWrap::collide)
+	.def_readwrite("neutralSpeed", &BolaWrap::neutralSpeed)
 ;
 	class_<EPuckWrap, bases<DifferentialWheeled>, boost::noncopyable>("EPuck")
 		.def("controlStep", &EPuckWrap::controlStep)
@@ -539,32 +765,65 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def_readonly("groundSensorValues", &Thymio2Wrap::getGroundSensorValues)
 	;
 
+
 	// World
 
+	//, with_custodian_and_ward<1,2>())
 	class_<World>("WorldBase", no_init)
+	.def("addItem", addWorldItem)
 	;
 
 	class_<WorldWithoutObjectsOwnership, bases<World> >("World",
-		"The world is the container of all objects and robots.\n"
-		"It is either a rectangular arena with walls at all sides, a circular area with walls, or an infinite surface."
-		,
-		init<double, double, optional<const Color&> >(args("width", "height", "wallsColor"))
-	)
+        "The world is the container of all objects and robots.\n"
+        "It is either a rectangular arena with walls at all sides, a circular area with walls, or an infinite surface.",
+				init<double, double, optional<const Color&> >(args("width", "height", "wallsColor")))
 		.def(init<double, optional<const Color&> >(args("r", "wallsColor")))
 		.def(init<>())
 		.def_readonly("width", &World::w)
 		.def_readonly("height", &World::h)
-		.def("step", &World::step, step_overloads(args("dt", "physicsOversampling")))
+		.def_readonly("iterations", &World::iterations)
+		.def("step", &World::step, step_overloads(args("mult", "dt", "physicsOversampling")))
 		.def("addObject", &World::addObject, with_custodian_and_ward<1,2>())
 		.def("removeObject", &World::removeObject)
 		.def("setRandomSeed", &World::setRandomSeed)
 		.def("run", run)
-		.def("runInViewer", runInViewer, runInViewer_overloads(args("self", "camPos", "camAltitude", "camYaw", "camPitch", "wallsHeight")))
 	;
 
 	class_<WorldWithTexturedGround, bases<World> >("WorldWithTexturedGround",
-		init<double, double, const std::string&, optional<const Color&> >(args("width", "height", "ppmFileName", "wallsColor"))
-	)
+		init<double, double, const std::string&, optional<const Color&> >(args("width", "height", "ppmFileName", "wallsColor")))
 		.def(init<double, const std::string&, optional<const Color&> >(args("r", "ppmFileName", "wallsColor")))
+		.def_readonly("width", &World::w)
+		.def_readonly("height", &World::h)
+		.def_readonly("iterations", &World::iterations)
+		.def("step", &World::step, step_overloads(args("mult", "dt", "physicsOversampling")))
+		.def("addObject", &World::addObject, with_custodian_and_ward<1,2>())
+		.def("removeObject", &World::removeObject)
+		.def("setRandomSeed", &World::setRandomSeed)
+		.def("run", run)
+	;
+
+
+	class_<std::vector<double>>("vector_double")
+	   .def(vector_indexing_suite<std::vector<double>>())
+	;
+
+	//class_<Analytics>("AnalyticsModule")
+	class_<Analytics, bases<> , boost::noncopyable>("Analytics_Module")
+	.def(init<int>(args("maxIt")))
+	// .def("notifyBestQuality", &Analytics::addTopPoint)//, with_custodian_and_ward<1,2>())
+	// .def("notifyAVGQuality", &Analytics::addAVGPoint)//, with_custodian_and_ward<1,2>())
+	// .def("varList", &Analytics::varList, return_value_policy<reference_existing_object>())
+	//return_internal_reference
+	.def("getDoubleList", &Analytics::getDoubleList, return_internal_reference<>())
+	.def("getQList", &Analytics::getQList,  return_internal_reference<>())// .def("evController", &Analytics::evController)
+	.def("testList", &Analytics::getVarList)
+	.def("step", &Analytics::step)
+
+	//.def(init<>())
+	;
+
+	class_<PythonViewer, boost::noncopyable>("EnkiViewer",no_init)//<World&, optional<Analytics&>>)
+	.def("runSimulation", runInViewer,runInViewer_overloads(args("World", "Analytics", "wallsHeight" , "WorldSize", "camAltitude", "camPitch", "Jaw")))
+	.staticmethod("runSimulation")
 	;
 }

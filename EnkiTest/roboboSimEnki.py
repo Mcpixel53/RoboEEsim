@@ -29,7 +29,7 @@ maxFitness = np.sqrt(np.power(0 - WIDTH,2)+np.power(0-HEIGHT,2))
 #OBJ_Speed = conf.objectiveSpeed
 
 #w = pyenki.World(wW,wH,pyenki.Color(0.5, 0.5, 0.5))
-w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/terra.png", pyenki.Color(0.9, 0.9, 0.9))
+w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/area.png", pyenki.Color(135/250.,206/250.,235/250.))
 
 experimentData = {"Iterations": 0, "Individuals": [], "IndividualFitness": [], "MeanFitness": [] , "TopFitness": []}
 
@@ -46,6 +46,7 @@ class Analise(pyenki.Analytics_Module):
 		self.Individuals = self.register("Chromosome");
 		self.Age =  self.register("Age");
 		self.Fitness = self.register("Fitness");
+		self.stop = False
 		# self.exitFlag = 0
 		#self.maxFitInd
 
@@ -137,7 +138,14 @@ class Analise(pyenki.Analytics_Module):
 		# print("Evolving Step!")
 #		try:
 #	    logicThread = threading._start_new_thread(
-		self.evController()
+		if self.robotList:
+			self.evController()
+			self.stop=False
+
+		else:
+			if not self.stop:
+				print("Population size = 0")
+			self.stop=True
 ''' 	)
 		except Exception as e:
 			print ("Error: unable to start thread",str(e))
@@ -155,13 +163,18 @@ class MyBall(pyenki.Bola):
 		self.dir = 1
 		self.neutralSpeed = conf.objectiveSpeed
 		print("New Ball At", self.pos)
-
+		# self.mills = int(round(time.time() * 1000))
+		# self.colliss =0
 
 	def controlStep(self, dt):
-		num=random.choice([1.2,3]) # angle multiplier
+		num= random.choice([1.2,3]) # angle multiplier
 		grads = random.randrange(35,45,2) # random angle between 35-45 by 2 units
 		self.dir = (1 if Math.cos(self.angle)>0 else 0 if Math.cos(self.angle)==0 else -1 ,1 if Math.sin(self.angle)>0 else 0 if Math.sin(self.angle)==0 else -1)#(1 if Math.cos(self.angle)>0 else 0 if Math.cos(self.angle)=0 else -1,1 if Math.sin(self.angle)>0 else 0 if Math.sin(self.angle)=0 else -1)
 		if self.collide:
+			# self.colliss +=1
+			# if (int(round(time.time() * 1000)) - self.mills)>=1000:
+			#  	print(self.colliss," Collisssss")
+			#   	time.sleep(10)
 			if (debugBall):
 				print("////////////////////////////////")
 			coll = self.getWall(wW,wH) #get wich wall caused collision x =1, y = 2, both = 3
@@ -172,7 +185,7 @@ class MyBall(pyenki.Bola):
 			if (debugBall):
 				print("nextDir ", nextDir)
 			self.angDir = (self.angDir%360)+(nextDir*grads*num) if nextDir != 0 else (self.angDir%360)+(random.choice([1,-1])*grads*num)
-			self.angle = Math.radians(self.angDir)
+			self.angle = Math.radians(self.angDir+180)
 			if (debugBall):
 				print("debug speed:",self.speed,"angle: ",self.angle)
 			self.collide=False ## check disable
@@ -211,7 +224,7 @@ class MyRobobo(pyenki.EPuck):
 		fitness = 0
 		if self.distanceBuffer.getSize() > 1:
 			fitness = (self.distanceBuffer.getTail() - self.distanceBuffer.getHead())
-			speed = (3 + conf.objectiveSpeed*0.03)#(conf.roboboSpeed+conf.objectiveSpeed)
+			speed = (30 + conf.objectiveSpeed*0.3)#(conf.roboboSpeed+conf.objectiveSpeed)
 			fitness = fitness/((self.distanceBuffer.getSize()-1)*speed)
 			fitness = (1+fitness)/2
 		else:
@@ -223,6 +236,12 @@ class MyRobobo(pyenki.EPuck):
 			print("buffer",self.distanceBuffer.getSize(),"distance: ",distance, " speed ",speed, "fitness: ",fitness)
 			#print()
 		return fitness
+
+
+	def fitnesSpeed(self): #100,100
+		difer =1-(abs(100-self.leftSpeed)/100 + abs(100-self.rightSpeed)/100)
+		print ("Calidade: "+ str(1-difer))
+		return (difer)
 
 	def fitnessAlg(self):
 		return self.fitnessDistanceOverTimeSpeed()
@@ -265,9 +284,11 @@ class MyRobobo(pyenki.EPuck):
 		#print("Alpha: ", alpha)
 		#print("Beta: ", beta)
 		#print("Delta: ", delta)
-		output = self.controlSystem.forward([self.rightSpeed,self.leftSpeed,delta])
-		(self.leftSpeed,self.rightSpeed) = output*100
-		#print (self.leftSpeed,self.rightSpeed)
+
+		V = 100
+		discrepancia = self.controlSystem.forward([delta])*V*2 -V
+		(self.leftSpeed,self.rightSpeed) = (V-discrepancia[0], V+discrepancia[0])
+		# print (self.leftSpeed,self.rightSpeed, "Outpt", discrepancia)
 		#output = self.controlSystem.forward(-delta/180)
 		#(self.leftSpeed,self.rightSpeed) = self.controlSystem.forward((leftSpeed, rightSpeed, -delta/180))
 		#print ("Individual %i Neuronal Network Input: %1f, Output: %2f"%(self.individual.id,delta/180, output))
@@ -295,7 +316,6 @@ def checkMatings(pRobotList,pCurrent):
                 pCurrent.individual.mate(candidate.individual.genotype)
                 candidate.individual.mate(pCurrent.individual.genotype)
 
-
 ball = MyBall((0,0))
 objective = ball
 #w.steps = 100
@@ -308,6 +328,12 @@ for i in range(conf.populationSize):
 
 w.addObject(ball)
 
+for a in range (-13,16):
+	w.addItem("recta", ((a-1)* 10,0), 5000)
+for eh in range(0,10):
+	w.addItem("prisma",(random.randrange(-wR/2,wR/2,2),random.randrange(-wR/2,wR/2,2)), -1)
+
+# w.addItem("recta",(a,0), 1000)
 # anl.evolve()
 	#//runSimulation(Enki::World, AnalyticsModule, camPos, camAltitude, camYaw, camPitch, wallsHeight)
 #pyenki.EnkiViewer.runSimulation(w, anl, (wW/2,wH/2),wH*1.05, 0, Math.radians(-89.9), 10)

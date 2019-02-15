@@ -87,7 +87,7 @@ namespace Enki
 		Q_OBJECT
 
 	public:
-		int timerPeriodMs;
+		int msStep;
 		int mult;
 		class ViewerUserData : public PhysicalObject::UserData
 		{
@@ -253,7 +253,6 @@ namespace Enki
 		void toggleTracking();
 		void addInfoMessage(const QString& message, double persistance = 5.0, const QColor& color = Qt::black, const QUrl& link = QUrl());
 		void showHelp();
-		void speedSim(int timerSpeed);
 
 
 	protected:
@@ -536,6 +535,7 @@ class ViewerWindow : public QMainWindow
 			void manageSettings(QString);
 			void manageGraphs();
 			void pauseRun(){ s_paused =! s_paused; };
+			void speedSim(int timerSpeed);
 			// QStringList * getVariables(){ return new QStringList("variables"); };
 
 	private:
@@ -560,7 +560,7 @@ class ViewerWindow : public QMainWindow
 			QWidget *chartLayout;
 			QAnalytics *anl;
 			int timerPeriodMs;
-
+			int timer; //timer for engine step
 			// QWidget  *charts[6];  //TODO quitar
 			int activeGraphs = 3;
 			// QDockWidget *dockChart2;

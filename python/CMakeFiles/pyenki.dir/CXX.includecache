@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/media/Cousas/git/enki/enki/BluetoothBase.h
+/media/Cousas/git/robosim/enki/BluetoothBase.h
 PhysicalEngine.h
-/media/Cousas/git/enki/enki/PhysicalEngine.h
+/media/Cousas/git/robosim/enki/PhysicalEngine.h
 valarray
 -
 list
@@ -16,7 +16,7 @@ list
 queue
 -
 
-/media/Cousas/git/enki/enki/Geometry.h
+/media/Cousas/git/robosim/enki/Geometry.h
 math.h
 -
 cmath
@@ -30,19 +30,19 @@ ostream
 algorithm
 -
 
-/media/Cousas/git/enki/enki/Interaction.h
+/media/Cousas/git/robosim/enki/Interaction.h
 
-/media/Cousas/git/enki/enki/PhysicalEngine.h
+/media/Cousas/git/robosim/enki/PhysicalEngine.h
 Geometry.h
-/media/Cousas/git/enki/enki/Geometry.h
+/media/Cousas/git/robosim/enki/Geometry.h
 Types.h
-/media/Cousas/git/enki/enki/Types.h
+/media/Cousas/git/robosim/enki/Types.h
 Random.h
-/media/Cousas/git/enki/enki/Random.h
+/media/Cousas/git/robosim/enki/Random.h
 Interaction.h
-/media/Cousas/git/enki/enki/Interaction.h
+/media/Cousas/git/robosim/enki/Interaction.h
 BluetoothBase.h
-/media/Cousas/git/enki/enki/BluetoothBase.h
+/media/Cousas/git/robosim/enki/BluetoothBase.h
 iostream
 -
 set
@@ -52,13 +52,13 @@ vector
 valarray
 -
 
-/media/Cousas/git/enki/enki/Random.h
+/media/Cousas/git/robosim/enki/Random.h
 cmath
 -
 cstdlib
 -
 
-/media/Cousas/git/enki/enki/Types.h
+/media/Cousas/git/robosim/enki/Types.h
 vector
 -
 sstream
@@ -70,11 +70,11 @@ cassert
 stdint.h
 -
 
-/media/Cousas/git/enki/enki/robots/Bola.h
+/media/Cousas/git/robosim/enki/robots/Bola.h
 enki/PhysicalEngine.h
 -
 
-/media/Cousas/git/enki/enki/robots/e-puck/EPuck.h
+/media/Cousas/git/robosim/enki/robots/e-puck/EPuck.h
 enki/robots/DifferentialWheeled.h
 -
 enki/interactions/IRSensor.h
@@ -84,7 +84,7 @@ enki/interactions/CircularCam.h
 enki/interactions/Bluetooth.h
 -
 
-/media/Cousas/git/enki/enki/robots/thymio2/Thymio2.h
+/media/Cousas/git/robosim/enki/robots/thymio2/Thymio2.h
 enki/robots/DifferentialWheeled.h
 -
 enki/interactions/IRSensor.h
@@ -92,7 +92,7 @@ enki/interactions/IRSensor.h
 enki/interactions/GroundSensor.h
 -
 
-/media/Cousas/git/enki/python/enki.cpp
+/media/Cousas/git/robosim/python/enki.cpp
 Python.h
 -
 boost/python.hpp
@@ -102,19 +102,19 @@ boost/python/suite/indexing/vector_indexing_suite.hpp
 boost/python/return_value_policy.hpp
 -
 ../enki/Types.h
-/media/Cousas/git/enki/enki/Types.h
+/media/Cousas/git/robosim/enki/Types.h
 ../enki/Geometry.h
-/media/Cousas/git/enki/enki/Geometry.h
+/media/Cousas/git/robosim/enki/Geometry.h
 ../enki/PhysicalEngine.h
-/media/Cousas/git/enki/enki/PhysicalEngine.h
+/media/Cousas/git/robosim/enki/PhysicalEngine.h
 ../enki/robots/e-puck/EPuck.h
-/media/Cousas/git/enki/enki/robots/e-puck/EPuck.h
+/media/Cousas/git/robosim/enki/robots/e-puck/EPuck.h
 ../enki/robots/thymio2/Thymio2.h
-/media/Cousas/git/enki/enki/robots/thymio2/Thymio2.h
+/media/Cousas/git/robosim/enki/robots/thymio2/Thymio2.h
 ../enki/robots/Bola.h
-/media/Cousas/git/enki/enki/robots/Bola.h
+/media/Cousas/git/robosim/enki/robots/Bola.h
 ../viewer/Viewer.h
-/media/Cousas/git/enki/viewer/Viewer.h
+/media/Cousas/git/robosim/viewer/Viewer.h
 QImage
 -
 QApplication
@@ -122,7 +122,7 @@ QApplication
 QtGui
 -
 
-/media/Cousas/git/enki/viewer/Viewer.h
+/media/Cousas/git/robosim/viewer/Viewer.h
 unordered_map
 -
 typeinfo

@@ -1,4 +1,4 @@
-# Install script for directory: /media/Cousas/git/enki/python
+# Install script for directory: /media/Cousas/git/robosim/python
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -47,7 +47,7 @@ if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMP
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/usr/local/lib/python2.7/dist-packages" TYPE MODULE FILES "/media/Cousas/git/enki/python/pyenki.so")
+file(INSTALL DESTINATION "/usr/local/lib/python2.7/dist-packages" TYPE MODULE FILES "/media/Cousas/git/robosim/python/pyenki.so")
   if(EXISTS "$ENV{DESTDIR}/usr/local/lib/python2.7/dist-packages/pyenki.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/python2.7/dist-packages/pyenki.so")
     file(RPATH_CHANGE

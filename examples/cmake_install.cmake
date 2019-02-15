@@ -1,4 +1,4 @@
-# Install script for directory: /media/Cousas/git/enki/examples
+# Install script for directory: /media/Cousas/git/robosim/examples
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,8 +34,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/media/Cousas/git/enki/examples/minimal/cmake_install.cmake")
-  include("/media/Cousas/git/enki/examples/playground/cmake_install.cmake")
+  include("/media/Cousas/git/robosim/examples/minimal/cmake_install.cmake")
+  include("/media/Cousas/git/robosim/examples/playground/cmake_install.cmake")
 
 endif()
 

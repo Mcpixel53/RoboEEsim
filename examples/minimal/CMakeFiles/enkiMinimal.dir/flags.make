@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/media/Cousas/git/enki 
+CXX_INCLUDES = -I/media/Cousas/git/robosim 
 

@@ -3,7 +3,7 @@ import Configuration as cnf
 
 
 ##Internal Functions:
-k = 0.5
+k = 0.5#0.5
     #sigmoid function + derivative for backpropagation
 def nonlin(x,deriv=False):
     if(deriv==True):

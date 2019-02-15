@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/media/Cousas/git/enki/examples/minimal/enkiMinimal.cpp
+/media/Cousas/git/robosim/examples/minimal/enkiMinimal.cpp
 enki/PhysicalEngine.h
 -
 enki/robots/khepera/Khepera.h

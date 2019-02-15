@@ -1,4 +1,4 @@
-# Install script for directory: /media/Cousas/git/enki
+# Install script for directory: /media/Cousas/git/robosim
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,16 +33,16 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "dev" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enki/CMake" TYPE FILE FILES "/media/Cousas/git/enki/enkiConfig.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enki/CMake" TYPE FILE FILES "/media/Cousas/git/robosim/enkiConfig.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/media/Cousas/git/enki/enki/cmake_install.cmake")
-  include("/media/Cousas/git/enki/viewer/cmake_install.cmake")
-  include("/media/Cousas/git/enki/python/cmake_install.cmake")
-  include("/media/Cousas/git/enki/tests/cmake_install.cmake")
-  include("/media/Cousas/git/enki/examples/cmake_install.cmake")
+  include("/media/Cousas/git/robosim/enki/cmake_install.cmake")
+  include("/media/Cousas/git/robosim/viewer/cmake_install.cmake")
+  include("/media/Cousas/git/robosim/python/cmake_install.cmake")
+  include("/media/Cousas/git/robosim/tests/cmake_install.cmake")
+  include("/media/Cousas/git/robosim/examples/cmake_install.cmake")
 
 endif()
 
@@ -54,5 +54,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/media/Cousas/git/enki/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/media/Cousas/git/robosim/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

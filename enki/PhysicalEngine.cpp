@@ -1071,10 +1071,9 @@ namespace Enki
 		}
 	}
 
-	void World::step(int mult, double dt, unsigned physicsOversampling)
+	void World::step(double dt, unsigned physicsOversampling)
 	{
-		// multiplying
-		dt *=mult;
+		
 		// oversampling physics
 		const double overSampledDt = dt / (double)physicsOversampling;
 		for (unsigned po = 0; po < physicsOversampling; po++)

@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_FLAGS =   -fPIC -std=gnu++11
 
-CXX_DEFINES = -DQT_CHARTS_LIB -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB
+CXX_DEFINES = -DQT_CHARTS_LIB -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUSE_SDL
 
-CXX_INCLUDES = -I/media/Cousas/git/enki -isystem /opt/Qt/5.11.2/gcc_64/include -isystem /opt/Qt/5.11.2/gcc_64/include/QtWidgets -isystem /opt/Qt/5.11.2/gcc_64/include/QtGui -isystem /opt/Qt/5.11.2/gcc_64/include/QtCore -isystem /opt/Qt/5.11.2/gcc_64/./mkspecs/linux-g++ -isystem /opt/Qt/5.11.2/gcc_64/include/QtCharts -isystem /opt/Qt/5.11.2/gcc_64/include/QtOpenGL 
+CXX_INCLUDES = -I/usr/include/SDL2 -I/media/Cousas/git/robosim -isystem /opt/Qt/5.11.2/gcc_64/include -isystem /opt/Qt/5.11.2/gcc_64/include/QtWidgets -isystem /opt/Qt/5.11.2/gcc_64/include/QtGui -isystem /opt/Qt/5.11.2/gcc_64/include/QtCore -isystem /opt/Qt/5.11.2/gcc_64/./mkspecs/linux-g++ -isystem /opt/Qt/5.11.2/gcc_64/include/QtCharts -isystem /opt/Qt/5.11.2/gcc_64/include/QtOpenGL 
 

@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/media/Cousas/git/enki/examples/playground/Playground.cpp" "/media/Cousas/git/enki/examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o"
-  "/media/Cousas/git/enki/examples/playground/enkiplayground_automoc.cpp" "/media/Cousas/git/enki/examples/playground/CMakeFiles/enkiplayground.dir/enkiplayground_automoc.cpp.o"
+  "/media/Cousas/git/robosim/examples/playground/Playground.cpp" "/media/Cousas/git/robosim/examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o"
+  "/media/Cousas/git/robosim/examples/playground/enkiplayground_automoc.cpp" "/media/Cousas/git/robosim/examples/playground/CMakeFiles/enkiplayground.dir/enkiplayground_automoc.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -17,10 +17,12 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
   "QT_NO_DEBUG"
   "QT_OPENGL_LIB"
   "QT_WIDGETS_LIB"
+  "USE_SDL"
   )
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/usr/include/SDL2"
   "."
   "/opt/Qt/5.11.2/gcc_64/include"
   "/opt/Qt/5.11.2/gcc_64/include/QtWidgets"
@@ -33,8 +35,8 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/media/Cousas/git/enki/viewer/CMakeFiles/enkiviewer.dir/DependInfo.cmake"
-  "/media/Cousas/git/enki/enki/CMakeFiles/enki.dir/DependInfo.cmake"
+  "/media/Cousas/git/robosim/viewer/CMakeFiles/enkiviewer.dir/DependInfo.cmake"
+  "/media/Cousas/git/robosim/enki/CMakeFiles/enki.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

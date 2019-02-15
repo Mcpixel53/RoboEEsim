@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Enki__ViewerWidget_t {
-    QByteArrayData data[34];
-    char stringdata0[350];
+    QByteArrayData data[32];
+    char stringdata0[330];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -63,9 +63,7 @@ QT_MOC_LITERAL(27, 290, 7), // "message"
 QT_MOC_LITERAL(28, 298, 11), // "persistance"
 QT_MOC_LITERAL(29, 310, 5), // "color"
 QT_MOC_LITERAL(30, 316, 4), // "link"
-QT_MOC_LITERAL(31, 321, 8), // "showHelp"
-QT_MOC_LITERAL(32, 330, 8), // "speedSim"
-QT_MOC_LITERAL(33, 339, 10) // "timerSpeed"
+QT_MOC_LITERAL(31, 321, 8) // "showHelp"
 
     },
     "Enki::ViewerWidget\0hideGraph\0\0updateGraph\0"
@@ -76,8 +74,7 @@ QT_MOC_LITERAL(33, 339, 10) // "timerSpeed"
     "centerCameraWorld\0restartDumpFrames\0"
     "setDumpFrames\0doDump\0setTracking\0"
     "doTrack\0toggleTracking\0addInfoMessage\0"
-    "message\0persistance\0color\0link\0showHelp\0"
-    "speedSim\0timerSpeed"
+    "message\0persistance\0color\0link\0showHelp"
 };
 #undef QT_MOC_LITERAL
 
@@ -87,7 +84,7 @@ static const uint qt_meta_data_Enki__ViewerWidget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      19,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -95,27 +92,26 @@ static const uint qt_meta_data_Enki__ViewerWidget[] = {
        4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  109,    2, 0x06 /* Public */,
-       3,    1,  110,    2, 0x06 /* Public */,
-       5,    0,  113,    2, 0x06 /* Public */,
-       6,    0,  114,    2, 0x06 /* Public */,
+       1,    0,  104,    2, 0x06 /* Public */,
+       3,    1,  105,    2, 0x06 /* Public */,
+       5,    0,  108,    2, 0x06 /* Public */,
+       6,    0,  109,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       7,    4,  115,    2, 0x0a /* Public */,
-       7,    5,  124,    2, 0x0a /* Public */,
-      14,    1,  135,    2, 0x0a /* Public */,
-      16,    1,  138,    2, 0x0a /* Public */,
-      19,    0,  141,    2, 0x0a /* Public */,
-      20,    0,  142,    2, 0x0a /* Public */,
-      21,    1,  143,    2, 0x0a /* Public */,
-      23,    1,  146,    2, 0x0a /* Public */,
-      25,    0,  149,    2, 0x0a /* Public */,
-      26,    4,  150,    2, 0x0a /* Public */,
-      26,    3,  159,    2, 0x2a /* Public | MethodCloned */,
-      26,    2,  166,    2, 0x2a /* Public | MethodCloned */,
-      26,    1,  171,    2, 0x2a /* Public | MethodCloned */,
-      31,    0,  174,    2, 0x0a /* Public */,
-      32,    1,  175,    2, 0x0a /* Public */,
+       7,    4,  110,    2, 0x0a /* Public */,
+       7,    5,  119,    2, 0x0a /* Public */,
+      14,    1,  130,    2, 0x0a /* Public */,
+      16,    1,  133,    2, 0x0a /* Public */,
+      19,    0,  136,    2, 0x0a /* Public */,
+      20,    0,  137,    2, 0x0a /* Public */,
+      21,    1,  138,    2, 0x0a /* Public */,
+      23,    1,  141,    2, 0x0a /* Public */,
+      25,    0,  144,    2, 0x0a /* Public */,
+      26,    4,  145,    2, 0x0a /* Public */,
+      26,    3,  154,    2, 0x2a /* Public | MethodCloned */,
+      26,    2,  161,    2, 0x2a /* Public | MethodCloned */,
+      26,    1,  166,    2, 0x2a /* Public | MethodCloned */,
+      31,    0,  169,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -138,7 +134,6 @@ static const uint qt_meta_data_Enki__ViewerWidget[] = {
     QMetaType::Void, QMetaType::QString, QMetaType::Double,   27,   28,
     QMetaType::Void, QMetaType::QString,   27,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,   33,
 
        0        // eod
 };
@@ -167,7 +162,6 @@ void Enki::ViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
         case 15: _t->addInfoMessage((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
         case 16: _t->addInfoMessage((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 17: _t->showHelp(); break;
-        case 18: _t->speedSim((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -228,13 +222,13 @@ int Enki::ViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 19)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 19;
+        _id -= 18;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 19)
+        if (_id < 18)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 19;
+        _id -= 18;
     }
     return _id;
 }
@@ -945,8 +939,8 @@ void Enki::viewerChart::threadUpdate(float _t1)
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 struct qt_meta_stringdata_Enki__ViewerWindow_t {
-    QByteArrayData data[6];
-    char stringdata0[67];
+    QByteArrayData data[8];
+    char stringdata0[87];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -960,11 +954,14 @@ QT_MOC_LITERAL(1, 19, 9), // "hideGraph"
 QT_MOC_LITERAL(2, 29, 0), // ""
 QT_MOC_LITERAL(3, 30, 14), // "manageSettings"
 QT_MOC_LITERAL(4, 45, 12), // "manageGraphs"
-QT_MOC_LITERAL(5, 58, 8) // "pauseRun"
+QT_MOC_LITERAL(5, 58, 8), // "pauseRun"
+QT_MOC_LITERAL(6, 67, 8), // "speedSim"
+QT_MOC_LITERAL(7, 76, 10) // "timerSpeed"
 
     },
     "Enki::ViewerWindow\0hideGraph\0\0"
-    "manageSettings\0manageGraphs\0pauseRun"
+    "manageSettings\0manageGraphs\0pauseRun\0"
+    "speedSim\0timerSpeed"
 };
 #undef QT_MOC_LITERAL
 
@@ -974,7 +971,7 @@ static const uint qt_meta_data_Enki__ViewerWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -982,16 +979,18 @@ static const uint qt_meta_data_Enki__ViewerWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   34,    2, 0x0a /* Public */,
-       3,    1,   35,    2, 0x0a /* Public */,
-       4,    0,   38,    2, 0x0a /* Public */,
-       5,    0,   39,    2, 0x0a /* Public */,
+       1,    0,   39,    2, 0x0a /* Public */,
+       3,    1,   40,    2, 0x0a /* Public */,
+       4,    0,   43,    2, 0x0a /* Public */,
+       5,    0,   44,    2, 0x0a /* Public */,
+       6,    1,   45,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    7,
 
        0        // eod
 };
@@ -1006,6 +1005,7 @@ void Enki::ViewerWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
         case 1: _t->manageSettings((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 2: _t->manageGraphs(); break;
         case 3: _t->pauseRun(); break;
+        case 4: _t->speedSim((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -1036,13 +1036,13 @@ int Enki::ViewerWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }
