@@ -1,0 +1,28 @@
+
+Class tarefa_chasing:
+    def __init__(self):
+        pass
+
+
+    def initRob(self, current):
+        current.fitness =
+        current.buffer =
+
+    def fitnessDistanceOverTimeSpeed(self):
+      distance = np.sqrt(np.power((self.pos[0] - objective.pos[0]),2) + np.power((self.pos[1] - objective.pos[1]),2))
+      current.buffer.enqueue(distance)
+      fitness = 0
+      if self.buffer.getSize() > 1:
+        fitness = (self.buffer.getTail() - self.buffer.getHead())
+        speed = (0.0471 * conf.roboboSpeed + .114 * conf.objectiveSpeed)
+        fitness = fitness/((self.buffer.getSize()-1)*speed)
+        fitness = (1+fitness)/2
+      else:
+        fitness = fitness/maxFitness
+        speed = 0
+      if (debugRbobo and self.id == "rBobo 0"):
+        print("debugging fitness distance over time Speed \n")
+        print("tail",self.buffer.getTail(),"head",self.buffer.getHead())
+        print("buffer",self.buffer.getSize(),"distance: ",distance, " speed ",speed, "fitness: ",fitness)
+        #print()
+      return fitness

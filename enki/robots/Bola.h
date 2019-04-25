@@ -19,7 +19,7 @@ namespace Enki
 
 	public:
 		//! Constructor
-		Bola(double radio, double maxSpeed, double noiseAmount);
+		Bola(double radio, double maxSpeed, double noiseAmount, Color col);
 
 		//public overcharge of radius
 		int r;

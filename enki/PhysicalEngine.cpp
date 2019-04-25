@@ -1073,7 +1073,7 @@ namespace Enki
 
 	void World::step(double dt, unsigned physicsOversampling)
 	{
-		
+
 		// oversampling physics
 		const double overSampledDt = dt / (double)physicsOversampling;
 		for (unsigned po = 0; po < physicsOversampling; po++)
@@ -1154,6 +1154,8 @@ namespace Enki
 	void World::addObject(PhysicalObject *o)
 	{
 		objects.insert(o);
+		Robot* robot = dynamic_cast<Robot*>(o);
+		if (robot) robots.insert(robot);
 	}
 
 	void World::removeObject(PhysicalObject *o)

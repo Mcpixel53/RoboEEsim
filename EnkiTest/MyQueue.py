@@ -32,3 +32,7 @@ class MyQueue:
             return None
         else:
             return self.queue.pop() # quitar o primeiro elemento en troques do ultimo, non?
+
+    def reset(self):
+		while self.isEmpty() != True:
+			self.dequeue()

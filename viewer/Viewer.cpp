@@ -82,7 +82,7 @@ namespace Enki
 			m_pEdit(NULL),
 			chartLayout(new QWidget),
 			timerPeriodMs(1),
-			s_paused(false)
+			s_paused(true)
 	{
 			setWindowIcon(QIcon(":/appicon.png"));
 			QDesktopWidget widget;
@@ -91,11 +91,11 @@ namespace Enki
 			int y = mainScreenSize.height()*0.9;
 
 			this->resize(x,y);
-			connect(_viewer, SIGNAL(hideGraph()),
+			connect(viewer, SIGNAL(hideGraph()),
 									this, SLOT(hideGraph()) );
-			connect(_viewer, SIGNAL(pause()),
+			connect(viewer, SIGNAL(pause()),
 									this, SLOT(pauseRun()));
-			connect(_viewer->getSettings(), SIGNAL(settingsChanged(QString)),
+			connect(viewer->getSettings(), SIGNAL(settingsChanged(QString)),
 		              this, SLOT(manageSettings(QString)));
 
 			QWidget *w = new QWidget;
@@ -201,103 +201,37 @@ namespace Enki
 			return a;
 		}
 
+	void  QAnalytics::log(std::string logText) {
+		if (file->isOpen() || (file->open(QIODevice::ReadWrite | QIODevice::Text)) )
+		    {
+					QTextStream out(file);
+					out << logText.c_str();
+				}
+		else
+			qWarning("COULDN'T LOG %s", logText.c_str());
+		//
+	}
+
 	void  QAnalytics::registaer(std::string name, std::vector<double>* list, std::string var) {
 		varList[var].push_back(roboStat(name, list));
 		int num = varList[var].size();//.vect->size();
 		if (num>numRobots) numRobots=num;
 	}
 
-
-	void ViewerWindow::getChoices(viewerChart *vChart){
-
-			QDialog *widget = new QDialog(vChart,Qt::Popup);;
-			QFormLayout *layout = new QFormLayout();
-
-			// QPushButton *buttonBox = new QPushButton(tr("&Find"));
-      // buttonBox->setDefault(true);
-			QDialogButtonBox *buttonBox = new QDialogButtonBox();
-			buttonBox->addButton(new QPushButton(tr("&Aceptar")), QDialogButtonBox::AcceptRole);
-			connect(buttonBox, SIGNAL(accepted()), widget, SLOT(accept()));
-
-			QComboBox *yVars = new QComboBox;
-			QStringList *temp = anl->getListVars();
-			yVars->insertItems(0,*temp);
-			QComboBox *xVars = new QComboBox;
-			xVars->insertItem(0,"Iteracións");
-			delete(temp);
-			QComboBox *modificador = new QComboBox;
-			modificador->insertItems(0, {"unico", "todos", "maior/es", "menor/es", "mellor/es", "peor/es"});
-
-			QSpinBox *t_gAmm = new QSpinBox;
-			t_gAmm->setRange(1,anl->robots());
-			t_gAmm->setSingleStep(1);
-
-			QSlider *calidadeSpin = new QSlider(Qt::Horizontal);
-			calidadeSpin->setRange(0, 2);
-			calidadeSpin->setSingleStep(1);
-			//slider->setPageStep(2 * 10);
-			calidadeSpin->setTickInterval(1);
-			calidadeSpin->setValue(1);
-			calidadeSpin->setTickPosition(QSlider::TicksRight);
-				// QSpinBox * t_gModif = new QSpinBox();
-			layout->addRow(new QLabel(tr("y:")),modificador);
-			layout->addRow(t_gAmm, yVars );
-			layout->addRow(new QLabel(tr("x:")));
-			layout->addRow(xVars);
-			layout->addRow(buttonBox);
-
-			layout->setRowWrapPolicy(QFormLayout::DontWrapRows);
-		  layout->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
-		  layout->setFormAlignment(Qt::AlignHCenter | Qt::AlignTop);
-
-			widget->setLayout(layout);
-			widget->setWindowFlags(Qt::Popup);
-			widget->setWindowTitle(tr("Selección de eixos"));
-			widget->show();
-			connect(vChart, SIGNAL(changeSignal()), this, SLOT(manageGraphs()));
-			//->setWindowFlags(Qt::Popup|Qt::WindowStaysOnTopHint);
-			// anl->checkVarList();
-			int result = widget->exec();
-			if(result == QDialog::Accepted){
-				const std::string a[3] = {yVars->currentText().toStdString(), QString::number(t_gAmm->value()).toStdString(), modificador->currentText().toStdString()};
-				// qDebug(" %d  elemts first List?", anl->getVarList().count("Fitness"));
-				// qDebug("found and correct? %d - %d" ,anl->getListVar(a[0]) == anl->getVarList().at(a[0]),anl->getListVar(a[0])->size());
-				vChart->change(a, anl->getListVar(a[0]));
-				connect(viewer, SIGNAL(updateGraph(int)), vChart, SLOT(ecUpdate(int)));
-
-			}
+	void  QAnalytics::registaer(std::string name, std::vector<std::string>* list, std::string var) {
+		varList[var].push_back(roboStat(name, list));
+		int num = varList[var].size();//.vect->size();
+		if (num>numRobots) numRobots=num;
 	}
-
-
-
 
 	void ViewerWindow::saveSettings()
-	{
-	 QSettings settings(m_sSettingsFile, QSettings::NativeFormat);
-	 QString sText = (m_pEdit) ? m_pEdit->text() : "";
+		{
+		 QSettings settings(m_sSettingsFile, QSettings::NativeFormat);
+		 QString sText = (m_pEdit) ? m_pEdit->text() : "";
 
-	}
+		}
 
-
-
-	void ViewerWindow::manageGraphs(){
-
-		QWidget *older;
-		QPushButton *push = qobject_cast<QPushButton*>( sender());
-
-		if(!push)
-				older = qobject_cast<viewerChart*>( sender());
-		else older = push;
-
-		viewerChart *chart = new viewerChart(new eChart("",1), this);
-		chartLayout->layout()->replaceWidget(older, chart);
-		delete older;
-		getChoices(chart);
-
-
-	}
-
-void ViewerWindow::manageSettings(QString what){
+	void ViewerWindow::manageSettings(QString what){
 
 		QStringList args = what.split('&');
 		if (args.empty()){
@@ -309,22 +243,22 @@ void ViewerWindow::manageSettings(QString what){
 			 changeGraphLayout(args[1]);
 		 }
 		 else return;
-}
+	}
 
 
-void ViewerWindow::changeGraphLayout(QString arg){
+	void ViewerWindow::changeGraphLayout(QString arg){
 			qDebug("num layouts %d",chartLayout->layout()->count());
-}
+	}
 
 
-void ViewerWindow::hideGraph(){
+	void ViewerWindow::hideGraph(){
 	//anlCharts->setVisible(anlCharts->isHidden());
 	hideDock->trigger();
-}
+	}
 
 
-ViewerWindow::~ViewerWindow()
-{
+	ViewerWindow::~ViewerWindow()
+	{
 	delete viewer;
 	/*for(QWidget c :anlCharts->layout()){
 		delete c;
@@ -332,141 +266,320 @@ ViewerWindow::~ViewerWindow()
 
 	//delete customerList;
 
+	}
+	void gPopup::manage(const QString changed){
+		if(qobject_cast<QComboBox*>( sender())){
+			if (!yVars->currentText().compare("Chromosome")){
+				t_gAmm2->show();
+				if(!modificador->currentText().compare("menor/es"))
+					modificador->setCurrentText("peor/es");
+				if(!modificador->currentText().compare("maior/es"))
+					modificador->setCurrentText("mellor/es");
+				}
+			else
+				t_gAmm2->hide();
+
+			}
+			if (!modificador->currentText().compare("todos"))
+				t_gAmm->hide();
+				else{
+				t_gAmm->show();
+				}
+}
+	// Popup::~gPopup(){
+	// 	delete buttonBox;
+	// 	delete yVars;
+	// 	delete xVars;
+	// 	delete modificador;
+	// 	delete calidadeSpin;
+	// 	delete layout;
+	// }
+
+	gPopup::gPopup(viewerChart *vChart, QWidget *parent):
+		QDialog(vChart, Qt::Popup)
+	{
+		Enki::ViewerWindow *parente = qobject_cast<Enki::ViewerWindow*>(parent);
+		// qDebug("has Parent %d", parente);
+		// QDialog *widget = new QDialoge(vChart, Qt::Popup);
+			// QDialog *widget = new QDialge(vChart, Qt::Popup);
+			layout = new QFormLayout();
+
+
+			// QPushButton *buttonBox = new QPushButton(tr("&Find"));
+      // buttonBox->setDefault(true);
+			buttonBox = new QDialogButtonBox();
+			buttonBox->addButton(new QPushButton(tr("&Aceptar")), QDialogButtonBox::AcceptRole);
+			connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+
+			yVars = new QComboBox;
+			QStringList *temp = parente->getAnl()->getListVars();
+			yVars->insertItems(0, *temp);
+			delete(temp);
+			xVars = new QComboBox;
+			xVars->insertItem(0, "Iteracións");
+			modificador = new QComboBox;
+			modificador->insertItems(0, {"unico", "todos", "maior/es", "menor/es", "mellor/es", "peor/es"});
+			connect(yVars, SIGNAL(currentTextChanged(const QString)), this, SLOT(manage(const QString)));
+			connect(modificador, SIGNAL(currentTextChanged(const QString)), this, SLOT(manage(const QString)));
+
+			t_gAmm = new QSpinBox;
+			t_gAmm->setRange(1,parente->getAnl()->robots());
+			t_gAmm->setSingleStep(1);
+
+			int sRang = 4; //""
+			t_gAmm2 = new QSpinBox;
+			t_gAmm2->setRange(1,sRang);
+			t_gAmm2->setSingleStep(1);
+			t_gAmm2->hide();
+
+			calidadeSpin = new QSlider(Qt::Horizontal);
+			calidadeSpin->setRange(0, 2);
+			calidadeSpin->setSingleStep(1);
+			//slider->setPageStep(2 * 10);
+			calidadeSpin->setTickInterval(1);
+			calidadeSpin->setValue(1);
+			calidadeSpin->setTickPosition(QSlider::TicksRight);
+
+			checkbox = new QCheckBox("Plot por puntos?", this);
+
+				// QSpinBox * t_gModif = new QSpinBox();
+			layout->addRow(new QLabel(tr("y:")));
+			layout->addRow(t_gAmm, modificador);
+			layout->addRow(yVars, t_gAmm2 );
+			layout->addRow(new QLabel(tr("x:")));
+			layout->addRow(checkbox);
+			layout->addRow(xVars);
+			layout->addRow(buttonBox);
+
+			layout->setRowWrapPolicy(QFormLayout::DontWrapRows);
+		  layout->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
+		  layout->setFormAlignment(Qt::AlignHCenter | Qt::AlignTop);
+
+			this->setLayout(layout);
+			this->setWindowFlags(Qt::Popup);
+			this->setWindowTitle(tr("Seleción de eixos"));
+			this->show();
+			//->setWindowFlags(Qt::Popup|Qt::WindowStaysOnTopHint);
+			// parente->getAnl()->checkVarList();
+			int result = this->exec();
+			if(result == QDialog::Accepted){
+				const std::string a[5] = {yVars->currentText().toStdString(), QString::number(t_gAmm->value()).toStdString(), modificador->currentText().toStdString(), QString::number(t_gAmm->value()).toStdString(),	checkbox->isChecked()?"si":"non"};
+				// qDebug(" %d  elemts first List?", parente->getAnl()->getVarList().count("Fitness"));
+				// qDebug("found and correct? %d - %d" ,parente->getAnl()->getListVar(a[0]) == parente->getAnl()->getVarList().at(a[0]),parente->getAnl()->getListVar(a[0])->size());
+				vChart->change(a, parente->getAnl()->getListVar(a[0]), parente->getAnl()->getListVar("Fitness"));
+				//signals for threading & selection
+				connect(vChart->getGthread(),SIGNAL(selectedUpdate(std::vector<std::string> *)),
+								parente->getViewer(),SLOT(selectedUpdate(std::vector<std::string> *)));
+
+
+			}
+
+	}
+
+
+
+
+
+	void ViewerWindow::manageGraphs(){
+
+		QWidget *older;
+		QPushButton *push = qobject_cast<QPushButton*>(sender());
+
+		if(!push)
+				older = qobject_cast<viewerChart*>( sender());
+		else older = push;
+		viewerChart *chart = new viewerChart(new eChart("",1), this);
+		chartLayout->layout()->replaceWidget(older, chart);
+		delete older;
+
+		gPopup(chart, this);
+
+		connect(viewer, SIGNAL(updateGraph(int)), chart,  SLOT(ecUpdate(int)));
+		connect(chart, SIGNAL(changeSignal()), this,      SLOT(manageGraphs()));
+		connect(chart, SIGNAL(enSelected(bool)),	viewer, SLOT(enSelected(bool)));
+
+	}
+
+
+
+
+  viewerChart::~viewerChart(){
+		sel = false;
+		emit enSelected(sel);
+		delete gthread;
+	// delete thread;
 }
 
+	void viewerChart::change(const std::string params [], std::vector<roboStat>*  _wholeLista, std::vector<roboStat>*  _fitness){
 
-	void viewerChart::change(const std::string params [], std::vector<roboStat>*  _wholeLista){
-		//params[0] = Var to be shown, params [1] = ammount modifier, params [2] = manner modifier
-		// qDebug("%d %d %d", params [0], params [1], params [2]);
+		// Enki::ViewerWindow *parent = qobject_cast<Enki::ViewerWindow*>(this->parent());
 
-		//Enki::ViewerWindow *parente = qobject_cast<Enki::ViewerWindow*>(parentWidget());
-		//for param[0] getVar
 		eChart *temp = chart;
 		cant = atoi(params[1].c_str());
 		mod = params[2];
+		int pos = atoi(params[3].c_str());
+		bool dots = params[4] == "si";
 		int nRob, unic = 0;
-		if (!mod.compare("unico")) {nRob =1; unic = cant;}
-		else if (!mod.compare("todos")) nRob =_wholeLista->size() ;
-		else  {
+
+		std::string num = "["+params[1]+"]";
+		if (!mod.compare("unico"))      { nRob =1; unic = cant;}
+		else if (!mod.compare("todos"))	{	num = "";	nRob =_wholeLista->size() ;}
+		else
+		{
 			nRob = cant;
-			// if (nRob == 0){
-			// 	QMessageBox::warning(NULL,QString("Oops"),QString("Non podo mostrar os 0 ")+QString::fromStdString(mod));
-			// 	return;
-			// }
+			if (!mod.compare("unico")&&!params[0].compare("unico")){
+				QMessageBox::warning(NULL, QString("Oops"), QString::fromStdString(mod));
+				return;
+			}
 		}
-		setChart(new eChart(QString::fromStdString("["+params[1]+"] "+mod+" "+params[0]), nRob, unic));
-		// if(temp!=chart) delete(temp);
-		// else  qDebug("son iguais!");[]
-
 		if (_wholeLista==NULL) {qWarning("Error retrieving list!"); return;}
-		//Notify chart when zoom is on not to
-		QObject::connect(this, SIGNAL(zoomSignal(bool)),
-											chart, SLOT(zoomAction(bool)));
 
-//initiate thread & worker
-		gthread = new GThread(_wholeLista, cant, mod);
-		// gthread->initiate();
-		QThread* thread = new QThread();
+		setChart(new eChart(QString::fromStdString(num+" "+mod+" "+params[0]), nRob, unic, dots));
+
+		//Notify chart when zoom is on not to
+		connect(this, SIGNAL(zoomSignal(bool)),
+									chart, SLOT(zoomAction(bool)));
+
+		//initiate thread & worker
+		gthread = new GThread(_wholeLista, cant, mod, 200, _fitness, pos);
+		//TODO wea constant sampling
+			// gthread->initiate();
+		thread = new QThread();
 		gthread->moveToThread(thread);
-		// connect(gthread, SIGNAL (error(QString)), this, SLOT (errorString(QString)));
+		// Thread autokill stuff
 		connect(thread, SIGNAL (started()), gthread, SLOT (iniLoop()));
-		connect(this, SIGNAL (threadUpdate(float)), gthread, SLOT (threadUpdate(float)));
+		connect(this, SIGNAL (threadUpdate(float, bool)), gthread, SLOT (threadUpdate(float, bool)));
 		connect(gthread, SIGNAL (finished()), thread, SLOT (quit()));
 		connect(gthread, SIGNAL (finished()), gthread, SLOT (deleteLater()));
 		connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+		//add point to graph signals
 		connect(gthread, SIGNAL(addpoints(float, float)), chart, SLOT(addPoint(float, float)));
 		connect(gthread, SIGNAL(addpoints(QVector<QPointF>*)), chart, SLOT(addPoint(QVector<QPointF>*)));
 		thread->start();
-		// gthread.init();
 }
 
 
 ///GRAPH THREAD
-GThread::GThread(std::vector<roboStat>* _lista, int n, std::string _mod, QObject *parent)
+GThread::GThread(std::vector<roboStat>* _lista, int n, std::string _mod, int _k, std::vector<roboStat>* _fitness, int _pos, QObject *parent)
     : QObject(parent)
 {
-    restart = false;
-    aborta = false;
-		lista = _lista;
-		cant = n; //ammount of robots
-		num = cant-1; // robot num in list
-		mod = _mod;
+    restart  = false;
+    aborta   = false;
+		selected = false;
+		lista    = _lista;
+		fitness  = _fitness;
+		cant  = n; //ammount of robots
+		num   = cant-1; // robot num in list
+		pos   = _pos-1; //position in string list
+		mod   = _mod;
 		state = 0;
+		k     = _k;
 		// condition.wait(&mutex);
-	}
+}
 
 GThread::~GThread(){
 	emit finished();
-
-	// QThread::~QThread();
-	// mutex.lock();/
-	// aborta = true;
-	// mutex.unlock();
-	// condition.wakeOne();
-	// wait();
-	// this->exit();
-	// qDebug("Thread %d Dying!!",QThread::currentThreadId());
 }
 
-// void GThread::initiate(std::vector<roboStat>* _lista, int n, std::string _mod){
-// 	// qDebug("initiaitng Thread %d",QThread::currentThreadId());
-// 	//qDebug() << "Hello" << "Initiate THREAD" << "from" << QThread::currentThread();
-// 	// QMutexLocker locker(&mutex);
-// 	// chart = _chart;
-//
-// 	// iniLoop();
-// 	// if (!isRunning()) start(NormalPriority);
-// 		// condition.wakeOne();
-//
-// 	// disconnect(SIGNAL(addpoint(float, float)));
-// 	// connect(this, SIGNAL(addpoint(float, float)),chart, SLOT(addPoint(float, float)));
-//
-// }
-std::vector<double> GThread::retOrdRoboStats(int n){
-	std::vector<double>  tempIn;
-	//std::vector<roboStat>::iterator robo;
+
+std::vector<double> GThread::retOrdRoboStats(int n, std::vector<double> *tempOrig = NULL ){
+
+	std::vector<double>  roboSort;
+	std::vector<std::pair<double,double>> tempSet;
+
+	// if(tempOrig!=NULL)
 	if(!mod.compare("menor/es")){
 		for (auto robo: *lista)
-			tempIn.push_back(n==-1?robo.vect->back():robo.vect->at(n));
-		std::sort(tempIn.begin(), tempIn.end(), std::less<double>());
-		return tempIn;
+			roboSort.push_back(n==-1?robo.vectD->back():robo.vectD->at(n));
+		if(tempOrig) *tempOrig = roboSort;
+		std::sort(roboSort.begin(), roboSort.end(), std::less<double>());
+		return roboSort;
 		}
+
+
 	else if (!mod.compare("maior/es")){
 		for (auto robo: *lista)
-			tempIn.push_back(n==-1?robo.vect->back():robo.vect->at(n));
-		std::sort(tempIn.begin(), tempIn.end(),std::greater<double>());
-		return tempIn;
+			roboSort.push_back(n==-1?robo.vectD->back():robo.vectD->at(n));
+		if(tempOrig) *tempOrig = roboSort; //keep track of original order
+		std::sort(roboSort.begin(), roboSort.end(),std::greater<double>());
+		return roboSort;
 		}
-	// else if (!mod.compare("peor/es")){
-	// 	qDebug("SEN IMPLEMENTAR!");
-	// 	return *wholeLst[0].vect;
-	// 	}
-	// else if (!mod.compare("mellor/es")){
-	// 	qDebug("SEN IMPLEMENTAR!");
-	// 	return *wholeLst[0].vect;
-	// 	}
 
+
+	else if (!mod.compare("peor/es")){
+		for (int  i = 0; i<lista->size(); i++)
+		{
+			if(lista->at(i).isString()){
+				double tempD = n==-1? atof(&lista->at(i).vectS->back()[pos*6]): atof(&lista->at(i).vectS->at(n)[pos*6]);
+				std::pair<double,double> temp (n==-1? fitness->at(i).vectD->back(): fitness->at(i).vectD->at(n),
+																			tempD
+																			);
+				tempSet.push_back(temp);
+				}
+			else{
+			std::pair<double,double> temp ( n==-1?fitness->at(i).vectD->back():fitness->at(i).vectD->at(n),
+																			n==-1?lista->at(i).vectD->back():lista->at(i).vectD->at(n)
+																			);
+			tempSet.push_back(temp);
+			}
+			if(tempOrig) tempOrig->push_back(tempSet[i].second); //keep track of original order
+		}
+		std::sort(tempSet.begin(), tempSet.end(), std::less<std::pair<double,double>>());
+		// std::sort(tempSet.begin(), tempSet.end());
+		for (auto a: tempSet)
+			roboSort.push_back(a.second);
+		return roboSort;
+		}
+
+
+	else if (!mod.compare("mellor/es")){
+		for (int  i = 0; i<lista->size(); i++)
+		{
+			std::pair<double,double> temp;
+			if(lista->at(i).isString()){
+				double tempD = n==-1? atof(&lista->at(i).vectS->back()[pos*6]): atof(&lista->at(i).vectS->at(n)[pos*6]);
+				std::pair<double,double> temp (n==-1? fitness->at(i).vectD->back(): fitness->at(i).vectD->at(n),
+																			tempD
+																			);
+				tempSet.push_back(temp);
+				}
+			else{
+			std::pair<double,double> temp ( n==-1?fitness->at(i).vectD->back():fitness->at(i).vectD->at(n),
+																			n==-1?lista->at(i).vectD->back():lista->at(i).vectD->at(n)
+																			);
+			tempSet.push_back(temp);
+			}
+			if(tempOrig) tempOrig->push_back(tempSet[i].second); //keep track of original order
+		}
+		std::sort(tempSet.begin(), tempSet.end(), std::greater<std::pair<double,double>>());
+		// std::sort(tempSet.begin(), tempSet.end());
+		for (auto a: tempSet)
+			roboSort.push_back(a.second);
+		return roboSort;
+		}
 }
+
 void GThread::iniLoop(){
 	// qDebug() << "Hello" << "RUN THREAD" << "from" << QThread::currentThread();
 	QList<QVector<QPointF>*> Vlist;
-
-	int i = 1, k=i;// k = list->mult
+	int i = 1;// k = list->mult
 	// qDebug("init i %d",i);
-	for (int n=0; n<lista->at(0).vect->size(); n++){
+	for (int n=0; n<lista->at(0).size(); n=n+k){
 		int t = 0; //aux for robot num
 		if (!mod.compare("unico")){
 			if(Vlist.size()<1) Vlist.append(new QVector<QPointF>);
-			Vlist[t]->append(QPointF(i, lista->at(num).vect->at(n)));
+			double tempD = lista->at(num).isString()? atof(&lista->at(num).vectS->at(n)[pos*6]): lista->at(num).vectD->at(n);
+			Vlist[t]->append(QPointF(i, tempD));
 		}
 		else if (!mod.compare("todos")){
-			for (auto it : *lista){
+			for (auto robo : *lista){
 				if(Vlist.size()<lista->size()) Vlist.append(new QVector<QPointF>);//qDebug("Adding %d",t);
-				Vlist[t]->append(QPointF(i,it.vect->at(n)));
+				double tempD = robo.isString()? atof(&robo.vectS->at(n)[pos*6]):robo.vectD->at(n);
+				Vlist[t]->append(QPointF(i, tempD));
 				t++;
 				}
 		}
-		else{
+		else{ //order robot list by modif
 			std::vector<double> vecTemp = retOrdRoboStats(n);// Iterate doubleList and order each time with specific modifieremit addpoints
 			for (int y =0; y<cant; y++){
 				if(Vlist.size()<cant) Vlist.append(new QVector<QPointF>);
@@ -487,25 +600,63 @@ void GThread::iniLoop(){
 void GThread::g_Step(){
 	// qDebug("STEPPING %f",lista->at(cant).vect->back());
 	// float points[lista->size()]
-	if (!mod.compare("unico")){
-		emit addpoints(it, lista->at(num).vect->back()); // Iterate list and fill graph by increments of k{
-		}
-	else if (!mod.compare("todos")){
-		for (auto robo : *lista)
-			emit addpoints(it, robo.vect->back());
+	std::vector<std::string> *Slist = selected?new std::vector<std::string>:NULL;
+
+	if (!mod.compare("unico"))
+	{
+		double tempD = lista->at(num).isString()? atof(&lista->at(num).vectS->back()[pos*6]):lista->at(num).vectD->back();
+		emit addpoints(it, tempD); // Iterate list and fill graph by increments of k{
+			if (selected) Slist->push_back(lista->at(num).id);
 	}
-	else{
-		std::vector<double> vecTemp = retOrdRoboStats(-1);// sort and return the back of the list (-1 option) by modifier
-		for (auto y =0; y<cant; y++)
+	else if (!mod.compare("todos"))
+	{
+		for (auto robo : *lista)
+			{
+				double tempD = robo.isString()? atof(&robo.vectS->back()[pos*6]):robo.vectD->back();
+				emit addpoints(it, tempD);
+				if (selected) Slist->push_back(robo.id);
+			}
+	}
+	else
+	{
+		QList<std::string> orde;
+		std::vector<double> origTemp; //keep original robot order to look for ids
+		std::vector<double> vecTemp = retOrdRoboStats(-1, &origTemp);// sort and return the back of the list (-1 option) by modifier
+
+		for (int y =0; y<cant; y++)
+			{
 			emit addpoints(it, vecTemp[y]);
+			if (selected)
+			{
+				std::vector<double>::iterator vIter = std::find(origTemp.begin(), origTemp.end(), vecTemp[y]);
+				// if (viter==origTemp.end()) {qDebug("ERROR ORIGTEMP!!");return;}
+				int foundAt = vIter - origTemp.begin();
+				//While trying to add an existen robot id to the list
+				while(std::find(Slist->begin(), Slist->end(), lista->at(foundAt).id) != Slist->end()){
+					vIter = std::find(origTemp.begin()+foundAt+1, origTemp.end(), vecTemp[y]); //search from vIter+1
+					foundAt = vIter - origTemp.begin();
+
+					};
+				Slist->push_back(lista->at(foundAt).id);
+			}
 		}
+	}
+	// qDebug(" selected? %d",selected);
+	if (selected)
+		{
+			emit selectedUpdate(Slist);
+		 // qDebug("SList size %d",Slist->size());
+	 }
 }
 
-void GThread::threadUpdate(float x){
+
+void GThread::threadUpdate(float x, bool sel){
 	// QMutexLocker locker(&mutex);
 	// mutex.lock();
 	it = x;
 	g_Step();
+	selected = sel;
+	// qDebug("SELECTED = %d, %d ",selected, sel);
 	// mutex.unlock();
 	// condition.wakeOne();
 }
@@ -528,8 +679,8 @@ void GThread::threadUpdate(float x){
 // }
 
 
-void viewerChart::ecUpdate(int i){
-	emit threadUpdate(i);///
+void viewerChart::ecUpdate(int i = 0){
+	emit threadUpdate(i, sel);///
  }
 
 	viewerChart::viewerChart( eChart *_chart, QWidget *parent):
@@ -625,8 +776,14 @@ void viewerChart::ecUpdate(int i){
 		 		  emit zoomSignal(0);
 					break;
 			case Qt::Key_R:
-					// delete gthread();
-		 		  emit changeSignal();
+					// emit enSelected(false);
+					// delete gthread;
+					emit changeSignal();
+					break;
+			case Qt::Key_S:
+					sel = !sel;
+		 		  emit enSelected(sel);
+		 		  // if (sel) emit threadUpdate(0, sel);
 					break;
 			 case Qt::Key_Right:
 					emit zoomSignal(1);
@@ -645,12 +802,13 @@ void viewerChart::ecUpdate(int i){
 	        break;
 	    }
 	}
-	eChart::eChart(QString title, int nRobo, int unic, QGraphicsItem *parent, Qt::WindowFlags wFlags):
+	eChart::eChart(QString title, int nRobo, int unic, bool dots, QGraphicsItem *parent, Qt::WindowFlags wFlags):
 		QChart(QChart::ChartTypeCartesian,parent,wFlags),
     m_step(0),
 		m_axis(new QValueAxis),
     m_x(0.0),
-    m_y(0.0)
+    m_y(0.0),
+    m_ylow(0.0)
 		{
 		if (!title.compare("")) {setTitle("Por defeito"); legend()->hide();}
 		else setTitle(title);
@@ -661,13 +819,26 @@ void viewerChart::ecUpdate(int i){
 		QValueAxis* Yaxis = new QValueAxis;
 		// qDebug("LISTA CORES!:: %d",cor.size());// 148 colours
 		for (int i = 0; i<nRobo; i++){
-			m_series.append(new QLineSeries);
-			//set a different drawing style for each robot//
+			if(dots)
+				m_series.append(new QScatterSeries);
+			else
+				m_series.append(new QLineSeries);
+
+				//set a different drawing style for each robot//
 
 			//////////////////////////////////////////
 			QPen trace(cor[c]);
 			trace.setStyle(Qt::PenStyle(p));
 			trace.setWidth(2);
+			if(dots)
+			{
+				((QScatterSeries *) m_series[i])->setMarkerShape(QScatterSeries::MarkerShapeCircle);
+				((QScatterSeries *) m_series[i])->setMarkerSize(6);
+				((QScatterSeries *) m_series[i])->setColor(QColor(cor[c]));
+			}
+			else
+				((QLineSeries *) m_series[i])->setPen(trace);
+
 
 			c++;
 			if (c>cor.size()){
@@ -675,7 +846,7 @@ void viewerChart::ecUpdate(int i){
 				// p++;
 				// if(p>6){
 				// 	p = 1;
-					qWarning("RUNING OUT OF STYLES!!!");
+					qWarning("RUNING OUT OF COLORS!!!");
 					//TODO add random style algorithm
 					/*  QPen pen;
 					QVector<qreal> dashes;
@@ -685,9 +856,16 @@ void viewerChart::ecUpdate(int i){
 				// }
 			}
 			// qDebug("YUP %f-%f",(m_series[0])->at(0).x(),(m_series[0])->at(0).y());
-			m_series[i]->clear();
-	    m_series[i]->setPen(trace);
-	    m_series[i]->append(m_x, m_y);
+			((QLineSeries *) m_series[i])->clear();
+				// QPainter painter(&star);
+				// painter.setRenderHint(QPainter::Antialiasing);
+	    	// painter.setPen(trace);
+	    	// painter.setBrush(painter.pen().color());
+	    	// painter.drawPath(starPath);
+
+			// else
+
+			((QLineSeries *) m_series[i])->append(m_x, m_y);
 			addSeries(m_series[i]);
 			setAxisX(m_axis,m_series[i]);
 			setAxisY(Yaxis,m_series[i]);
@@ -713,7 +891,7 @@ void viewerChart::ecUpdate(int i){
 			// resetCachedContent()
 			zoomReset();
 			axisX()->setRange(RANGE-RANGEinc,RANGE);
-			axisY()->setRange(0,m_y+0.1);
+			axisY()->setRange(m_ylow-0.1,m_y+0.1);
 		}
 }
 	eChart::~eChart()
@@ -745,7 +923,7 @@ void viewerChart::ecUpdate(int i){
 	}
 	void eChart::addPoint(QVector<QPointF>* vector){
 		// qDebug("lets seee! %d",letsSee->size());
-		(*c_series)->replace(*vector);
+		((QLineSeries *) (*c_series))->replace(*vector);
 		if (++m_series.constBegin() != m_series.constEnd()){
 			c_series++;
 			if (c_series == m_series.constEnd()){
@@ -759,10 +937,16 @@ void viewerChart::ecUpdate(int i){
 		// qDebug() << "Hello" << "ADDPOINT" << "from" << QThread::currentThread();
 // qDebug("chega %f %f",it, quality);
 		//std::cout << "addddding"<< it <<"+"<<quality;
-		if (quality>m_y){
+		if (quality>m_y)
+		{
 			m_y=quality;
-			axisY()->setMax(m_y+0.1);
-			}
+			axisY()->setMax(m_y + 0.1);
+		}
+		else if(quality < m_ylow)
+		{
+			m_ylow=quality;
+			axisY()->setMin(m_ylow - 0.1);
+		}
 		//qreal x = (m_axis->max() - m_axis->min()) / m_axis->tickCount
 			//printf("avanzamos %f",x);
 			//printf("XMAX %f",maxx);
@@ -773,8 +957,8 @@ void viewerChart::ecUpdate(int i){
 					qreal x = plotArea().width() / m_axis->tickCount();
 					scroll(x*5, 0);
 					}
-				}
-		(*c_series)->append(it,quality);
+			}
+		((QLineSeries *) (*c_series))->append(it,quality);
 		if (++m_series.constBegin() != m_series.constEnd()){
 			c_series++;
 			if (c_series == m_series.constEnd()){
@@ -904,7 +1088,7 @@ void viewerChart::ecUpdate(int i){
 	}
 
 
-	Settings::Settings()
+	Settings::Settings(QString ruta):route(ruta)
 		{
 		    //createMenu();
 		    createHorizontalGroupBox();
@@ -1049,11 +1233,13 @@ void viewerChart::ecUpdate(int i){
 		mouseLeftButtonRobot(0),
 		mouseRightButtonRobot(0),
 		mouseMiddleButtonRobot(0),
-		s_paused(false)
+		charthighlighted(NULL),
+		showingObjects{"-"},
+		s_paused(true)
 	{
 		initTexturesResources();
 		//qDebug("oarent: %s", parentWidget());
-		settings = new Settings();
+		settings = new Settings(".");
 		settings->setWindowFlags(Qt::Popup|Qt::WindowStaysOnTopHint);
 		settings->resize(this->width()*0.5,this->height()*0.5);
 		//settings->setAlignment(Qt::AlignCenter);
@@ -1092,6 +1278,7 @@ void viewerChart::ecUpdate(int i){
 		deleteTexture(graphWidget);
 		deleteTexture(settingsWidget);
 		deleteTexture(selectionTexture);
+		deleteTexture(selectedTexture);
 		glDeleteLists(worldList, 1);
 		deleteTexture (worldTexture);
 		deleteTexture (wallTexture);
@@ -1223,6 +1410,32 @@ void viewerChart::ecUpdate(int i){
 	{
 		setTracking(!trackingView);
 	}
+
+void ViewerWidget::selectedUpdate(std::vector<std::string> * highlightedRobots){
+		int size = highlightedRobots->size();
+		int i;
+		for( i= 0; i<size;i++) showingObjects[i] = highlightedRobots->at(i);
+		// qDebug("metidos %d primeiro foi: %s",size, highlightedRobots->at(0).c_str());
+		if(size<maxShowing)  showingObjects[i] = "-";
+		// delete highlighted  Robots;
+	}
+
+void ViewerWidget::enSelected(bool mode)
+{
+	viewerChart *vchart = qobject_cast<viewerChart*>( sender());
+
+	if (!charthighlighted)
+		charthighlighted = vchart;
+	else
+	{
+		charthighlighted->sel = false;
+		// qDebug("Char Selected %d, new %d",charthighlighted->sel, vchart->sel);
+		charthighlighted = mode? vchart: NULL;
+	}
+	// update chart not to wait for next one to show changes
+	if(mode && vchart)  vchart->ecUpdate(world->iterations);
+	// if (mode) emit updateGraph(world->iterations);
+}
 
 	void ViewerWidget::addInfoMessage(const QString& message, double persistance, const QColor& color, const QUrl& link)
 	{
@@ -1484,9 +1697,12 @@ void viewerChart::ecUpdate(int i){
 
 				if (world->hasGroundTexture())
 				{
+					// break;
+					// glColor3d(world->color.r(), world->color.g(), world->color.b());
 					glEnable(GL_TEXTURE_2D);
 					glBindTexture(GL_TEXTURE_2D, worldGroundTexture);
-				}
+					// glDisable(GL_TEXTURE_2D);
+			}
 
 				glNormal3d(0, 0, 1);
 				glColor3d(world->color.r(), world->color.g(), world->color.b());
@@ -1524,6 +1740,23 @@ void viewerChart::ecUpdate(int i){
 					const double angMid((angStart+angEnd)/2);
 					const double innerR(r - 10);
 
+
+					if (world->hasGroundTexture())
+					{
+						// glColor3d(world->color.r(), world->color.g(), world->color.b());
+						glEnable(GL_TEXTURE_2D);
+						glBindTexture(GL_TEXTURE_2D, worldGroundTexture);
+					}
+					glColor3d(1,1,1);
+					glBegin(GL_TRIANGLES);
+					glTexCoord2f(0.5f, 0.5f);
+					glVertex3d(0, 0, 0);
+					glTexCoord2f(0.5f+0.5f*cosf(angStart), 0.5f+0.5f*sinf(angStart));
+					glVertex3d(cos(angStart) * r, sin(angStart) * r, 0);
+					glTexCoord2f(0.5f+0.5f*cosf(angEnd), 0.5f+0.5f*sinf(angEnd));
+					glVertex3d(cos(angEnd) * r, sin(angEnd) * r, 0);
+					glEnd();
+
 					glDisable(GL_TEXTURE_2D);
 					glNormal3d(0, 0, 1);
 					glColor3d(world->color.r(), world->color.g(), world->color.b());
@@ -1537,20 +1770,7 @@ void viewerChart::ecUpdate(int i){
 					glEnd();
 
 					// draw ground center
-					if (world->hasGroundTexture())
-					{
-						glEnable(GL_TEXTURE_2D);
-						glBindTexture(GL_TEXTURE_2D, worldGroundTexture);
-					}
 
-					glBegin(GL_TRIANGLES);
-					glTexCoord2f(0.5f, 0.5f);
-					glVertex3d(0, 0, 0);
-					glTexCoord2f(0.5f+0.5f*cosf(angStart), 0.5f+0.5f*sinf(angStart));
-					glVertex3d(cos(angStart) * r, sin(angStart) * r, 0);
-					glTexCoord2f(0.5f+0.5f*cosf(angEnd), 0.5f+0.5f*sinf(angEnd));
-					glVertex3d(cos(angEnd) * r, sin(angEnd) * r, 0);
-					glEnd();
 
 					glEnable(GL_TEXTURE_2D);
 					glBindTexture(GL_TEXTURE_2D, worldTexture);
@@ -1591,6 +1811,7 @@ void viewerChart::ecUpdate(int i){
 					glDepthMask( GL_TRUE );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 					glDisable(GL_BLEND);
+
 				}
 			}
 			break;
@@ -1762,6 +1983,8 @@ void viewerChart::ecUpdate(int i){
 		// fitnessBar.setEnabled(false);
 
 		selectionTexture = bindTexture(QPixmap(QString(":/textures/selection.png")), GL_TEXTURE_2D, GL_RGBA);
+		selectedTexture = bindTexture(QPixmap(QString(":/textures/selectionRGB.png")), GL_TEXTURE_2D, GL_RGBA);
+		glColor4d(0,1,0,1);
 		worldTexture = bindTexture(QPixmap(QString(":/textures/world.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
 		wallTexture = bindTexture(QPixmap(QString(":/textures/wall.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
 		if (world->hasGroundTexture())
@@ -1784,8 +2007,10 @@ void viewerChart::ecUpdate(int i){
 		renderObjectsTypesHook();
 	}
 
+
 	void ViewerWidget::renderScene(double left, double right, double bottom, double top, double zNear, double zFar)
 	{
+		std::map<int,Robot *> tempRob;
 		//float aspectRatio = (float)width() / (float)height();
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -1800,10 +2025,8 @@ void viewerChart::ecUpdate(int i){
 		glRotated(rad2deg * -camera.yaw, 0, 0, 1);
 
 		glTranslated(-camera.pos.x(), -camera.pos.y(), -camera.altitude);
-
 		GLfloat LightPosition[] = {(GLfloat)world->w/2, (GLfloat)world->h/2, 60, 1};
 		glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
-
 		glCallList(worldList);
 		for (World::ObjectsIterator it = world->objects.begin(); it != world->objects.end(); ++it)
 		{
@@ -1849,9 +2072,21 @@ void viewerChart::ecUpdate(int i){
 			glRotated(rad2deg * (*it)->angle, 0, 0, 1);
 
 			ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>((*it)->userData);
-
 			userData->draw(*it);
 			displayObjectHook(*it);
+			Robot * rob = dynamic_cast<Robot*>(*it);
+
+			if(charthighlighted && rob)
+			{
+				int rangeSearch = std::find(showingObjects,showingObjects+20,"-")-showingObjects;
+				std::string *temp = std::find(showingObjects,showingObjects+rangeSearch,rob->getId());
+				int colPos = temp-showingObjects;
+				// std::cout<<"rangeSearch " <<rangeSearch<< " colPos "<<colPos;
+				if(colPos<rangeSearch){
+				tempRob[colPos]=rob;
+				// std::cout<<"found robot! "<< rob->getId()<<'\n';
+				}
+			}
 
 			glPopMatrix();
 		}
@@ -1890,7 +2125,92 @@ void viewerChart::ecUpdate(int i){
 
 			glPopMatrix();
 		}
-	}
+
+		//paint the halo of the robots being monitorized
+		if (!tempRob.empty())
+		{
+
+			// std::cout << "Element found in myints: " << *temp << "at"<< colPos;
+			// std::cout << *temp<< '\n';
+			// qDebug("size map= %d", tempRob.size());
+			for(auto robPaint:tempRob)
+			{
+
+				glPushMatrix();
+				int color = robPaint.first ;
+				Robot * robotto = robPaint.second ;
+				// std::cout<<"Rob="<< robotto->getId()<<"\n";
+				glTranslated(robotto->pos.x, robotto->pos.y, 0);
+				glRotated(rad2deg * robotto->angle, 0, 0, 1);
+				if (movingObject)
+				{
+					ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>(selectedObject->userData);
+					userData->draw(selectedObject);
+					displayObjectHook(selectedObject);
+				}
+				glEnable(GL_BLEND);
+				glEnable(GL_TEXTURE_2D);
+				glDisable(GL_LIGHTING);
+				glBindTexture(GL_TEXTURE_2D, selectedTexture);
+				// int size = *(&showingObjects + 1) - showingObjects;
+				// ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>(selectedObject->userData);
+				// userData->draw(selectedObject);
+				// if( showingObjects[i].compare((*it)->getId()) ) robot = (*it);
+				// qDebug("robot %s", robot->getId());
+
+				glColor4d(colorSel[color].r(),colorSel[color].g(),colorSel[color].b(),1);
+				glBegin(GL_QUADS);
+				const double rs(robotto->getRadius() * 2);
+				glTexCoord2f(0.f, 0.f); glVertex3d(-rs, -rs, 0.15);
+				glTexCoord2f(1.f, 0.f); glVertex3d(rs, -rs, 0.15);
+				glTexCoord2f(1.f, 1.f); glVertex3d(rs, rs, 0.15);
+				glTexCoord2f(0.f, 1.f); glVertex3d(-rs, rs, 0.15);
+				glEnd();
+				glDisable(GL_TEXTURE_2D);
+				glDisable(GL_BLEND);
+				glPopMatrix();
+			}
+}
+		//show agents from the selected chart by color
+		/*if(charthighlighted)
+		{
+			glPushMatrix();
+			glEnable(GL_BLEND);
+			glEnable(GL_TEXTURE_2D);
+			glDisable(GL_LIGHTING);
+			glBindTexture(GL_TEXTURE_2D, selectedTexture);
+			int size = *(&showingObjects + 1) - showingObjects;
+			qDebug("lenght %d",size);
+
+			for(int i =0; i<maxShowing &&  showingObjects[i].compare("-") ; i++)
+			{
+
+				Robot* robot;
+				for (World::RobotsIterator it = world->robots.begin(); it != world->robots.end(); ++it)
+				{
+					ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>(selectedObject->userData);
+					userData->draw(selectedObject);
+					if( showingObjects[i].compare((*it)->getId()) ) robot = (*it);
+					qDebug("robot %s", robot->getId());
+
+					glColor4d(colorSel[i].r(),colorSel[i].g(),colorSel[i].b(),1);
+					glBegin(GL_QUADS);
+					const double rs(robot->getRadius() * 2);
+					glTexCoord2f(0.f, 0.f); glVertex3d(-rs, -rs, 0.15);
+					glTexCoord2f(1.f, 0.f); glVertex3d(rs, -rs, 0.15);
+					glTexCoord2f(1.f, 1.f); glVertex3d(rs, rs, 0.15);
+					glTexCoord2f(0.f, 1.f); glVertex3d(-rs, rs, 0.15);
+					glEnd();
+
+				}
+			}
+			glDisable(GL_TEXTURE_2D);
+			glDisable(GL_BLEND);
+			glPopMatrix();
+		}*/
+
+
+}
 
 	void ViewerWidget::picking(double left, double right, double bottom, double top, double zNear, double zFar)
 	{
@@ -2205,30 +2525,35 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		  glVertex2f(x+progress*bwidth, y+bheight);
 		  glVertex2f(x, y+bheight);
 		glEnd();
+		glPopMatrix();
 
 }
 	void ViewerWidget::paintGL()
 	{
 		bool drawBar = false;
 		// Ifitness = 0;
+		bool debugScreen = true;
 		QString roboId = "";
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		const double znear = 0.5;
-		if (trackingView && selectedObject){
-		//= new QProgressBar(self)
 		  //fitnessBar.setValue(selectedObject->fitness)
-		  Robot* robot = dynamic_cast<Robot*>(selectedObject);
-			Bola* ball = dynamic_cast<Bola*>(selectedObject);
+
+				//qDebug("fitnessEnabledinRobot");
+	  		//else renderText(5, 15, QString("Not Fitness MAaan"));
+				//printf("found robot fitness");
+
+			// int followingOffset = 10; //Following the robot from higher
+	if (selectedObject)
+	{
+		Robot* robot = dynamic_cast<Robot*>(selectedObject);
+		Bola* ball = dynamic_cast<Bola*>(selectedObject);
 			if (robot && !ball){
 				Ifitness = robot->getIntFitness();
 				// fitnessBar.setValue(Ifitness);
 				drawBar = true;
 				roboId = QString(robot->getId().c_str());
-				//qDebug("fitnessEnabledinRobot");
-	  		//else renderText(5, 15, QString("Not Fitness MAaan"));
-				//printf("found robot fitness");
-			}
-			// int followingOffset = 10; //Following the robot from higher
+			}//= new QProgressBar(self)
+		if (trackingView)
 			camera.updateTracking(selectedObject->angle, QVector3D(selectedObject->pos.x, selectedObject->pos.y, selectedObject->getHeight()), znear);
 		}else
 			camera.update();
@@ -2240,16 +2565,16 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		int ww = (int) width()+0.5;
 		int offsetX = 80, offsetY = 15 ;
 		//printf("wea %d$%d ",ww,wh);
+
+		glColor3d(0,0,1);
+		renderText(ww-offsetX,wh-offsetY, ("Iter:"+std::to_string((int) getWorld()->iterations)).c_str());
+		picking(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
 		if (drawBar){
 			// qDebug("fitness %d",Ifitness);
 			paintBar(Ifitness, width()/2, 2);
 			glColor3d(0,0,0);
 			renderText(((width()/4)-30), 15, QString("ID - %1").arg(roboId));
 		}
-		glColor3d(0,0,1);
-		renderText(ww-offsetX,wh-offsetY, ("Iter:"+std::to_string((int) getWorld()->iterations)).c_str());
-		picking(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
-
 		displayMessages();
 		displayWidgets();
 
@@ -2488,7 +2813,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 			world->iterations++;
 			//Step for evolutionary
 			//update graphs
-			if (!(world->iterations%100)) emit updateGraph(world->iterations);
+			if (!(world->iterations % s_const)) emit updateGraph(world->iterations);
 
 	}
 

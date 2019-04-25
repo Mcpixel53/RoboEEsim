@@ -377,7 +377,8 @@ struct RoboWrap: Robot, wrapper<Robot>
 // Bola Máxica
 struct BolaWrap: Bola, wrapper<Bola>
 {	//radius, maxSpeed, noise
-	BolaWrap():Bola(3,102,0.05){};
+	BolaWrap(float size, Color col = Color(0.9, 0.9, 0)):Bola(size,102,0.05, col){};
+
 	virtual void controlStep(double dt)
 	{
 		if (override controlStep = this->get_override("controlStep"))
@@ -385,6 +386,7 @@ struct BolaWrap: Bola, wrapper<Bola>
 
 		Bola::controlStep(dt);
 	}
+
   int getWall(float w, float h){
 			return Bola::getWall(w,h);
 		}
@@ -456,7 +458,7 @@ struct Analytics: QAnalytics, wrapper<QAnalytics>
 		QAnalytics(_itMax)
 		//*chart ( new Chart),
 	{
-		this->moveToThread(thread); //TODO check if thread dies!
+		this->moveToThread(thread);
 		// connect(this, SIGNAL (finished()), thread, SLOT (deleteLater()));
 		// connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
 		//series->append(0, 0);
@@ -465,9 +467,37 @@ struct Analytics: QAnalytics, wrapper<QAnalytics>
 	// 	qDebug("SEH");
 	// }
 
+	void initLogModule(){
+		file = new QFile(logName);
+		if (file->open(QIODevice::ReadWrite | QIODevice::ExistingOnly)){
+			if (QMessageBox::No == QMessageBox::question(0,"Sobrescrivir?","O ficheiro "+logName +" xa existe, sobrescrivir?" ,
+																QMessageBox::Yes|QMessageBox::No,QMessageBox::No))
+			{
+				QFile* temp = file;
+				QFileSelector selector;
+				QString tempText= QFileDialog::getSaveFileName(0, tr("Gardar Como?"), "../"+logName+"_1.log",
+																													tr("All files (*.*);; Log Files (*.log)"));
+				if(tempText != NULL)
+					{
+					file = new QFile(tempText);
+					temp->close();
+					delete temp;
+					}
+			}
+		}
+		// file->close();
+		std::string welcome = "Begining new Simulation "+logName.toStdString()+"\n\n";
+		this->log(welcome);
+	}
 
 	std::vector<double> * getDoubleList(std::string name, std::string var){
 		std::vector<double>* lista = new std::vector<double>();
+		registaer(name, lista, var);
+		return lista;
+		}
+
+	std::vector<std::string> * getStringList(std::string name, std::string var){
+		std::vector<std::string>* lista = new std::vector<std::string>();
 		registaer(name, lista, var);
 		return lista;
 		}
@@ -558,7 +588,7 @@ void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector c
 	wViewer.grabGesture(Qt::PinchGesture);
 	viewer.centerCameraWorld();
 	wViewer.show();
-
+	anl.initLogModule();
 	wViewer.pythonSavedState = PyEval_SaveThread();
 	app.exec();
 	if (wViewer.pythonSavedState)
@@ -585,9 +615,9 @@ void addWorldItem(World& world, const std::string& item, Vector pos, int mass =-
 			p.push_back(Point(radius * cos(a), radius * sin(a)));
 		PhysicalObject::Hull hull(Enki::PhysicalObject::Part(p, height));
 		o->setCustomHull(hull, mass);
-		o->setColor(Color(0.4,0.6,0.8));
+		o->setColor(Color(0.5,0.5,0.5));
 	}
-	else if(!item.compare("minibola")){
+	else if(!item.compare("punto")){
 		o->setCylindric(1, 1, 10);
 		o->setColor(Color(0.9, 0.2, 0.2));
 		o->dryFrictionCoefficient = 0.01;
@@ -603,7 +633,7 @@ void addWorldItem(World& world, const std::string& item, Vector pos, int mass =-
 			PhysicalObject::Hull hull(Enki::PhysicalObject::Part(p2, 3));
 			o->setCustomHull(hull, mass);
 			o->setColor(Color(0.2, 0.1, 0.6));
-			o->collisionElasticity = 0.2;
+			o->collisionElasticity = 0.01;
 		}
 	}
 	else if(!item.compare("cruz")){
@@ -739,6 +769,8 @@ BOOST_PYTHON_MODULE(pyenki)
 	class_<Robot, bases<PhysicalObject> >("PhysicalObject", no_init)
 	.def("setFitnessVar", &Robot::setFitness)
 	.def("setId", &Robot::setId)
+	// .def("id", &Robot::id)
+
 	;
 
 	class_<DifferentialWheeled, bases<Robot> >("DifferentialWheeled", no_init)
@@ -751,8 +783,10 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def("resetEncoders", &DifferentialWheeled::resetEncoders)
 	;
 
-	class_<BolaWrap, bases<Robot>, boost::noncopyable>("Bola")
-	.def("controlStep", &BolaWrap::controlStep)
+	class_<BolaWrap, bases<Robot>, boost::noncopyable>("Bola", no_init)
+	.def(init<double, optional<const Color&> >(args("Size","Color")))
+	// .def(init<>())
+		.def("controlStep", &BolaWrap::controlStep)
 	.def("getWall",&BolaWrap::getWall)
 	.def_readwrite("collide", &BolaWrap::collide)
 	.def_readwrite("neutralSpeed", &BolaWrap::neutralSpeed)
@@ -813,6 +847,10 @@ BOOST_PYTHON_MODULE(pyenki)
 	class_<std::vector<double>>("vector_double")
 	   .def(vector_indexing_suite<std::vector<double>>())
 	;
+	class_<std::vector<std::string>>("vector_string")
+	 .def( vector_indexing_suite< std::vector<std::string>, true>())
+   // .def(vector_indexing_suite<std::vector< const std::string &>>())
+	;
 
 	//class_<Analytics>("AnalyticsModule")
 	class_<Analytics, bases<> , boost::noncopyable>("Analytics_Module")
@@ -822,10 +860,11 @@ BOOST_PYTHON_MODULE(pyenki)
 	// .def("varList", &Analytics::varList, return_value_policy<reference_existing_object>())
 	//return_internal_reference
 	.def("getDoubleList", &Analytics::getDoubleList, return_internal_reference<>())
+	.def("getStringList", &Analytics::getStringList, return_internal_reference<>())
 	.def("getQList", &Analytics::getQList,  return_internal_reference<>())// .def("evController", &Analytics::evController)
 	.def("testList", &Analytics::getVarList)
 	.def("step", &Analytics::step)
-
+	.def("log",&QAnalytics::log)
 	//.def(init<>())
 	;
 

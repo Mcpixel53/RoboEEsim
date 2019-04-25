@@ -480,13 +480,16 @@ namespace Enki
 		const GroundTexture groundTexture;
 
 		typedef std::set<PhysicalObject *> Objects;
+		typedef std::set<Robot *> Robots;
 		typedef Objects::iterator ObjectsIterator;
+		typedef Robots::iterator RobotsIterator;
 
 		//! Whether the world should delete the objects upon destruction, true by default
 		bool takeObjectOwnership;
 
 		//! All the objects in the world
 		Objects objects;
+		Robots robots;
 		//!
 		//! Base for the Bluetooth connections between robots
 		BluetoothBase* bluetoothBase;

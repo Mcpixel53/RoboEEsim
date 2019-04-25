@@ -54,13 +54,12 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QSplineSeries>
 #include <QtCharts/QAbstractAxis>
-#include <QtCharts/QSplineSeries>
+#include <QtCharts/QScatterSeries>
 #include <QtCharts/QValueAxis>
 #include <QtCore/QDebug>
 #include <QtCharts/QChart>
 #include <QtCharts/QAbstractSeries>
 #include <QtWidgets/QRubberBand>
-
 
 
 using namespace QtCharts;
@@ -81,7 +80,9 @@ namespace Enki
 
 	class PhysicalObject;
 	class Settings;
+	class viewerChart;
 
+	const int maxShowing = 20;
 	class ViewerWidget : public QGLWidget
 	{
 		Q_OBJECT
@@ -126,6 +127,8 @@ namespace Enki
 
 	protected:
 		Settings* settings;
+		//sampling const
+		int s_const = 200;
 		//! A camera pose that can be updated given a target position
 		struct UpdatableCameraPose: CameraPose
 		{
@@ -165,6 +168,7 @@ namespace Enki
 		GLuint resumeWidget;
 		GLuint settingsWidget;
 		GLuint selectionTexture;
+		GLuint selectedTexture;
 		GLuint worldList;
 		GLuint worldTexture;
 		GLuint wallTexture;
@@ -208,11 +212,14 @@ namespace Enki
 		CameraPose nonTrackingCamera; //!< copy of global camera when in tracking view
 
 		int Ifitness; //selected robot actual fitness
-
 		PhysicalObject *pointedObject, *selectedObject;
 		QVector3D pointedPoint;
 		bool movingObject;
-
+		viewerChart* charthighlighted;
+		std::string showingObjects[maxShowing];
+		Color colorSel[maxShowing] = {Color(0 , 0 , 0),Color(0 , 0 , 1),Color(0.541176 , 0.168627 , 0.886275),Color(0.647059 , 0.164706 , 0.164706),Color(0.498039 , 1 , 0),Color(0.823529 , 0.411765 , 0.117647),Color(0.913725 , 0.588235 , 0.478431),
+		Color(0 , 1 , 1),Color(1 , 0 , 0),Color(0.662745 , 0.662745 , 0.662745),Color(0 , 0.392157 , 0),Color(1 , 0.843137 , 0),Color(0.333333 , 0.419608, 0.184314),Color(1 , 0.54902, 0), Color(0.6 , 0.196078, 0.8), Color(0.545098 , 0 , 0),
+		Color(0.560784 , 0.737255 , 0.560784),Color(0.282353 , 0.239216 , 0.545098), Color(0.184314 , 0.309804 , 0.309804), Color(0.184314 , 0.309804 , 0.309804)};
 		Robot* mouseLeftButtonRobot;
 		Robot* mouseRightButtonRobot;
 		Robot* mouseMiddleButtonRobot;
@@ -251,6 +258,8 @@ namespace Enki
 		void setDumpFrames(bool doDump);
 		void setTracking(bool doTrack);
 		void toggleTracking();
+		void selectedUpdate(std::vector<std::string> * highlightedRobots);
+		void enSelected(bool mode);
 		void addInfoMessage(const QString& message, double persistance = 5.0, const QColor& color = Qt::black, const QUrl& link = QUrl());
 		void showHelp();
 
@@ -311,13 +320,14 @@ namespace Enki
 	    Q_OBJECT
 			int maxIterations = 10000;
 	public:
-	    Settings();
+	    Settings(QString ruta);
 
 	signals:
 			void settingsChanged(QString arg);
 
 	private:
 //	    void createMenu();
+			QString route;
 	    void createHorizontalGroupBox();
 	    void createGridGroupBox();
 	    void createFormGroupBox();
@@ -338,21 +348,28 @@ namespace Enki
 	    QMenu *fileMenu;
 	    QAction *exitAction;
 	};
-
-class eChart;
+// class viewerChart;
+// class QAnalytics;
 	/////// Analytics_Module
-	struct roboStat{
-	std::string id;
-	std::vector<double>* vect;
-	roboStat(std::string name, std::vector<double>* list):vect(list),id(name){}
-	//	roboStat():id("NULL"){}
 
+struct roboStat{
+	std::string id;
+	std::vector<double>* vectD;
+	std::vector<std::string>* vectS;
+
+	roboStat(std::string name, std::vector<double>* list):vectD(list),vectS(NULL),id(name){}
+	roboStat(std::string name, std::vector<std::string>* list):vectS(list),vectD(NULL),id(name){}
+	int size(){int size = vectD==NULL? vectS->size(): vectD->size(); return size;}
+	bool isString() {return (vectD==NULL);}
+	//	roboStat():id("NULL"){}
 	};
 
+
+	class eChart;
 	class GThread: public QObject{
 		Q_OBJECT
 		public:
-			GThread(std::vector<roboStat>* _lista, int n, std::string _mod, QObject *parent = 0);
+			GThread(std::vector<roboStat>* _lista, int n, std::string _mod, int _k, std::vector<roboStat>* _fitness = NULL, int _pos= -1, QObject *parent = 0);
 			~GThread();
 
 			// void initiate(std::vector<roboStat>* lista, int n, const std::string mod);
@@ -363,56 +380,72 @@ class eChart;
 
 			void addpoints(float x, float y);
 			void addpoints(QVector<QPointF> *);
-
 			void finished();
+			void selectedUpdate(std::vector<std::string> * highlightedRobots);
 
 		public slots:
-				void threadUpdate(float x);
+				void threadUpdate(float x, bool sel);
 				void iniLoop();
-
+				std::vector<std::string>* getSlist(){return Slist;}
 		protected:
 			void g_Step();
 			// void run() override;
 			void finish();
-			std::vector<double> retOrdRoboStats(int n);
+			std::vector<double> retOrdRoboStats(int n, std::vector<double> *tempOut );
 
 
 		private:
 			// QMutex mutex;
 			// QWaitCondition condition;
+			std::vector<std::string> *Slist;
 			float it;
 			eChart * chart;
 			std::vector<roboStat>* lista;
+			std::vector<roboStat>* fitness;
 			int cant, state, num;
 			std::string mod;
 			bool restart;
     	bool aborta;
+			bool selected;
+			int pos;
+			int k; //sampling variable
 
 };
+
+#include <QFile>
+#include <QTextStream>
 
 	class QAnalytics: public QObject {
 		Q_OBJECT
 
+	private:
+		// static QAnalytics* instance;
+
 	public:
 		QAnalytics(int maxIt){ maxIt=maxIt; internalLogic = 1;}
+		~QAnalytics() {file->close();}
 		std::unordered_map <std::string, std::vector<roboStat> > getVarList() {return varList;}
+		// static QAnalytics* getInstance() {if (QAnalytics::instance) return QAnalytics::instance; else qDebug("NOOOOORL");}
 		// void  getVarList() {qDebug("size: %d; %2.2f ",varList->size(),varList->at(0));}
 
 	public slots:
 		QStringList*  getListVars();
 		std::vector<roboStat>*  getListVar(const std::string& name ) { if (varList.count(name.c_str())==0) return NULL; else return &varList.at(name.c_str());}//qDebug("Retrieving ''%s'' %d",name.c_str(),varList.at(name.c_str())->size());
 		virtual void step(){};
-
-
 		int robots(){return numRobots;}
+		void  log(std::string logText);
 
 
 	protected:
 		// std::vector<double> * varList = NULL;
 		int numRobots = 0;
+		std::vector<Robot> robotList;
 		std::unordered_map <std::string, std::vector<roboStat>> varList;
+		QString logName = "proba.log";
+		QFile *file;
 	//	template <typename T>
 		void registaer(std::string name, std::vector<double>* list, std::string var);
+		void registaer(std::string name, std::vector<std::string>* list, std::string var);
 		// void registaer(std::string name, std::vector<double> *list){varList = list;};
 
 
@@ -433,7 +466,7 @@ class eChart;
 		Q_OBJECT
 
 		public:
-			eChart(QString title , int nRobo, int unic = 0, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
+			eChart(QString title , int nRobo, int unic = 0, bool dots = false, QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
 		    //eChart( QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0):QChart(QChart::ChartTypeCartesian,parent,wFlags);
 				~eChart();
 
@@ -446,29 +479,36 @@ class eChart;
 			bool sceneEvent(QEvent *event);
 
 		private:
-			const QStringList cor= {"black","aqua","blue","blueviolet","brown","chartreuse","chocolate","coral","cornflowerblue","cyan","darkblue","darkcyan","darkgoldenrod","darkgray","darkgreen","darkmagenta","darkolivegreen","darkorange","darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet","deeppink","deepskyblue","dimgray","dimgrey","dodgerblue","firebrick","floralwhite","forestgreen","fuchsia","gainsboro","ghostwhite","gold","goldenrod","gray","green","greenyellow","grey","honeydew","hotpink","indianred","indigo","ivory","khaki","lavender","lavenderblush","lawngreen","lemonchiffon","lightblue","lightcoral","lightcyan","lightgoldenrodyellow","lightgray","lightgreen","lightgrey","lightpink","lightsalmon","lightseagreen","lightskyblue","lightslategray","lightslategrey","lightsteelblue","lightyellow","lime","limegreen","linen","magenta","maroon","mediumaquamarine","mediumblue","mediumorchid","mediumpurple","mediumseagreen","mediumslateblue","mediumspringgreen","mediumturquoise","mediumvioletred","midnightblue","mintcream","mistyrose","moccasin","navajowhite","navy","oldlace","olive","olivedrab","orange","orangered","orchid","palegoldenrod","palegreen","paleturquoise","palevioletred","papayawhip","peachpuff","peru","pink","plum","powderblue","purple","red","rosybrown","royalblue","saddlebrown","salmon","sandybrown","seagreen","seashell","sienna","silver","skyblue","slateblue","slategray","slategrey","snow","springgreen","steelblue","tan","teal","thistle","tomato","transparent","turquoise","violet","wheat","white","whitesmoke","yellow","yellowgreen"};
-				QList<QLineSeries*> m_series;
-				QList<QLineSeries*>::const_iterator c_series;
+			const QStringList cor= {"black","blue","blueviolet","brown","chartreuse","chocolate","darksalmon","cyan","red","darkgray","darkgreen","gold","darkolivegreen","darkorange","darkorchid","darkred","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet","deeppink","deepskyblue","dimgray","dimgrey","dodgerblue","firebrick","floralwhite","forestgreen","fuchsia","gainsboro","ghostwhite","gold","goldenrod","gray","green","greenyellow","grey","honeydew","hotpink","indianred","indigo","ivory","khaki","lavender","lavenderblush","lawngreen","lemonchiffon","lightblue","lightcoral","lightcyan","lightgoldenrodyellow","lightgray","lightgreen","lightgrey","lightpink","lightsalmon","lightseagreen","lightskyblue","lightslategray","lightslategrey","lightsteelblue","lightyellow","lime","limegreen","linen","magenta","maroon","mediumaquamarine","mediumblue","mediumorchid","mediumpurple","mediumseagreen","mediumslateblue","mediumspringgreen","mediumturquoise","mediumvioletred","midnightblue","mintcream","mistyrose","moccasin","navajowhite","navy","oldlace","olive","olivedrab","orange","orangered","orchid","palegoldenrod","palegreen","paleturquoise","palevioletred","papayawhip","peachpuff","peru","pink","plum","powderblue","purple","red","rosybrown","royalblue","saddlebrown","salmon","sandybrown","seagreen","seashell","sienna","silver","skyblue","slateblue","slategray","slategrey","snow","springgreen","steelblue","tan","teal","thistle","tomato","transparent","turquoise","violet","wheat","white","whitesmoke","yellow","yellowgreen"};
+				QList<QAbstractSeries*> m_series;
+				QList<QAbstractSeries*>::const_iterator c_series;
 				QStringList m_titles;
 				QValueAxis *m_axis;
 				qreal m_step;
 				qreal m_x;
 				qreal m_y;
+				qreal m_ylow;
 				int	RANGEinc = 10000;
 				int RANGE = RANGEinc;
 				bool gestureEvent(QGestureEvent *event);
 				bool m_isZooming;
 
 };
+
+
 //using namespace std;
 // Widget grafo
+
 	class viewerChart: public QChartView{
 		Q_OBJECT
 
 	public:
     viewerChart( eChart *chart, QWidget *parent = nullptr);
-		void setChart( eChart *_chart){chart = _chart; QChartView::setChart(_chart); }
+		~viewerChart();
 
+		void setChart( eChart *_chart){chart = _chart; QChartView::setChart(_chart); }
+		bool sel;
+		GThread * getGthread(){return gthread;}
 				//eChart* chart() {return chart;};
 	protected:
 			std::vector<roboStat>* lista;
@@ -482,15 +522,18 @@ class eChart;
 	    virtual void keyPressEvent(QKeyEvent *event);
 
 	public slots:
-			void change(const std::string params[], std::vector<roboStat>* lista);
+			void change(const std::string params[], std::vector<roboStat>* lista, std::vector<roboStat>* fitness= NULL);
 			void ecUpdate(int it);
 
 	signals:
 			void zoomSignal(bool act);
 			void changeSignal();
-			void threadUpdate(float i);
+			void threadUpdate(float i, bool sel);
+			void enSelected(bool mode);
+
 	private:
 			GThread* gthread;
+			QThread* thread;
 	    bool m_isTouching;
 			eChart * chart;
 	};
@@ -518,6 +561,29 @@ class eChart;
 	}
 */
 
+class gPopup: public QDialog{
+	Q_OBJECT
+
+  public:
+		gPopup(viewerChart *vChart, QWidget *parent);
+		// ~gPopup();
+
+
+	public slots:
+		void manage(const QString changed);
+
+	private:
+		QFormLayout *layout;
+		QComboBox *yVars;
+		QComboBox *xVars;
+		QComboBox *modificador ;
+		QSpinBox *t_gAmm;
+		QSpinBox *t_gAmm2;
+		QSlider *calidadeSpin;
+		QDialogButtonBox *buttonBox ;
+		QCheckBox *checkbox;
+};
+
 
 ///// Main viewer
 class ViewerWindow : public QMainWindow
@@ -528,7 +594,11 @@ class ViewerWindow : public QMainWindow
 //TODO specify mandatory charts in constructor
 	    ViewerWindow(ViewerWidget *_viewer, QAnalytics* anl);
 			~ViewerWindow();
-			ViewerWidget* getViewer();
+
+			// static ViewerWindow getinstance(if (!instance) instance = new ViewerWindow(); return instance;);
+			ViewerWidget* getViewer() {return this->viewer;}
+			QAnalytics* getAnl() {return this->anl;}
+
 
 	public slots:
 			void hideGraph();
@@ -539,6 +609,7 @@ class ViewerWindow : public QMainWindow
 			// QStringList * getVariables(){ return new QStringList("variables"); };
 
 	private:
+			static ViewerWindow instance;
 	    void createActions();
 	    void createStatusBar();
 	    void createDockWindows();
@@ -555,14 +626,13 @@ class ViewerWindow : public QMainWindow
 
 	protected:
 			virtual void timerEvent(QTimerEvent * event);
-
-	    ViewerWidget *viewer;
 			QWidget *chartLayout;
+	    ViewerWidget *viewer;
 			QAnalytics *anl;
 			int timerPeriodMs;
 			int timer; //timer for engine step
-			// QWidget  *charts[6];  //TODO quitar
 			int activeGraphs = 3;
+			// QWidget  *charts[6];  //TODO quitar
 			// QDockWidget *dockChart2;
 			/*viewerChart *anlChart1;
 			viewerChart *anlChart2;*/
