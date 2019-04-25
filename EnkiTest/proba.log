@@ -1,0 +1,8 @@
+Begining new Simulation proba.log
+
+*Task: Task Chasing
+*Population size: 20
+*Controller: Sigmoid Neural Network. k=0.5 1 input layers, 3 hidden layers, 1 output layers.
+*Individual type: cannonical
+
+

@@ -8,6 +8,7 @@ examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -18,6 +19,7 @@ examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -30,6 +32,7 @@ examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -43,6 +46,7 @@ examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
 examples/playground/CMakeFiles/enkiplayground.dir/Playground.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QtCore

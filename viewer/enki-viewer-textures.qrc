@@ -13,6 +13,7 @@
 	<file>textures/thymio-ground-shadow.png</file>
 	<file>textures/thymio-wheel-texture.png</file>
 	<file>textures/selection.png</file>
+	<file>textures/selectionRGB.png</file>
 	<file>widgets/help.png</file>
 	<file>widgets/center.png</file>
 	<file>widgets/graph.png</file>

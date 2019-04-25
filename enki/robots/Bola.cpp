@@ -18,7 +18,7 @@ namespace Enki
 	}
 
 
- Bola::Bola(double radio, double maxSpeed, double noiseAmount) :
+ Bola::Bola(double radio, double maxSpeed, double noiseAmount, Color col = Color(0.0, 0.0, 1.0)):
 maxSpeed(maxSpeed),
 noiseAmount(noiseAmount),
 r(radio),
@@ -28,7 +28,7 @@ collisionElasticity(0)
 {
 	ghost = 1;
 	setSpheric(radio,10);
-	setColor(Color(0.3, 0.0, 0.9));
+	setColor(col);
 	collide = false;
 	collXY = 0;
 	 dryFrictionCoefficient = 0.25;

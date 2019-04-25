@@ -11,6 +11,7 @@ viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -21,6 +22,7 @@ viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -33,6 +35,7 @@ viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -46,6 +49,7 @@ viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
 viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QtCore
@@ -529,6 +533,7 @@ viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/inclu
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -539,6 +544,7 @@ viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/inclu
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -551,6 +557,7 @@ viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/inclu
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -564,6 +571,7 @@ viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/inclu
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
 viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QtCore
@@ -1044,6 +1052,7 @@ viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/inclu
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -1054,6 +1063,7 @@ viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/inclu
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -1066,6 +1076,7 @@ viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/inclu
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -1079,6 +1090,7 @@ viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/inclu
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
 viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QtCore
@@ -1562,6 +1574,7 @@ viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtC
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -1572,6 +1585,7 @@ viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtC
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -1584,6 +1598,7 @@ viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtC
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -1597,6 +1612,7 @@ viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtC
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
 viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QtCore
@@ -2083,6 +2099,7 @@ viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -2093,6 +2110,7 @@ viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -2105,6 +2123,7 @@ viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -2118,6 +2137,7 @@ viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
 viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o: /opt/Qt/5.11.2/gcc_64/include/QtCore/QVector

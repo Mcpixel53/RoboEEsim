@@ -12,6 +12,7 @@ viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+ /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -22,6 +23,7 @@ viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+ /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -34,6 +36,7 @@ viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -47,6 +50,7 @@ viewer/CMakeFiles/enkiviewer.dir/EPuckModel.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QtCore
@@ -530,6 +534,7 @@ viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+ /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -540,6 +545,7 @@ viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+ /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -552,6 +558,7 @@ viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -565,6 +572,7 @@ viewer/CMakeFiles/enkiviewer.dir/MarxbotModel.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QtCore
@@ -1045,6 +1053,7 @@ viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+ /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -1055,6 +1064,7 @@ viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+ /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -1067,6 +1077,7 @@ viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -1080,6 +1091,7 @@ viewer/CMakeFiles/enkiviewer.dir/Thymio2Model.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QtCore
@@ -1563,6 +1575,7 @@ viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+ /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -1573,6 +1586,7 @@ viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+ /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -1585,6 +1599,7 @@ viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -1598,6 +1613,7 @@ viewer/CMakeFiles/enkiviewer.dir/Viewer.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QtCore
@@ -2084,6 +2100,7 @@ viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartGlobal
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QChartView
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
+ /opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QValueAxis
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/QXYSeries
@@ -2094,6 +2111,7 @@ viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qchartview.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlineseries.h
+ /opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qvalueaxis.h
  /opt/Qt/5.11.2/gcc_64/include/QtCharts/qxyseries.h
@@ -2106,6 +2124,7 @@ viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QDebug
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QEvent
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QException
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMap
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QMargins
@@ -2119,6 +2138,7 @@ viewer/CMakeFiles/enkiviewer.dir/enkiviewer_automoc.cpp.o
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QSize
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QSizeF
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
+ /opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QVariant
  /opt/Qt/5.11.2/gcc_64/include/QtCore/QVector

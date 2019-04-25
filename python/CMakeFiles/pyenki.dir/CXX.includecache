@@ -155,7 +155,7 @@ QtCharts/QSplineSeries
 -
 QtCharts/QAbstractAxis
 -
-QtCharts/QSplineSeries
+QtCharts/QScatterSeries
 -
 QtCharts/QValueAxis
 -
@@ -166,6 +166,10 @@ QtCharts/QChart
 QtCharts/QAbstractSeries
 -
 QtWidgets/QRubberBand
+-
+QFile
+-
+QTextStream
 -
 
 /opt/Qt/5.11.2/gcc_64/include/QtCharts/QAbstractAxis
@@ -191,6 +195,10 @@ qchartview.h
 /opt/Qt/5.11.2/gcc_64/include/QtCharts/QLegend
 qlegend.h
 /opt/Qt/5.11.2/gcc_64/include/QtCharts/qlegend.h
+
+/opt/Qt/5.11.2/gcc_64/include/QtCharts/QScatterSeries
+qscatterseries.h
+/opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
 
 /opt/Qt/5.11.2/gcc_64/include/QtCharts/QSplineSeries
 qsplineseries.h
@@ -264,6 +272,12 @@ QtCharts/QChartGlobal
 QtCharts/QXYSeries
 -
 QtGui/QPen
+-
+
+/opt/Qt/5.11.2/gcc_64/include/QtCharts/qscatterseries.h
+QtCharts/QChartGlobal
+-
+QtCharts/qxyseries.h
 -
 
 /opt/Qt/5.11.2/gcc_64/include/QtCharts/qsplineseries.h
@@ -340,6 +354,10 @@ qcoreevent.h
 qexception.h
 /opt/Qt/5.11.2/gcc_64/include/QtCore/qexception.h
 
+/opt/Qt/5.11.2/gcc_64/include/QtCore/QFile
+qfile.h
+/opt/Qt/5.11.2/gcc_64/include/QtCore/qfile.h
+
 /opt/Qt/5.11.2/gcc_64/include/QtCore/QList
 qlist.h
 /opt/Qt/5.11.2/gcc_64/include/QtCore/qlist.h
@@ -391,6 +409,10 @@ qsize.h
 /opt/Qt/5.11.2/gcc_64/include/QtCore/QStringList
 qstringlist.h
 /opt/Qt/5.11.2/gcc_64/include/QtCore/qstringlist.h
+
+/opt/Qt/5.11.2/gcc_64/include/QtCore/QTextStream
+qtextstream.h
+/opt/Qt/5.11.2/gcc_64/include/QtCore/qtextstream.h
 
 /opt/Qt/5.11.2/gcc_64/include/QtCore/QUrl
 qurl.h
