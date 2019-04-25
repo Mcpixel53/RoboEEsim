@@ -572,6 +572,30 @@ PyThreadState *pythonSavedState;
 };
 
 
+struct CoverWindow : public QMainWindow{
+
+	Settings* sett;
+	QHBoxLayout* layout;
+	QPushButton* buttIni;
+	QPushButton* buttSett;
+	PythonViewer* viewer;
+
+	CoverWindow(PythonViewer* view):viewer(view),sett(new Settings(QDir::currentPath())),
+	layout(new QHBoxLayout()), buttIni(new QPushButton()), buttSett(new QPushButton())
+	{
+		layout->addWidget(buttIni);
+		layout->addWidget(buttSett);
+		this->setLayout(layout);
+		// setCentralWidget(layout);
+		// connect(buttIni, SIGNAL(pressed()), this, SLOT(close()) );
+		this->show();
+	}
+	~CoverWindow(){
+		viewer->show();
+	}
+
+};
+
 void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0)
 {
 	int argc(1);
@@ -584,11 +608,13 @@ void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector c
 	wViewer.setWindowTitle("eRoboSim!");
 	//viewer.setWindowTitle("PyEnki Viewer");
 	//viewer.show();
+	wViewer.show();
 	wViewer.grabGesture(Qt::PanGesture);
 	wViewer.grabGesture(Qt::PinchGesture);
 	viewer.centerCameraWorld();
-	wViewer.show();
-	anl.initLogModule();
+	// CoverWindow cover(&wViewer);
+	// cover.show();
+	// anl.initLogModule();
 	wViewer.pythonSavedState = PyEval_SaveThread();
 	app.exec();
 	if (wViewer.pythonSavedState)
