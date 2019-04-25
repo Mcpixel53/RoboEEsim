@@ -125,10 +125,26 @@ namespace Enki
 			//qDebug("A VERERR OHHH %s",m_sSettingsFile);
 
 			//_viewer->installEventFilter(this);
+			// Settings* sett;
+
+
+
+			QWidget* cover = new QWidget(this);
+			QHBoxLayout* layoutCov = new QHBoxLayout();
+			QPushButton* buttIni = new QPushButton("", cover);
+			QPushButton* buttSett = new QPushButton("", cover);
+
+			layoutCov->addWidget(buttIni);
+			layoutCov->addWidget(buttSett);
+			cover->setLayout(layoutCov);
+			// cover->show();
+
 			container->addWidget(_viewer);
 			container->addWidget(slider);
 			w->setLayout(container);
 			setCentralWidget(w);
+
+	//anl->initLogModule();
 
 //			QGridLayout *chartLayout = new QGridLayout;
 
