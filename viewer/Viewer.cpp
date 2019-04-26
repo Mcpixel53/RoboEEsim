@@ -129,34 +129,41 @@ namespace Enki
 
 
 
-			QWidget* cover = new QWidget(this);
+			QDialog* cover = new QDialog(this);
 			QHBoxLayout* layoutCov = new QHBoxLayout();
-			QPushButton* buttIni = new QPushButton("", cover);
-			QPushButton* buttSett = new QPushButton("", cover);
+			QPushButton* buttIni = new QPushButton("Iniciar", cover);
+			QPushButton* buttSett = new QPushButton("Settings", cover);
 
-			layoutCov->addWidget(buttIni);
+
+
 			layoutCov->addWidget(buttSett);
+			layoutCov->addWidget(buttIni);
 			cover->setLayout(layoutCov);
-			// cover->show();
+			connect(buttIni, SIGNAL(clicked()), cover, SLOT(close()));
+			connect(buttSett, SIGNAL(clicked()), viewer->getSettings(), SLOT(show()));
 
-			container->addWidget(_viewer);
-			container->addWidget(slider);
-			w->setLayout(container);
-			setCentralWidget(w);
-
-	//anl->initLogModule();
 
 //			QGridLayout *chartLayout = new QGridLayout;
 
 			//anlCharts->setLayout(chartLayout);
 			//m_pEdit = new QLineEdit("", this);
-
-			_viewer->setFocus();
 			setWindowTitle(tr("eRoboSim"));
+			container->addWidget(_viewer);
+			container->addWidget(slider);
+			w->setLayout(container);
+			setCentralWidget(w);
+			_viewer->setFocus();
 			createDockWindows();
+
+
+			timer = startTimer(timerPeriodMs);
+			qDebug("%f, %f",this->pos().x(),this->pos().y());
+			cover->setGeometry(this->pos().x(), this->pos().y(),
+   												mainScreenSize.width()/8, mainScreenSize.height()/8);
+			cover->exec();
+			anl->initLogModule();
 	//    newLetter();
 	//    setUnifiedTitleAndToolBarOnMac(true);
- 	timer = startTimer(timerPeriodMs);
 	// qDebug("%d",timer);
 
 	}
@@ -215,6 +222,29 @@ namespace Enki
 		for( const auto& n : varList )
 			a->append(n.first.c_str());
 			return a;
+		}
+
+		void QAnalytics::initLogModule(){
+			file = new QFile(logName);
+			if (file->open(QIODevice::ReadWrite | QIODevice::ExistingOnly)){
+				if (QMessageBox::No == QMessageBox::question(0,"Sobrescrivir?","O ficheiro "+logName +" xa existe, sobrescrivir?" ,
+																	QMessageBox::Yes|QMessageBox::No,QMessageBox::No))
+				{
+					QFile* temp = file;
+					QFileSelector selector;
+					QString tempText= QFileDialog::getSaveFileName(0, tr("Gardar Como?"), "../"+logName+"_1.log",
+																														tr("All files (*.*);; Log Files (*.log)"));
+					if(tempText != NULL)
+						{
+						file = new QFile(tempText);
+						temp->close();
+						delete temp;
+						}
+				}
+			}
+			// file->close();
+			std::string welcome = "Begining new Simulation "+logName.toStdString()+"\n\n";
+			this->log(welcome);
 		}
 
 	void  QAnalytics::log(std::string logText) {
@@ -1148,17 +1178,17 @@ void viewerChart::ecUpdate(int i = 0){
 
 		void Settings::createHorizontalGroupBox()
 		{
-		    horizontalGroupBox = new QGroupBox(tr("Configuración:"));
-		    QHBoxLayout *layout = new QHBoxLayout;
+				horizontalGroupBox = new QGroupBox(tr("Configuración:"));
+				QHBoxLayout *layout = new QHBoxLayout;
 
 				buttons[0] = new QPushButton(tr("Gardar"));
 				buttons[1] = new QPushButton(tr("Reiniciar Simulación"));
-				buttons[2] = new QPushButton(tr("Cargar"));
 				buttons[3] = new QPushButton(tr("Exportar datos"));
-		    for (int i = 0; i < NumButtons; ++i) {
-		        layout->addWidget(buttons[i]);
-		    }
-		    horizontalGroupBox->setLayout(layout);
+				buttons[2] = new QPushButton(tr("Abrir Vars"));
+				for (int i = 0; i < NumButtons; ++i) {
+				    layout->addWidget(buttons[i]);
+				}
+				horizontalGroupBox->setLayout(layout);
 		}
 
 		void Settings::createGridGroupBox()

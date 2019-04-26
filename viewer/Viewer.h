@@ -425,6 +425,7 @@ struct roboStat{
 		QAnalytics(int maxIt){ maxIt=maxIt; internalLogic = 1;}
 		~QAnalytics() {file->close();}
 		std::unordered_map <std::string, std::vector<roboStat> > getVarList() {return varList;}
+		void initLogModule();
 		// static QAnalytics* getInstance() {if (QAnalytics::instance) return QAnalytics::instance; else qDebug("NOOOOORL");}
 		// void  getVarList() {qDebug("size: %d; %2.2f ",varList->size(),varList->at(0));}
 

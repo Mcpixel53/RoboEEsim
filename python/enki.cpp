@@ -467,28 +467,6 @@ struct Analytics: QAnalytics, wrapper<QAnalytics>
 	// 	qDebug("SEH");
 	// }
 
-	void initLogModule(){
-		file = new QFile(logName);
-		if (file->open(QIODevice::ReadWrite | QIODevice::ExistingOnly)){
-			if (QMessageBox::No == QMessageBox::question(0,"Sobrescrivir?","O ficheiro "+logName +" xa existe, sobrescrivir?" ,
-																QMessageBox::Yes|QMessageBox::No,QMessageBox::No))
-			{
-				QFile* temp = file;
-				QFileSelector selector;
-				QString tempText= QFileDialog::getSaveFileName(0, tr("Gardar Como?"), "../"+logName+"_1.log",
-																													tr("All files (*.*);; Log Files (*.log)"));
-				if(tempText != NULL)
-					{
-					file = new QFile(tempText);
-					temp->close();
-					delete temp;
-					}
-			}
-		}
-		// file->close();
-		std::string welcome = "Begining new Simulation "+logName.toStdString()+"\n\n";
-		this->log(welcome);
-	}
 
 	std::vector<double> * getDoubleList(std::string name, std::string var){
 		std::vector<double>* lista = new std::vector<double>();
@@ -608,10 +586,10 @@ void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector c
 	wViewer.setWindowTitle("eRoboSim!");
 	//viewer.setWindowTitle("PyEnki Viewer");
 	//viewer.show();
-	wViewer.show();
 	wViewer.grabGesture(Qt::PanGesture);
 	wViewer.grabGesture(Qt::PinchGesture);
 	viewer.centerCameraWorld();
+	wViewer.show();
 	// CoverWindow cover(&wViewer);
 	// cover.show();
 	// anl.initLogModule();

@@ -42,7 +42,7 @@ wR = conf.wRadio # for round worlds
 # w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/area.png", pyenki.Color(1,1, 1))
 # round world with texture terra and sky-blue color background
 if conf.roundMap:
-	w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/tiles.png", pyenki.Color(135/250., 206/250., 235/250.))
+	w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/2zones.png", pyenki.Color(135/250., 206/250., 235/250.))
 else:
 	w = pyenki.WorldWithTexturedGround(wW, wH, "GroundTextures/tiles.png", pyenki.Color(135/250., 206/250., 235/250.))
 
@@ -169,9 +169,10 @@ class Analise(pyenki.Analytics_Module):
 			if not self.stop:
 				self.log("*Task: " + str(self.task)+"\n")
 				self.log("*Population size: " + str(len(self.robotList))+"\n")
-				print(str(self.robotList[0].controlSystem))
+				# print(str(self.robotList[0].controlSystem))
 				self.log("*Controller: " + str(self.robotList[0].controlSystem)+"\n")
 				self.log("*Individual type: " + str(self.robotList[0].individual)+"\n")
+				# self.log("*Parametro cruze : " + str(conf.crueglgabmtrls)+"\n")
 
 				self.log("\n\n")
 				self.stop=True
@@ -196,8 +197,8 @@ class MyRobobo(pyenki.EPuck):
 		self.rightSpeed = conf.roboboSpeed # holds physics speed (right)
 
 		# self.individual = ind.DifferentialIndividual(self.controlSystem.size) ##
-		self.controlSystem = nn.sigNeural_Network() #Neural_Network
-		# self.controlSystem = nn.MLPNeuralNetwork() #Neural_Network
+		# self.controlSystem = nn.sigNeural_Network() #Neural_Network
+		self.controlSystem = nn.MLPNeuralNetwork() #Neural_Network
 		self.individual = ind.CanonicalIndividual(self.controlSystem.size) ##
 
 		self.fitnessFunc = None
@@ -261,8 +262,8 @@ class MyRobobo(pyenki.EPuck):
 
 #w.steps = 100
 # task = ()
-# anl = Analise(conf.maxIterations, tarefa_zones)
-anl = Analise(conf.maxIterations, tarefa_chasing)
+anl = Analise(conf.maxIterations, tarefa_zones)
+# anl = Analise(conf.maxIterations, tarefa_chasing)
 objective = anl.getObjective()
 if objective:
 	w.addObject(objective)
