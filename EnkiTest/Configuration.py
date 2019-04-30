@@ -8,7 +8,7 @@ class Config:
     wRadio = 150
 
     #[General]
-    maturity = 20  # Funcion Matematica = 1              maturityTime = 1
+    maturity    = 20     # Funcion Matematica = 1        maturityTime = 1
     maxLifetime = 200.0  # Funcion Matematica 10         maxLifetime = 100.0
     best = "Fitness"
     graphicInterface = False
@@ -72,7 +72,7 @@ class Config:
     roboboSpeed = 100
     # roboboSize = 30
 
-    populationSize =                            20   ### populationSize = 40
+    populationSize =                            10  ### populationSize = 40
     sleepTest = 0
     maxIterations = 100000
 

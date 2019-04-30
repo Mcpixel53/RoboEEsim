@@ -24,7 +24,6 @@ class Buffer:
             (x2,y2) = (x1,y1)
         return math.sqrt((x2-x1)**2  + (y2-y1)**2)
 
-
     def get_distancia_recorrida(self, x, y, mySpeed, coeficente_correccion_length):
 
         if len(self.deque) > 1:

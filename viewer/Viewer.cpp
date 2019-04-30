@@ -1260,7 +1260,7 @@ void viewerChart::ecUpdate(int i = 0){
 	//viewer constructor
 	ViewerWidget::ViewerWidget(World *world, QWidget *parent) :
 		QGLWidget(parent),
-		msStep(120),
+		msStep(30),
 		mult(1),
 		camera(world),
 		doDumpFrames(false),

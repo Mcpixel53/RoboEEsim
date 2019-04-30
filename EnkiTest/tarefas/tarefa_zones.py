@@ -86,6 +86,8 @@ def roboboZones_controlStep(self):
     V = conf.roboboSpeed #	100
     output = self.controlSystem.forward(inputController)
     discrepancia = output * V * 2 -V
+    if (self.id=="rBobo 0"):
+        print(inputController)
     # (self.leftSpeed, self.rightSpeed) = output*V
     (self.leftSpeed, self.rightSpeed) = (V-discrepancia[0], V+discrepancia[0])
 
@@ -126,6 +128,8 @@ def update_coeficiente_reparto_and_ir_floor(self, coef_reparto_zona):
 def fitness_coefzona(self):
 
         distancia_recorrida = self.buffer.get_distancia_recorrida(self.pos[0], self.pos[1], self.Speed, 0.5)
+        if (self.id=="rBobo 0"):
+            print(distancia_recorrida, self.leftSpeed, self.rightSpeed)
         #coeficiente_zona_continuo = self.buffer.get_coeficiente_zona_continuo(self.x, self.y, config.width, self)
         coeficiente_por_pasos_en_vida = self.buffer.get_coeficiente_zona_por_pasos_en_vida(self.pos[0], self.pos[1], width, self)
         '''if self.x > width *0.5:

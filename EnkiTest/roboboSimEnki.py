@@ -123,8 +123,7 @@ class Analise(pyenki.Analytics_Module):
 				#if (currentIteration % conf.eachIterationCollection == 0):
 			#self.Individuals.append(current.individual.genotype.chromosome[:])
 				#experimentData['IndividualFitness'].append(current.individual.genotype.fitness)
-				if not self.task.specific(i, current, self):
-					return
+				self.task.specific(i, current, self)
 				#Buscar el individuo mas apto
 				if current.individual.genotype.fitness > iterationMaxFitness:
 					iterationMaxFitness = current.individual.genotype.fitness
@@ -190,7 +189,7 @@ class MyRobobo(pyenki.EPuck):
 		self.id = self.setId("rBobo "+str(id))
 		self.pos = pos # tuple: pos[0] = x, pos[1] = y
 		# self.speed is reserved by the engine
-		self.Speed = 0.0471 * conf.roboboSpeed #holds real speed (u/s)
+		self.Speed = 0.0143 * conf.roboboSpeed #holds real speed (u/s)
 		self.leftSpeed = conf.roboboSpeed # holds physics speed (left)
 		self.rightSpeed = conf.roboboSpeed # holds physics speed (right)
 
@@ -263,7 +262,7 @@ class MyRobobo(pyenki.EPuck):
 #w.steps = 100
 # task = ()
 anl = Analise(conf.maxIterations, TarefaZones)
-# anl = Analise(conf.maxIterations, TarefaChasing)
+# anl = Analise(conf.maxI	terations, TarefaChasing)
 # anl = Analise(conf.maxIterations, Testing)
 objective = anl.getObjective()
 if objective:
