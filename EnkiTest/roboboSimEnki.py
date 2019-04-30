@@ -21,9 +21,9 @@ debugLogic = 0
 
 
 #Global world properties
-from tarefas.tarefa_chasing import tarefa_chasing
-from tarefas.tarefa_zones import tarefa_zones
-
+from tarefas.tarefa_chasing import TarefaChasing
+from tarefas.tarefa_zones import TarefaZones
+from tarefas.tarefa_testing import Testing
 
 wW = conf.wWidth
 wH = conf.wHeight
@@ -42,7 +42,7 @@ wR = conf.wRadio # for round worlds
 # w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/area.png", pyenki.Color(1,1, 1))
 # round world with texture terra and sky-blue color background
 if conf.roundMap:
-	w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/2zones.png", pyenki.Color(135/250., 206/250., 235/250.))
+	w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/tiles.png", pyenki.Color(135/250., 206/250., 235/250.))
 else:
 	w = pyenki.WorldWithTexturedGround(wW, wH, "GroundTextures/tiles.png", pyenki.Color(135/250., 206/250., 235/250.))
 
@@ -118,13 +118,13 @@ class Analise(pyenki.Analytics_Module):
 
 			i = 0
 			for current in self.robotList:
-
 				current.setFitness()
 				#Guardar valores Individuales de los experimentos
 				#if (currentIteration % conf.eachIterationCollection == 0):
 			#self.Individuals.append(current.individual.genotype.chromosome[:])
 				#experimentData['IndividualFitness'].append(current.individual.genotype.fitness)
-				self.task.specific(i, current, self)
+				if not self.task.specific(i, current, self):
+					return
 				#Buscar el individuo mas apto
 				if current.individual.genotype.fitness > iterationMaxFitness:
 					iterationMaxFitness = current.individual.genotype.fitness
@@ -140,7 +140,6 @@ class Analise(pyenki.Analytics_Module):
 				#devolver String de cromosomas, de maneira facilmente interpretable pola GUI
 				self.vlAdd("Chromosome_str", i, current.individual.genotype.returnChromosomeS())
 				self.vlAdd("Age", i,current.individual.age)
-
 				i+=1
 			# se non existe non pasa nada
 
@@ -161,7 +160,7 @@ class Analise(pyenki.Analytics_Module):
 
 
 	def step(self):
-		# print("Evolving Step!")
+	# print("Evolving Step!")
 	#		try:
 	#	    logicThread = threading._start_new_thread(
 		if self.robotList:
@@ -173,7 +172,6 @@ class Analise(pyenki.Analytics_Module):
 				self.log("*Controller: " + str(self.robotList[0].controlSystem)+"\n")
 				self.log("*Individual type: " + str(self.robotList[0].individual)+"\n")
 				# self.log("*Parametro cruze : " + str(conf.crueglgabmtrls)+"\n")
-
 				self.log("\n\n")
 				self.stop=True
 
@@ -197,9 +195,10 @@ class MyRobobo(pyenki.EPuck):
 		self.rightSpeed = conf.roboboSpeed # holds physics speed (right)
 
 		# self.individual = ind.DifferentialIndividual(self.controlSystem.size) ##
-		# self.controlSystem = nn.sigNeural_Network() #Neural_Network
-		self.controlSystem = nn.MLPNeuralNetwork() #Neural_Network
-		self.individual = ind.CanonicalIndividual(self.controlSystem.size) ##
+		self.controlSystem = nn.sigNeural_Network() #Neural_Network
+		# self.controlSystem = nn.MLPNeuralNetwork() #Neural_Network
+		self.individual = ind.DifferentialIndividual(self.controlSystem.size) ##
+		# self.individual = ind.CanonicalIndividual(self.controlSystem.size) ##
 
 		self.fitnessFunc = None
 		self.buffer = None
@@ -233,6 +232,7 @@ class MyRobobo(pyenki.EPuck):
 			print("NOT TASK_CONTROL SPECIFIED IN", self.id)
 			return
 		self.task_control(self)
+
 		# if (int(round(time.time() * 1000)) - self.mills)>=1000:
 		# 	time.sleep(4)
 		# 	print("POS",self.pos,int(round(time.time() * 1000)))
@@ -262,12 +262,14 @@ class MyRobobo(pyenki.EPuck):
 
 #w.steps = 100
 # task = ()
-anl = Analise(conf.maxIterations, tarefa_zones)
-# anl = Analise(conf.maxIterations, tarefa_chasing)
+anl = Analise(conf.maxIterations, TarefaZones)
+# anl = Analise(conf.maxIterations, TarefaChasing)
+# anl = Analise(conf.maxIterations, Testing)
 objective = anl.getObjective()
 if objective:
 	w.addObject(objective)
 
+random.seed(0)
 for i in range(conf.populationSize):
 	robobo = MyRobobo((random.randrange(-wR/2,wR/2,2),random.randrange(-wR/2,wR/2,2)),i)
 	w.addObject(robobo)
@@ -275,12 +277,12 @@ for i in range(conf.populationSize):
 
 
 
-for a in range (-13,16):
-	w.addItem("recta", ((a-1)* 10,0), 5000)
-for eh in range(0,10):
-	w.addItem("cruz",(random.randrange(-wR/2,wR/2,2),random.randrange(-wR/2,wR/2,2)), 100000)
-
-w.addItem("recta",(a,0), 1000)
+# for a in range (-13,16):
+# 	w.addItem("recta", ((a-1)* 10,0), 5000)
+# for eh in range(0,10):
+# 	w.addItem("cruz",(random.randrange(-wR/2,wR/2,2),random.randrange(-wR/2,wR/2,2)), 100000)
+#
+# w.addItem("recta",(a,0), 1000)
 # anl.evolve()
 	#//runSimulation(Enki::World, AnalyticsModule, camPos, camAltitude, camYaw, camPitch, wallsHeight)
 #pyenki.EnkiViewer.runSimulation(w, anl, (wW/2,wH/2),wH*1.05, 0, Math.radians(-89.9), 10)

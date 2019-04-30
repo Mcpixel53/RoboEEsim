@@ -6,13 +6,13 @@ import random
 import time
 import traceback
 import pyenki
-import random
+from Tarefa import Tarefa
 
 wW = conf.wWidth
 wH = conf.wHeight
 wR = conf.wRadio
 
-class tarefa_chasing:
+class TarefaChasing(Tarefa):
 
     def __init__(self):
         #Config specific

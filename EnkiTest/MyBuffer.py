@@ -15,6 +15,15 @@ class Buffer:
         else:
             self.deque.append((x, y, 0.0))
 
+    def get_distancia(self):
+        # print(len(self.deque[0]))
+        (x1, y1, z1) = self.deque[0]
+        if len(self.deque) > 1:
+            (x2, y2, z2) = self.deque[1]
+        else:
+            (x2,y2) = (x1,y1)
+        return math.sqrt((x2-x1)**2  + (y2-y1)**2)
+
 
     def get_distancia_recorrida(self, x, y, mySpeed, coeficente_correccion_length):
 

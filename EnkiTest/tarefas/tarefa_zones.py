@@ -1,13 +1,13 @@
 from MyBuffer import Buffer
 from Configuration import Config as conf
-import numpy as np
-
+import Tarefa
 width = 0 if conf.roundMap else conf.wWidth
 
-class tarefa_zones:
+class TarefaZones(Tarefa.Tarefa):
 
     def __init__(self):
         #Config specific
+        # Tarefa.__init__(self)
         pass
 
     def init(self, anl):
@@ -30,6 +30,7 @@ class tarefa_zones:
         current.variable_especie = 0
         current.zona_actual = 0
         current.coeficiente_penalizacion_reparto = 0
+        current.castigo = 0
         # current.porcentaje_pasos_en_vida_ZI
         ###############
         current.reset()
@@ -50,21 +51,45 @@ class tarefa_zones:
          return "Task Zones " + ("raw" if  conf.fitness_sin_zonas else "double zone" if conf.fitness_dos_zonas else "active zone")
 
 ################################################################################
+def normalizarIR(valor):
+    if ( valor > 11):
+         return 1
+    else:
+        return 0
+
+def checkCastigo(input):
+    if min(input) < 1:
+        return 15
+    return 0
+
 def roboboZones_controlStep(self):
+
     inputController = []
     irSensors = self.proximitySensorDistances
-    inputController.append((irSensors[6])) #front-L
-    inputController.append((irSensors[7])) #front-front-L
-    inputController.append((irSensors[0])) #front-front-R
-    inputController.append((irSensors[1])) #front-R
+    inputController.append(normalizarIR(irSensors[6])) #front-L
+    inputController.append(normalizarIR(irSensors[7])) #front-front-L
+    inputController.append(normalizarIR(irSensors[0])) #front-front-R
+    inputController.append(normalizarIR(irSensors[1])) #front-R
+
+    if (self.castigo < 1):
+        self.castigo = checkCastigo(irSensors)
+    else:
+        self.castigo -=1
+        (self.leftSpeed, self.rightSpeed) = (0,0)
+        # if (self.id=="rBobo 1"):
+        #     print("Senss ", inputController)
+        return
+
     inputController.append(self.zona_actual)
+
     # # alpha = 1/cos(15.*M_PI/180.)
     V = conf.roboboSpeed #	100
     output = self.controlSystem.forward(inputController)
     discrepancia = output * V * 2 -V
     # (self.leftSpeed, self.rightSpeed) = output*V
     (self.leftSpeed, self.rightSpeed) = (V-discrepancia[0], V+discrepancia[0])
-    # print(output,"-", discrepancia,"-",inputController)
+
+
 ################################################################################
 
 

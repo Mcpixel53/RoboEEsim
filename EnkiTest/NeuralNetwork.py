@@ -23,16 +23,16 @@ def ReLU(x):
 class MLPNeuralNetwork:
 
     def __init__(self):
-        self.input = cnf.Config.inputSize
-        self.hidden = cnf.Config.hiddenSize
-        self.output = cnf.Config.outputSize
-        self.wi = (2.0*np.random.rand(self.input+1, self.hidden)-1.0)*1.0
-        self.wo = (2.0*np.random.rand(self.hidden+1, self.output)-1.0)*1.0
+        self.inputSize = cnf.Config.inputSize
+        self.hiddenSize = cnf.Config.hiddenSize
+        self.outputSize = cnf.Config.outputSize
+        self.wi = (2.0*np.random.rand(self.inputSize+1, self.hiddenSize)-1.0)*1.0
+        self.wo = (2.0*np.random.rand(self.hiddenSize+1, self.outputSize)-1.0)*1.0
         self.size = self.wi.size + self.wo.size
 
 
     def forward(self, input):
-        if len(input) != self.input:
+        if len(input) != self.inputSize:
             raise ValueError('Wrong number of inputs')
 
         input_with_bias = np.append(input, 1.0)
@@ -47,8 +47,8 @@ class MLPNeuralNetwork:
             return
             # raise ValueError('Wrong number of parameters')
         weights = (2.0 * new_weights - 1.0) *5.0
-        self.wi = np.reshape(weights[:self.wi.size], (self.input+1, self.hidden))
-        self.wo = np.reshape(weights[self.wi.size:], (self.hidden+1, self.output))
+        self.wi = np.reshape(weights[:self.wi.size], (self.inputSize+1, self.hiddenSize))
+        self.wo = np.reshape(weights[self.wi.size:], (self.hiddenSize+1, self.outputSize))
 
 
     def updateWeights2(self, Genes):
@@ -62,6 +62,7 @@ class MLPNeuralNetwork:
     def __str__ (self):
         return "MPL Neural Network. " + str(self.inputSize) +" input layers, "\
         + str(self.hiddenSize) + " hidden layers, "  + str(self.outputSize) + " output layers."
+
 
 #########################################################
 
