@@ -12,7 +12,7 @@ class TarefaZones(Tarefa.Tarefa):
 
     def init(self, anl):
         conf.inputSize = 5
-        conf.hiddenSize = 5
+        conf.hiddenSize = 4
         conf.outputSize = 1
 
         anl.coefZona = anl.register("Zone Sharing Coef")
@@ -46,20 +46,21 @@ class TarefaZones(Tarefa.Tarefa):
         ### adding at last
         if i==conf.populationSize-1:
 			anl.vlAdd("Zone Sharing Coef", 0, anl.coef_reparto_zona)
+        # print(len(current.individual.genotype.chromosome))
 
     def __str__(self):
          return "Task Zones " + ("raw" if  conf.fitness_sin_zonas else "double zone" if conf.fitness_dos_zonas else "active zone")
 
 ################################################################################
 def normalizarIR(valor):
-    if ( valor > 11):
-         return 1
-    else:
-        return 0
+    # if ( valor > 11):
+    #      return 1
+    # else:
+    return valor/12
 
 def checkCastigo(input):
     if min(input) < 1:
-        return 15
+        return 0 #15
     return 0
 
 def roboboZones_controlStep(self):
@@ -70,6 +71,7 @@ def roboboZones_controlStep(self):
     inputController.append(normalizarIR(irSensors[7])) #front-front-L
     inputController.append(normalizarIR(irSensors[0])) #front-front-R
     inputController.append(normalizarIR(irSensors[1])) #front-R
+    inputController.append(self.zona_actual)
 
     if (self.castigo < 1):
         self.castigo = checkCastigo(irSensors)
@@ -80,16 +82,18 @@ def roboboZones_controlStep(self):
         #     print("Senss ", inputController)
         return
 
-    inputController.append(self.zona_actual)
 
     # # alpha = 1/cos(15.*M_PI/180.)
     V = conf.roboboSpeed #	100
     output = self.controlSystem.forward(inputController)
     discrepancia = output * V * 2 -V
-    if (self.id=="rBobo 0"):
-        print(inputController)
-    # (self.leftSpeed, self.rightSpeed) = output*V
     (self.leftSpeed, self.rightSpeed) = (V-discrepancia[0], V+discrepancia[0])
+    #outro
+    # output = self.controlSystem.forward(inputController) *2-1
+    # (self.leftSpeed, self.rightSpeed) = (self.controlSystem.forward(inputController)  *2-1) * V
+    # if (self.id=="rBobo 0"):
+        # print(inputController)
+    # (self.leftSpeed, self.rightSpeed) = output*V
 
 
 ################################################################################
@@ -128,8 +132,8 @@ def update_coeficiente_reparto_and_ir_floor(self, coef_reparto_zona):
 def fitness_coefzona(self):
 
         distancia_recorrida = self.buffer.get_distancia_recorrida(self.pos[0], self.pos[1], self.Speed, 0.5)
-        if (self.id=="rBobo 0"):
-            print(distancia_recorrida, self.leftSpeed, self.rightSpeed)
+        # if (self.id=="rBobo 0"):
+            # print(distancia_recorrida, self.leftSpeed, self.rightSpeed)
         #coeficiente_zona_continuo = self.buffer.get_coeficiente_zona_continuo(self.x, self.y, config.width, self)
         coeficiente_por_pasos_en_vida = self.buffer.get_coeficiente_zona_por_pasos_en_vida(self.pos[0], self.pos[1], width, self)
         '''if self.x > width *0.5:

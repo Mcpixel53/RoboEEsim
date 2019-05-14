@@ -38,18 +38,16 @@ pbest = conf.pbest
 # Classes
 
 class Genotype:
-
     def __init__(self, pDimensions):
-
         self.size = pDimensions
         self.chromosome = self.generateRandomChromosome(self.size)
         self.fitness = 0.0
 
-
     def create_new(self, chrom = None):
         chrom = chrom or self.chromosome
         newGenotyppe = Genotype(len(chrom))
-        newGenotyppe.chomosome = chrom[:]
+        newGenotyppe.chromosome = list(chrom) #list copy
+        newGenotyppe.fitness = self.fitness
         return newGenotyppe
 
     def returnChromosomeD(self):
@@ -60,7 +58,7 @@ class Genotype:
         return ch
 
     def returnChromosomeS(self):
-        return " ".join(str('%.2f') %elem for elem in self.chromosome).replace(".",",")
+        return " ".join(str('%+.2f') %elem for elem in self.chromosome).replace(".",",")
 
     def generateRandomChromosome(self, pDimensions):
         newChromosome = [None for j in range(pDimensions)]
@@ -70,116 +68,12 @@ class Genotype:
 
 
     def randomGene(self):
-        return np.random.uniform(geneMin,geneMax)
+        return np.random.uniform(geneMin, geneMax)
+
 #############
 ##OPERATORS##
 ################################################################################
 
-# class RecombinationOperators:
-#
-#     def __init__(self, pReplacer, pMater, pPreference, pGeneVariability, pAlpha, pPercentOfGenes, pMutationRate, pSuperMutationProb, pMutationPercent, pMutationAmplitude):
-#         self.replacer = pReplacer
-#         self.mater = pMater
-#
-#         self.preference = pPreference
-#         self.geneVariability = pGeneVariability
-#
-#         self.alpha = pAlpha
-#         self.percentOfGenes = pPercentOfGenes
-#
-#         self.mutationRate = pMutationRate
-#         self.superMutationProbability = pSuperMutationProb
-#         self.mutationPercent = pMutationPercent
-#         self.mutationAmplitude = pMutationAmplitude
-#
-#     def selectMatings(self):
-#         matesGenotype = self.mater.listOfMates
-#         bestMateIndex = 0
-#         matesMaxFitness = -np.finfo(float).max
-#         for i in range(len(matesGenotype)):
-#             if matesMaxFitness < matesGenotype[i].fitness:
-#                 bestMateIndex = i
-#                 matesMaxFitness = matesGenotype[i].fitness
-#         return matesGenotype[bestMateIndex]
-#
-#     def startMating(self, pOwnGenotype):
-#         self.mate(pOwnGenotype, self.selectMatings())
-#
-#     def mate(self, pReceiver, pOther):
-#         if(np.random.uniform(0.0, 1.0) < self.mutationRate):
-#             self.mutationMating(pReceiver, pOther)
-#         else:
-#             self.crossoverMating(pReceiver, pOther)
-#
-#     def mutationMating(self, pReceiver, pOther):
-#         newGenotype = Genotype(len(pReceiver.chromosome))
-#         if np.random.uniform(0.0, 1.0) < self.preference:
-#             newGenotype.chromosome = self.mutate(pReceiver.chromosome)
-#             estimatedFitness = pReceiver.fitness
-#         # mutation over Other
-#         else:
-#             newGenotype.chromosome = self.mutate(pOther.chromosome)
-#             estimatedFitness = pOther.fitness
-#
-#         newGenotype.fitness = estimatedFitness*0.5
-#         self.replacer.embryoGenotype = newGenotype
-#
-#     def crossoverMating(self, pReceiver, pOther):
-#         newGenotype = Genotype(len(pReceiver.chromosome))
-#         newGenotype.chromosome = self.crossover(
-#             pReceiver.chromosome, pOther.chromosome)
-#
-#         newGenotype.fitness = (pReceiver.fitness + pOther.fitness) * 0.5
-#         self.replacer.embryoGenotype = newGenotype
-#
-#     def crossover(self, pReceiverChromosome, pOtherChromosome):
-#         size = len(pReceiverChromosome)
-#
-#         newChromosome = [None for i in range(size)]
-#
-#         for i in range(size):
-#             if np.random.uniform(0.0, 1.0) < self.percentOfGenes:
-#                 newChromosome[i] = self.BLXCrossover(
-#                     pReceiverChromosome[i], pOtherChromosome[i])
-#             else:
-#                 if (np.random.uniform(0.0, 1.0) < 0.5):
-#                     newChromosome[i] = pReceiverChromosome[i]
-#                 else:
-#                     newChromosome[i] = pOtherChromosome[i]
-#         return newChromosome
-#
-#     def BLXCrossover(self, pReceiverGene, pOtherGene):
-#         dist = np.abs(pReceiverGene - pOtherGene)
-#         minimum = np.minimum(pReceiverGene, pOtherGene)
-#         maximum = np.maximum(pReceiverGene, pOtherGene)
-#
-#         dif = maximum + alpha*dist - (minimum - alpha*dist)
-#         return self.checkBoundaries(minimum - alpha*dist + np.random.uniform(0, 1)*dif)
-#
-#     def checkBoundaries(self, gene):
-#         if gene > geneMax:
-#             return geneMax
-#         elif gene < geneMin:
-#             return geneMin
-#         return gene
-#
-#     def mutateGene(self, gene):
-#         superMut = np.random.uniform(0.0, 1.0)
-#         if superMut < self.superMutationProbability:
-#             print("WHAT")
-#             print("Valor aletorio ", superMut)
-#             print("Prob Supermutation ", self.superMutationProbability)
-#             #return randomGene()
-#         else:
-#             return self.checkBoundaries(gene + (np.random.uniform(0.0, 1.0) - 0.5)*self.mutationAmplitude)
-#
-#     def mutate(self, pChromosome):
-#         mutated = pChromosome
-#         for i in range(len(mutated)):
-#             if np.random.uniform(0, 1) < mutationPercent:
-#                 mutated[i] = self.mutateGene(pChromosome[i])
-#         return mutated
-#
 class CanonicalGeneticOperators:
 
     def __init__(self, mutation_amplitude, mutation_portion, crossover_portion, crossover_margin):
@@ -299,38 +193,7 @@ class CanonicalReplacement:
             replaceProb = 1.0
 
         return replaceProb
-#
-#
-# class MatingOperators:
-#
-#     def __init__(self, pPendingMatings, pMaxTournament, pMaxLifeTime):
-#         self.pendingMatings = pPendingMatings
-#         self.matesAllowed = pPendingMatings
-#         self.isMating = False
-#         self.listOfMates = []
-#
-#         self.maxTournament = pMaxTournament
-#         self.maximunMatingProbability = pMaxTournament/pMaxLifeTime
-#         self.matingProbability = pMaxTournament/pMaxLifeTime
-#         #print(pMaxTournament,pMaxLifeTime,self.matingProbability)
-#
-#     def checkMating(self):
-#         if self.isMating:
-#             pass
-#         else:
-#             if np.random.uniform(0, 1) < self.matingProbability:
-#                 self.isMating = True
-#
-#     def addMate(self, pGenotype):
-#         self.listOfMates.append(pGenotype)
-#         self.pendingMatings -= 1
-#
-#     def resetMatingStatus(self):
-#         self.pendingMatings = self.matesAllowed
-#         self.isMating = False
-#         self.listOfMates = []
-#
-#         self.matingProbability = self.maximunMatingProbability
+
 
 class DifferentialEvolutionOperator:
 
@@ -484,4 +347,144 @@ class DifferentialEvolutionOperator:
 
         return (r1, r2)
 
+
 ################################################################################
+
+# class RecombinationOperators:
+#
+#     def __init__(self, pReplacer, pMater, pPreference, pGeneVariability, pAlpha, pPercentOfGenes, pMutationRate, pSuperMutationProb, pMutationPercent, pMutationAmplitude):
+#         self.replacer = pReplacer
+#         self.mater = pMater
+#
+#         self.preference = pPreference
+#         self.geneVariability = pGeneVariability
+#
+#         self.alpha = pAlpha
+#         self.percentOfGenes = pPercentOfGenes
+#
+#         self.mutationRate = pMutationRate
+#         self.superMutationProbability = pSuperMutationProb
+#         self.mutationPercent = pMutationPercent
+#         self.mutationAmplitude = pMutationAmplitude
+#
+#     def selectMatings(self):
+#         matesGenotype = self.mater.listOfMates
+#         bestMateIndex = 0
+#         matesMaxFitness = -np.finfo(float).max
+#         for i in range(len(matesGenotype)):
+#             if matesMaxFitness < matesGenotype[i].fitness:
+#                 bestMateIndex = i
+#                 matesMaxFitness = matesGenotype[i].fitness
+#         return matesGenotype[bestMateIndex]
+#
+#     def startMating(self, pOwnGenotype):
+#         self.mate(pOwnGenotype, self.selectMatings())
+#
+#     def mate(self, pReceiver, pOther):
+#         if(np.random.uniform(0.0, 1.0) < self.mutationRate):
+#             self.mutationMating(pReceiver, pOther)
+#         else:
+#             self.crossoverMating(pReceiver, pOther)
+#
+#     def mutationMating(self, pReceiver, pOther):
+#         newGenotype = Genotype(len(pReceiver.chromosome))
+#         if np.random.uniform(0.0, 1.0) < self.preference:
+#             newGenotype.chromosome = self.mutate(pReceiver.chromosome)
+#             estimatedFitness = pReceiver.fitness
+#         # mutation over Other
+#         else:
+#             newGenotype.chromosome = self.mutate(pOther.chromosome)
+#             estimatedFitness = pOther.fitness
+#
+#         newGenotype.fitness = estimatedFitness*0.5
+#         self.replacer.embryoGenotype = newGenotype
+#
+#     def crossoverMating(self, pReceiver, pOther):
+#         newGenotype = Genotype(len(pReceiver.chromosome))
+#         newGenotype.chromosome = self.crossover(
+#             pReceiver.chromosome, pOther.chromosome)
+#
+#         newGenotype.fitness = (pReceiver.fitness + pOther.fitness) * 0.5
+#         self.replacer.embryoGenotype = newGenotype
+#
+#     def crossover(self, pReceiverChromosome, pOtherChromosome):
+#         size = len(pReceiverChromosome)
+#
+#         newChromosome = [None for i in range(size)]
+#
+#         for i in range(size):
+#             if np.random.uniform(0.0, 1.0) < self.percentOfGenes:
+#                 newChromosome[i] = self.BLXCrossover(
+#                     pReceiverChromosome[i], pOtherChromosome[i])
+#             else:
+#                 if (np.random.uniform(0.0, 1.0) < 0.5):
+#                     newChromosome[i] = pReceiverChromosome[i]
+#                 else:
+#                     newChromosome[i] = pOtherChromosome[i]
+#         return newChromosome
+#
+#     def BLXCrossover(self, pReceiverGene, pOtherGene):
+#         dist = np.abs(pReceiverGene - pOtherGene)
+#         minimum = np.minimum(pReceiverGene, pOtherGene)
+#         maximum = np.maximum(pReceiverGene, pOtherGene)
+#
+#         dif = maximum + alpha*dist - (minimum - alpha*dist)
+#         return self.checkBoundaries(minimum - alpha*dist + np.random.uniform(0, 1)*dif)
+#
+#     def checkBoundaries(self, gene):
+#         if gene > geneMax:
+#             return geneMax
+#         elif gene < geneMin:
+#             return geneMin
+#         return gene
+#
+#     def mutateGene(self, gene):
+#         superMut = np.random.uniform(0.0, 1.0)
+#         if superMut < self.superMutationProbability:
+#             print("WHAT")
+#             print("Valor aletorio ", superMut)
+#             print("Prob Supermutation ", self.superMutationProbability)
+#             #return randomGene()
+#         else:
+#             return self.checkBoundaries(gene + (np.random.uniform(0.0, 1.0) - 0.5)*self.mutationAmplitude)
+#
+#     def mutate(self, pChromosome):
+#         mutated = pChromosome
+#         for i in range(len(mutated)):
+#             if np.random.uniform(0, 1) < mutationPercent:
+#                 mutated[i] = self.mutateGene(pChromosome[i])
+#         return mutated
+#
+
+#
+#
+# class MatingOperators:
+#
+#     def __init__(self, pPendingMatings, pMaxTournament, pMaxLifeTime):
+#         self.pendingMatings = pPendingMatings
+#         self.matesAllowed = pPendingMatings
+#         self.isMating = False
+#         self.listOfMates = []
+#
+#         self.maxTournament = pMaxTournament
+#         self.maximunMatingProbability = pMaxTournament/pMaxLifeTime
+#         self.matingProbability = pMaxTournament/pMaxLifeTime
+#         #print(pMaxTournament,pMaxLifeTime,self.matingProbability)
+#
+#     def checkMating(self):
+#         if self.isMating:
+#             pass
+#         else:
+#             if np.random.uniform(0, 1) < self.matingProbability:
+#                 self.isMating = True
+#
+#     def addMate(self, pGenotype):
+#         self.listOfMates.append(pGenotype)
+#         self.pendingMatings -= 1
+#
+#     def resetMatingStatus(self):
+#         self.pendingMatings = self.matesAllowed
+#         self.isMating = False
+#         self.listOfMates = []
+#
+#         self.matingProbability = self.maximunMatingProbability

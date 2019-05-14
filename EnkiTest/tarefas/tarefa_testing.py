@@ -5,7 +5,7 @@ import time
 import random
 from MyBuffer import Buffer
 from tarefas.tarefa_zones import *
-
+import numpy as np
 
 class Testing(Tarefa.Tarefa):
     roboPos = 0
@@ -17,8 +17,8 @@ class Testing(Tarefa.Tarefa):
     speed = 0
 
     def init(self,anl):
-        conf.inputSize = 5
-        conf.hiddenSize = 5
+        conf.inputSize = 1
+        conf.hiddenSize = 2
         conf.outputSize = 1
         anl.coefZona = anl.register("Zone Sharing Coef")
         anl.coefPunish = anl.register("Punish Sharing Coef")
@@ -38,11 +38,11 @@ class Testing(Tarefa.Tarefa):
         current.task_control = testing_controlStep
         current.buffer = Buffer(2)
         # current.fitnessFunc = noFitness
-        current.fitnessFunc = fitness_coefzona
-        current.testTemp = True
+        current.fitnessFunc = maxfitness#fitness_coefzona
+        current.testTemp = False
         current.testIR = False
         current.testStraight = False
-        (current.leftSpeed, current.rightSpeed) = (100,90)
+        (current.leftSpeed, current.rightSpeed) = (0,0)
         ###############
         current.contador_pasos_en_zona_izda_en_vida_paraesterobot = 0
         current.contador_pasos_en_zona_dcha_en_vida_paraesterobot = 0
@@ -63,7 +63,17 @@ class Testing(Tarefa.Tarefa):
 def noFitness(self):
     return 0
 
+def maxfitness(self):
+    suma = np.sum(self.individual.genotype.chromosome)/len(self.individual.genotype.chromosome)
+    # print(suma, self.individual.genotype.chromosome)
+    return suma if (suma < 1 and suma > 0) else 0
+
+
 def testing_controlStep(self):
+    irSensors = self.proximitySensorDistances
+    return
+    if (self.id=="rBobo 0"):
+        print(irSensors)
 
     if (self.testTemp):
         # (self.leftSpeed, self.rightSpeed) = (45,60)

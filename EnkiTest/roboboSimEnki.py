@@ -115,7 +115,6 @@ class Analise(pyenki.Analytics_Module):
 			#print(running,(w.iterations<conf.maxIterations))
 			iterationMeanFitness = 0
 			iterationMaxFitness = 0
-
 			i = 0
 			for current in self.robotList:
 				current.setFitness()
@@ -123,15 +122,16 @@ class Analise(pyenki.Analytics_Module):
 				#if (currentIteration % conf.eachIterationCollection == 0):
 			#self.Individuals.append(current.individual.genotype.chromosome[:])
 				#experimentData['IndividualFitness'].append(current.individual.genotype.fitness)
-				self.task.specific(i, current, self)
+
+				self.task.specific(i, current, self) #Specific task evaluation procedure
 				#Buscar el individuo mas apto
 				if current.individual.genotype.fitness > iterationMaxFitness:
 					iterationMaxFitness = current.individual.genotype.fitness
 					bestFitted = current
 				iterationMeanFitness += current.individual.genotype.fitness
 
-				current.individual.checkStatus(self.population)
 				current.individual.incrementAge()
+				current.individual.checkStatus(self.population)
 				if current.individual.age == 0:
 					current.reset()
 
@@ -189,11 +189,10 @@ class MyRobobo(pyenki.EPuck):
 		self.id = self.setId("rBobo "+str(id))
 		self.pos = pos # tuple: pos[0] = x, pos[1] = y
 		# self.speed is reserved by the engine
-		self.Speed = 0.0143 * conf.roboboSpeed #holds real speed (u/s)
-		self.leftSpeed = conf.roboboSpeed # holds physics speed (left)
-		self.rightSpeed = conf.roboboSpeed # holds physics speed (right)
+		self.Speed = 0.0283 * conf.roboboSpeed #holds real speed (u/s)
+		self.leftSpeed = conf.roboboSpeed   # holds physics speed (left wheel)
+		self.rightSpeed = conf.roboboSpeed  # holds physics speed (right wheel)
 
-		# self.individual = ind.DifferentialIndividual(self.controlSystem.size) ##
 		self.controlSystem = nn.sigNeural_Network() #Neural_Network
 		# self.controlSystem = nn.MLPNeuralNetwork() #Neural_Network
 		self.individual = ind.DifferentialIndividual(self.controlSystem.size) ##

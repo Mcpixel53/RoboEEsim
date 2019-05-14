@@ -540,28 +540,6 @@ struct roboStat{
 	};
 
 
-	/*Value RetrieveValue(std::string key)
-	{
-	     //get value
-	      std::string value = get_value(key, etc);
-	      return { value };
-	}
-
-	struct Value
-	{
-	    std::string _value;
-
-	    template<typename T>
-	    operator T() const   //implicitly convert into T
-	    {
-	       std::stringstream ss(_value);
-	       T convertedValue;
-	       if ( ss >> convertedValue ) return convertedValue;
-	       else throw std::runtime_error("conversion failed");
-	    }
-	}
-*/
-
 class gPopup: public QDialog{
 	Q_OBJECT
 
@@ -583,6 +561,7 @@ class gPopup: public QDialog{
 		QSlider *calidadeSpin;
 		QDialogButtonBox *buttonBox ;
 		QCheckBox *checkbox;
+
 };
 
 

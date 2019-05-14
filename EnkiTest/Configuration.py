@@ -8,17 +8,18 @@ class Config:
     wRadio = 150
 
     #[General]
-    maturity    = 20     # Funcion Matematica = 1        maturityTime = 1
-    maxLifetime = 200.0  # Funcion Matematica 10         maxLifetime = 100.0
+    maturity    = 10            # Funcion Matematica = 1        maturityTime = 1
+    maxLifetime = 200.0         # Funcion Matematica 10         maxLifetime = 100.0
     best = "Fitness"
     graphicInterface = False
     logging = False
     tournamentSize = 10                     ###maxTournament
 
     #Genes
-    geneMax = 1.0
-    geneMin = -1.0
-    dimensions = 2
+    k = 5
+    geneMax = 1.0 * k
+    geneMin = -1.0 * k
+    #dimensions = 2 # specified by neural net size in controller
 
     # canonical
     cm = 0.01                                         ### Cm = 0.2
@@ -34,7 +35,7 @@ class Config:
     affinity = False
     F = 0.5     #(coeficiente de diferencias)
     CR = 0.5    #crossover Rate (percentage genes change)
-    pbest = 0.15                                        #porcentaxe mellores no differential
+    pbest =     0.15  #porcentaxe mellores no differential
     matingAndReplaceProbability = 0.01
 
     #Mating
@@ -51,17 +52,18 @@ class Config:
     alpha = 0.50
     percentOfGenes = 0.6                                # ???
     fixedTags = 0
+
     #Neuronal Network
-    maxWeight = 1.0
-    minWeight = -1.0
+    maxWeight = 1.0  * 5
+    minWeight = -1.0  * 5
 
     inputSize = 1
     hiddenSize = 3
     outputSize = 1
 
     #Zones
-    fitness_sin_zonas = False
-    fitness_dos_zonas = True
+    fitness_sin_zonas = True
+    fitness_dos_zonas = False
     fitness_dos_zonas_una_activa = False
 
     #Simulation
@@ -72,7 +74,7 @@ class Config:
     roboboSpeed = 100
     # roboboSize = 30
 
-    populationSize =                            10  ### populationSize = 40
+    populationSize =                            20  ### populationSize = 40
     sleepTest = 0
     maxIterations = 100000
 

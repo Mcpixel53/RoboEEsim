@@ -30,10 +30,12 @@ class DifferentialIndividual:
 
 
     def replaceWithChild(self):
-        self.parent.fitness = self.genotype.fitness
-        self.parent = self.genotype.create_new()
-        self.genotype = self.child.create_new()
-
+        # self.parent = self.genotype.fitness
+        self.parent = self.genotype
+        self.genotype = self.child
+        # self.genotype = self.child.fitness
+        # self.genotype = self.child.create_new()
+        # print(" child ",self.child.chromosome," self ",self.genotype.chromosome)
         self.replacementOperator.replace = False
         self.age = 0
 
@@ -58,6 +60,7 @@ class DifferentialIndividual:
                 self.replacementOperator.replace = True
         if (self.replacementOperator.replace == True):
             sortedPopulation = sorted(population, reverse=True)
+            # print(population[0].genotype.chromosome)
             self.replacementOperator.currentToPBest1Bin(sortedPopulation, self)
             self.replaceWithChild()
 
@@ -155,9 +158,8 @@ class CanonicalIndividual:
         self.checkReplacement()
 
     def generateEmbryo(self):
-        newGenotype = self.genotype.create_new()
-        self.embryo  =  self.matingOperator.mutate_embryo(newGenotype)
-        self.embryo.fitness = self.genotype.fitness
+        self.embryo  =  self.matingOperator.mutate_embryo(self.genotype.create_new())
+        # self.embryo.fitness = self.genotype.fitness
 
 
     def incrementAge(self):

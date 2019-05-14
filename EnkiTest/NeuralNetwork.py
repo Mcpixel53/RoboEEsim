@@ -39,6 +39,7 @@ class MLPNeuralNetwork:
         activations = ReLU(np.dot(input_with_bias, self.wi))
         activations_with_bias = np.append(activations, 1.0)
         out = sigmoid(np.dot(activations_with_bias,self.wo))
+        # print(out)
         return out
 
     def updateWeights(self, Genes):
@@ -46,7 +47,7 @@ class MLPNeuralNetwork:
         if len(new_weights) != self.size:
             return
             # raise ValueError('Wrong number of parameters')
-        weights = (2.0 * new_weights - 1.0) *5.0
+        weights = (2.0 * new_weights -1) * cnf.Config.maxWeight
         self.wi = np.reshape(weights[:self.wi.size], (self.inputSize+1, self.hiddenSize))
         self.wo = np.reshape(weights[self.wi.size:], (self.hiddenSize+1, self.outputSize))
 
@@ -113,7 +114,7 @@ class sigNeural_Network(object):
     self.hiddenSize = cnf.Config.hiddenSize
 
     #seed
-    np.random.seed(1)
+    # np.random.seed(1)
     #Weights
     self.W1 = np.random.uniform(low = cnf.Config.minWeight , high =cnf.Config.maxWeight, size = (self.inputSize,self.hiddenSize))
     self.W2 = np.random.uniform(low = cnf.Config.minWeight , high =cnf.Config.maxWeight, size = (self.hiddenSize,self.outputSize))
@@ -130,12 +131,15 @@ class sigNeural_Network(object):
     return o
 
   def updateWeights(self, Genes):
+    # print("Antes ",self.W1)
     sizeW1 = np.prod(self.W1.shape)
     flatW1 = Genes[:sizeW1]
     flatW2 = Genes[sizeW1:]
 
     self.W1 = np.reshape(flatW1,self.W1.shape)
     self.W2 = np.reshape(flatW2,self.W2.shape)
+    # print("Despos ",self.W1)
+
 
   def __str__ (self):
       return "Sigmoid Neural Network. k=" + str(k) +" "+ str(self.inputSize) \

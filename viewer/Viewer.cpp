@@ -155,10 +155,10 @@ namespace Enki
 			_viewer->setFocus();
 			createDockWindows();
 
-
+			QPoint pos = QCursor::pos();
 			timer = startTimer(timerPeriodMs);
-			qDebug("%f, %f",this->pos().x(),this->pos().y());
-			cover->setGeometry(this->pos().x(), this->pos().y(),
+			qDebug("%f, %f",pos.x(), pos.y());
+			cover->setGeometry( pos.x() - cover->width(), pos.y() - cover->height(),
    												mainScreenSize.width()/8, mainScreenSize.height()/8);
 			cover->exec();
 			anl->initLogModule();
@@ -315,8 +315,12 @@ namespace Enki
 	}
 	void gPopup::manage(const QString changed){
 		if(qobject_cast<QComboBox*>( sender())){
-			if (!yVars->currentText().compare("Chromosome")){
+
+			std::vector<roboStat>* var = qobject_cast<ViewerWindow*>(parent() )->getAnl()->getListVar(yVars->currentText().toStdString());
+			if (var->at(0).isString()){
+				int tam = ((var->at(0).vectS->at(0)).size()+1)/6;
 				t_gAmm2->show();
+				t_gAmm2->setRange(1,tam);
 				if(!modificador->currentText().compare("menor/es"))
 					modificador->setCurrentText("peor/es");
 				if(!modificador->currentText().compare("maior/es"))
@@ -342,7 +346,7 @@ namespace Enki
 	// }
 
 	gPopup::gPopup(viewerChart *vChart, QWidget *parent):
-		QDialog(vChart, Qt::Popup)
+		QDialog(parent, Qt::Popup)
 	{
 		Enki::ViewerWindow *parente = qobject_cast<Enki::ViewerWindow*>(parent);
 		// qDebug("has Parent %d", parente);
@@ -369,12 +373,12 @@ namespace Enki
 			connect(modificador, SIGNAL(currentTextChanged(const QString)), this, SLOT(manage(const QString)));
 
 			t_gAmm = new QSpinBox;
-			t_gAmm->setRange(1,parente->getAnl()->robots());
+			t_gAmm->setRange(1, parente->getAnl()->robots());
 			t_gAmm->setSingleStep(1);
 
-			int sRang = 4; //""
+			// int sRang = 4; //""
 			t_gAmm2 = new QSpinBox;
-			t_gAmm2->setRange(1,sRang);
+			t_gAmm2->setRange(1,1);
 			t_gAmm2->setSingleStep(1);
 			t_gAmm2->hide();
 
@@ -409,7 +413,7 @@ namespace Enki
 			// parente->getAnl()->checkVarList();
 			int result = this->exec();
 			if(result == QDialog::Accepted){
-				const std::string a[5] = {yVars->currentText().toStdString(), QString::number(t_gAmm->value()).toStdString(), modificador->currentText().toStdString(), QString::number(t_gAmm->value()).toStdString(),	checkbox->isChecked()?"si":"non"};
+				const std::string a[5] = {yVars->currentText().toStdString(), QString::number(t_gAmm->value()).toStdString(), modificador->currentText().toStdString(), QString::number(t_gAmm2->value()).toStdString(),	checkbox->isChecked()?"si":"non"};
 				// qDebug(" %d  elemts first List?", parente->getAnl()->getVarList().count("Fitness"));
 				// qDebug("found and correct? %d - %d" ,parente->getAnl()->getListVar(a[0]) == parente->getAnl()->getVarList().at(a[0]),parente->getAnl()->getListVar(a[0])->size());
 				vChart->change(a, parente->getAnl()->getListVar(a[0]), parente->getAnl()->getListVar("Fitness"));
@@ -520,6 +524,7 @@ GThread::GThread(std::vector<roboStat>* _lista, int n, std::string _mod, int _k,
 		mod   = _mod;
 		state = 0;
 		k     = _k;
+		// qDebug("Pos %d lista %d,lista %d,lista %d  ",num, lista->size(),lista->at(0).size(),fitness->at(0).size());
 		// condition.wait(&mutex);
 }
 
@@ -635,7 +640,6 @@ void GThread::iniLoop(){
 		}
 		i+=k; //keep track of sampling frequency
 	}
-
 	for (auto aVtemp : Vlist)
 	{
 		// qDebug("sending one %d",aVtemp->size());
@@ -647,7 +651,7 @@ void GThread::g_Step(){
 	// qDebug("STEPPING %f",lista->at(cant).vect->back());
 	// float points[lista->size()]
 	std::vector<std::string> *Slist = selected?new std::vector<std::string>:NULL;
-
+	// qDebug("pos string %d",pos);
 	if (!mod.compare("unico"))
 	{
 		double tempD = lista->at(num).isString()? atof(&lista->at(num).vectS->back()[pos*6]):lista->at(num).vectD->back();
@@ -861,9 +865,10 @@ void viewerChart::ecUpdate(int i = 0){
     //TODO legend() handling;
 		int c = unic>0?unic-1:0;
 		int p = 3;
-
+		// qDebug("")
 		QValueAxis* Yaxis = new QValueAxis;
 		// qDebug("LISTA CORES!:: %d",cor.size());// 148 colours
+
 		for (int i = 0; i<nRobo; i++){
 			if(dots)
 				m_series.append(new QScatterSeries);
@@ -928,6 +933,7 @@ void viewerChart::ecUpdate(int i = 0){
     //setAnimationOptions(QChart::SeriesAnimations); // En linux-Q5.11 melhor sen elas..
 		grabGesture(Qt::PanGesture);
     grabGesture(Qt::PinchGesture);
+		qDebug("EXITS ECHART");
 	}
 
 	void eChart::zoomAction(bool act){

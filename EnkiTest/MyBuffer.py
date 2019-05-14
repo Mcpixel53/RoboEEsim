@@ -25,15 +25,16 @@ class Buffer:
         return math.sqrt((x2-x1)**2  + (y2-y1)**2)
 
     def get_distancia_recorrida(self, x, y, mySpeed, coeficente_correccion_length):
-
+        head, tail = ( 0,0)
         if len(self.deque) > 1:
             head, tail = self.deque[0], self.deque[-1]
             distx = tail[0] - head[0]
             disty = tail[1] - head[1]
-            distancia = math.sqrt(distx*distx + disty*disty)/(len(self.deque)*mySpeed)*(len(self.deque)/self.max_size)**coeficente_correccion_length  ##coef castigo traxectoria curta
+            distancia = math.sqrt(distx*distx + disty*disty)/(len(self.deque)*mySpeed)*(len(self.deque)/float(self.max_size))**coeficente_correccion_length  ##coef castigo traxectoria curta
         else:
             distancia = 0.0
 
+        # print(head, tail, distancia, len(self.deque))
         # codigo para penalizacion con genzona
         '''coef = 0.5
 
@@ -44,7 +45,6 @@ class Buffer:
         distancia = distancia * max(self.max_size - self.penalizacionzona, 0)/self.max_size
         '''
         # fin codigo penalizacion con genzona
-
         return distancia
 
 
