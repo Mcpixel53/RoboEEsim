@@ -62,8 +62,8 @@ class Config:
     outputSize = 1
 
     #Zones
-    fitness_sin_zonas = True
-    fitness_dos_zonas = False
+    fitness_sin_zonas = False
+    fitness_dos_zonas = True
     fitness_dos_zonas_una_activa = False
 
     #Simulation

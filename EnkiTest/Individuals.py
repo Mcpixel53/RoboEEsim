@@ -27,7 +27,7 @@ class DifferentialIndividual:
 
     def setParentAsActive(self):
         self.genotype = self.parent
-
+        
 
     def replaceWithChild(self):
         # self.parent = self.genotype.fitness

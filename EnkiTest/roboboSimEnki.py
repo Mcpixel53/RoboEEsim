@@ -59,6 +59,7 @@ class Analise(pyenki.Analytics_Module):
 		self.robotList = []
 		self.varList = {} #dict which contains all the variables wanted to show
 		self.Individuals = self.register("Chromosome_str");
+		self.dimreduc = self.register("ChromosomeSum");
 		self.Age =  self.register("Age");
 		self.Fitness = self.register("Fitness");
 		self.stop = False
@@ -138,6 +139,7 @@ class Analise(pyenki.Analytics_Module):
 				self.vlAdd("Fitness", i,current.individual.genotype.fitness)
 				#devolver String de cromosomas, de maneira facilmente interpretable pola GUI
 				self.vlAdd("Chromosome_str", i, current.individual.genotype.returnChromosomeS())
+				self.vlAdd("ChromosomeSum", i, np.sum(current.individual.genotype.chromosome))
 				self.vlAdd("Age", i,current.individual.age)
 				i+=1
 			# se non existe non pasa nada
@@ -261,7 +263,7 @@ class MyRobobo(pyenki.EPuck):
 #w.steps = 100
 # task = ()
 anl = Analise(conf.maxIterations, TarefaZones)
-# anl = Analise(conf.maxI	terations, TarefaChasing)
+# anl = Analise(conf.maxIterations, TarefaChasing)
 # anl = Analise(conf.maxIterations, Testing)
 objective = anl.getObjective()
 if objective:
