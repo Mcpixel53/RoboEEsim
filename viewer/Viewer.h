@@ -80,7 +80,7 @@ namespace Enki
 
 	class PhysicalObject;
 	class Settings;
-	class viewerChart;
+	class ViewerChart;
 
 	const int maxShowing = 20;
 	class ViewerWidget : public QGLWidget
@@ -215,7 +215,7 @@ namespace Enki
 		PhysicalObject *pointedObject, *selectedObject;
 		QVector3D pointedPoint;
 		bool movingObject;
-		viewerChart* charthighlighted;
+		ViewerChart* charthighlighted;
 		std::string showingObjects[maxShowing];
 		Color colorSel[maxShowing] = {Color(0 , 0 , 0),Color(0 , 0 , 1),Color(0.541176 , 0.168627 , 0.886275),Color(0.647059 , 0.164706 , 0.164706),Color(0.498039 , 1 , 0),Color(0.823529 , 0.411765 , 0.117647),Color(0.913725 , 0.588235 , 0.478431),
 		Color(0 , 1 , 1),Color(1 , 0 , 0),Color(0.662745 , 0.662745 , 0.662745),Color(0 , 0.392157 , 0),Color(1 , 0.843137 , 0),Color(0.333333 , 0.419608, 0.184314),Color(1 , 0.54902, 0), Color(0.6 , 0.196078, 0.8), Color(0.545098 , 0 , 0),
@@ -320,7 +320,7 @@ namespace Enki
 	    Q_OBJECT
 			int maxIterations = 10000;
 	public:
-	    Settings(QString ruta);
+	    Settings(QString ruta, QWidget *parent = 0);
 
 	signals:
 			void settingsChanged(QString arg);
@@ -348,7 +348,7 @@ namespace Enki
 	    QMenu *fileMenu;
 	    QAction *exitAction;
 	};
-// class viewerChart;
+// class ViewerChart;
 // class QAnalytics;
 	/////// Analytics_Module
 
@@ -377,20 +377,20 @@ struct roboStat{
 
 
 		signals:
-
 			void addpoints(float x, float y);
 			void addpoints(QVector<QPointF> *);
 			void finished();
 			void selectedUpdate(std::vector<std::string> * highlightedRobots);
 
 		public slots:
-				void threadUpdate(float x, bool sel);
-				void iniLoop();
-				std::vector<std::string>* getSlist(){return Slist;}
+			void threadUpdate(float x, bool sel);
+			void iniLoop();
+			std::vector<std::string>* getSlist(){return Slist;}
+
 		protected:
 			void g_Step();
-			// void run() override;
 			void finish();
+			// void run() override;
 			std::vector<double> retOrdRoboStats(int n, std::vector<double> *tempOut );
 
 
@@ -500,12 +500,12 @@ struct roboStat{
 //using namespace std;
 // Widget grafo
 
-	class viewerChart: public QChartView{
+	class ViewerChart: public QChartView{
 		Q_OBJECT
 
 	public:
-    viewerChart( eChart *chart, QWidget *parent = nullptr);
-		~viewerChart();
+    ViewerChart( eChart *chart, QWidget *parent = nullptr);
+		~ViewerChart();
 
 		void setChart( eChart *_chart){chart = _chart; QChartView::setChart(_chart); }
 		bool sel;
@@ -544,7 +544,7 @@ class gPopup: public QDialog{
 	Q_OBJECT
 
   public:
-		gPopup(viewerChart *vChart, QWidget *parent);
+		gPopup(ViewerChart *vChart,bool *revert, QWidget *parent);
 		// ~gPopup();
 
 
@@ -593,11 +593,11 @@ class ViewerWindow : public QMainWindow
 	    void createActions();
 	    void createStatusBar();
 	    void createDockWindows();
-			void getChoices(viewerChart *parent);
+			void getChoices(ViewerChart *parent);
 			void changeGraphLayout(QString arg);
-			QAction * hideDock;
 			void loadSettings();
 			void saveSettings();
+			QAction * hideDock;
 			QString m_sSettingsFile;
 			QLineEdit *m_pEdit;
 			QStringList *variables;
@@ -614,8 +614,8 @@ class ViewerWindow : public QMainWindow
 			int activeGraphs = 3;
 			// QWidget  *charts[6];  //TODO quitar
 			// QDockWidget *dockChart2;
-			/*viewerChart *anlChart1;
-			viewerChart *anlChart2;*/
+			/*ViewerChart *anlChart1;
+			ViewerChart *anlChart2;*/
 //			virtual void keyPressEvent(QKeyEvent* event);
 
 	    //QChartView *indAnlChart;

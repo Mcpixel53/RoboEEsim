@@ -821,18 +821,18 @@ int Enki::eChart::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     }
     return _id;
 }
-struct qt_meta_stringdata_Enki__viewerChart_t {
+struct qt_meta_stringdata_Enki__ViewerChart_t {
     QByteArrayData data[18];
     char stringdata0[165];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_Enki__viewerChart_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_Enki__ViewerChart_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_Enki__viewerChart_t qt_meta_stringdata_Enki__viewerChart = {
+static const qt_meta_stringdata_Enki__ViewerChart_t qt_meta_stringdata_Enki__ViewerChart = {
     {
-QT_MOC_LITERAL(0, 0, 17), // "Enki::viewerChart"
+QT_MOC_LITERAL(0, 0, 17), // "Enki::ViewerChart"
 QT_MOC_LITERAL(1, 18, 10), // "zoomSignal"
 QT_MOC_LITERAL(2, 29, 0), // ""
 QT_MOC_LITERAL(3, 30, 3), // "act"
@@ -852,7 +852,7 @@ QT_MOC_LITERAL(16, 153, 8), // "ecUpdate"
 QT_MOC_LITERAL(17, 162, 2) // "it"
 
     },
-    "Enki::viewerChart\0zoomSignal\0\0act\0"
+    "Enki::ViewerChart\0zoomSignal\0\0act\0"
     "changeSignal\0threadUpdate\0i\0sel\0"
     "enSelected\0mode\0change\0const std::string[]\0"
     "params\0std::vector<roboStat>*\0lista\0"
@@ -860,7 +860,7 @@ QT_MOC_LITERAL(17, 162, 2) // "it"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_Enki__viewerChart[] = {
+static const uint qt_meta_data_Enki__ViewerChart[] = {
 
  // content:
        7,       // revision
@@ -898,10 +898,10 @@ static const uint qt_meta_data_Enki__viewerChart[] = {
        0        // eod
 };
 
-void Enki::viewerChart::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void Enki::ViewerChart::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        viewerChart *_t = static_cast<viewerChart *>(_o);
+        ViewerChart *_t = static_cast<ViewerChart *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->zoomSignal((*reinterpret_cast< bool(*)>(_a[1]))); break;
@@ -916,29 +916,29 @@ void Enki::viewerChart::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (viewerChart::*)(bool );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&viewerChart::zoomSignal)) {
+            using _t = void (ViewerChart::*)(bool );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ViewerChart::zoomSignal)) {
                 *result = 0;
                 return;
             }
         }
         {
-            using _t = void (viewerChart::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&viewerChart::changeSignal)) {
+            using _t = void (ViewerChart::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ViewerChart::changeSignal)) {
                 *result = 1;
                 return;
             }
         }
         {
-            using _t = void (viewerChart::*)(float , bool );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&viewerChart::threadUpdate)) {
+            using _t = void (ViewerChart::*)(float , bool );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ViewerChart::threadUpdate)) {
                 *result = 2;
                 return;
             }
         }
         {
-            using _t = void (viewerChart::*)(bool );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&viewerChart::enSelected)) {
+            using _t = void (ViewerChart::*)(bool );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ViewerChart::enSelected)) {
                 *result = 3;
                 return;
             }
@@ -946,26 +946,26 @@ void Enki::viewerChart::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
     }
 }
 
-QT_INIT_METAOBJECT const QMetaObject Enki::viewerChart::staticMetaObject = {
-    { &QChartView::staticMetaObject, qt_meta_stringdata_Enki__viewerChart.data,
-      qt_meta_data_Enki__viewerChart,  qt_static_metacall, nullptr, nullptr}
+QT_INIT_METAOBJECT const QMetaObject Enki::ViewerChart::staticMetaObject = {
+    { &QChartView::staticMetaObject, qt_meta_stringdata_Enki__ViewerChart.data,
+      qt_meta_data_Enki__ViewerChart,  qt_static_metacall, nullptr, nullptr}
 };
 
 
-const QMetaObject *Enki::viewerChart::metaObject() const
+const QMetaObject *Enki::ViewerChart::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *Enki::viewerChart::qt_metacast(const char *_clname)
+void *Enki::ViewerChart::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_Enki__viewerChart.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_Enki__ViewerChart.stringdata0))
         return static_cast<void*>(this);
     return QChartView::qt_metacast(_clname);
 }
 
-int Enki::viewerChart::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int Enki::ViewerChart::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QChartView::qt_metacall(_c, _id, _a);
     if (_id < 0)
@@ -983,27 +983,27 @@ int Enki::viewerChart::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Enki::viewerChart::zoomSignal(bool _t1)
+void Enki::ViewerChart::zoomSignal(bool _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void Enki::viewerChart::changeSignal()
+void Enki::ViewerChart::changeSignal()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 
 // SIGNAL 2
-void Enki::viewerChart::threadUpdate(float _t1, bool _t2)
+void Enki::ViewerChart::threadUpdate(float _t1, bool _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 
 // SIGNAL 3
-void Enki::viewerChart::enSelected(bool _t1)
+void Enki::ViewerChart::enSelected(bool _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 3, _a);

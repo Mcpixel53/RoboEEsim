@@ -577,10 +577,10 @@ struct CoverWindow : public QMainWindow{
 void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0)
 {
 	int argc(1);
-	char* argv[1] = {(char*)"eRoboSim!"}; // FIXME: recovery sys.argv
+	char* argv[1] = {(char*)"eRoboSim"}; // FIXME: recovery sys.argv
 	QApplication app(argc, argv);
 	EnkiViewer viewer(world, camPos, camAltitude, camYaw, camPitch, wallsHeight);
-	app.setWindowIcon(QIcon("appicon.png"));
+	app.setWindowIcon(QIcon(":/appicon.ico"));
 
 	PythonViewer wViewer(viewer, anl);
 	wViewer.setWindowTitle("eRoboSim!");

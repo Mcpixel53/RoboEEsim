@@ -27,9 +27,9 @@ namespace Enki
 		//speed
 		double neutralSpeed;
 
-		double leftSpeed;
-		//! Reft speed of the robot
-		double rightSpeed;
+		// double leftSpeed;
+		// //! Reft speed of the robot
+		// double rightSpeed;
 		//! collides
 		bool collide;
 		//agaisnt which wall collided?

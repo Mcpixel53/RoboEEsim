@@ -89,7 +89,6 @@ namespace Enki
 			QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen()); // or screenGeometry(), depending on your needs
 			int x = mainScreenSize.width()*0.9;
 			int y = mainScreenSize.height()*0.9;
-
 			this->resize(x,y);
 			connect(viewer, SIGNAL(hideGraph()),
 									this, SLOT(hideGraph()) );
@@ -142,7 +141,6 @@ namespace Enki
 			connect(buttIni, SIGNAL(clicked()), cover, SLOT(close()));
 			connect(buttSett, SIGNAL(clicked()), viewer->getSettings(), SLOT(show()));
 
-
 //			QGridLayout *chartLayout = new QGridLayout;
 
 			//anlCharts->setLayout(chartLayout);
@@ -157,7 +155,6 @@ namespace Enki
 
 			QPoint pos = QCursor::pos();
 			timer = startTimer(timerPeriodMs);
-			qDebug("%f, %f",pos.x(), pos.y());
 			cover->setGeometry( pos.x() - cover->width(), pos.y() - cover->height(),
    												mainScreenSize.width()/8, mainScreenSize.height()/8);
 			cover->exec();
@@ -170,12 +167,14 @@ namespace Enki
 
 	void ViewerWindow::createDockWindows()
 	{
+		qDebug("GUCK");
 		QDockWidget *dock = new QDockWidget(this);
 		// *analise = new QWidget;
-		QGridLayout *GLayout = new QGridLayout();
+		QGridLayout *GLayout = new QGridLayout(this);
+		qDebug("GUCK");
 		// QHBoxLayout *HLayout = new QHBoxLayout();
 		QWidget  *charts[chMAX];
-		//charts[0] = new viewerChart(new eChart("",1), this);
+		//charts[0] = new ViewerChart(new eChart("",1), this);
 		// GLayout->addWidget(charts[0],0,0);
 		// VLayout->setStretchFactor(charts[0],2);
 		// HLayout->addLayout(VLayout);
@@ -345,7 +344,7 @@ namespace Enki
 	// 	delete layout;
 	// }
 
-	gPopup::gPopup(viewerChart *vChart, QWidget *parent):
+	 gPopup::gPopup(ViewerChart *vChart, bool *revert, QWidget *parent):
 		QDialog(parent, Qt::Popup)
 	{
 		Enki::ViewerWindow *parente = qobject_cast<Enki::ViewerWindow*>(parent);
@@ -407,8 +406,11 @@ namespace Enki
 
 			this->setLayout(layout);
 			this->setWindowFlags(Qt::Popup);
-			this->setWindowTitle(tr("Seleción de eixos"));
+			this->setWindowTitle(tr("Selección de eixos"));
 			this->show();
+			const QPoint global = this->mapToGlobal(vChart->rect().center());
+			// qDebug("%d %d or %d %d",global.x(), pos().y(),this->width(),this->height());
+	    this->move(global.x(), global.y());//->move(QCursor::pos().x() - this->width(), QCursor::pos().y() - this->height());//+QCursor::pos().x() this->width()- this->height()-
 			//->setWindowFlags(Qt::Popup|Qt::WindowStaysOnTopHint);
 			// parente->getAnl()->checkVarList();
 			int result = this->exec();
@@ -420,9 +422,8 @@ namespace Enki
 				//signals for threading & selection
 				connect(vChart->getGthread(),SIGNAL(selectedUpdate(std::vector<std::string> *)),
 								parente->getViewer(),SLOT(selectedUpdate(std::vector<std::string> *)));
-
-
 			}
+			else *revert = true;
 
 	}
 
@@ -436,31 +437,38 @@ namespace Enki
 		QPushButton *push = qobject_cast<QPushButton*>(sender());
 
 		if(!push)
-				older = qobject_cast<viewerChart*>( sender());
+				older = qobject_cast<ViewerChart*>( sender());
 		else older = push;
-		viewerChart *chart = new viewerChart(new eChart("",1), this);
-		chartLayout->layout()->replaceWidget(older, chart);
-		delete older;
 
-		gPopup(chart, this);
+		bool revert = false;
+		ViewerChart *grafica = new ViewerChart(new eChart("",1), this);
+		chartLayout->layout()->replaceWidget(older, grafica);
+		gPopup(grafica, &revert, this);
 
-		connect(viewer, SIGNAL(updateGraph(int)), chart,  SLOT(ecUpdate(int)));
-		connect(chart, SIGNAL(changeSignal()), this,      SLOT(manageGraphs()));
-		connect(chart, SIGNAL(enSelected(bool)),	viewer, SLOT(enSelected(bool)));
+		if(revert){
+			chartLayout->layout()->replaceWidget(grafica, older);
+			grafica->deleteLater();
+		}
+		else{
+			delete older;
+			connect(viewer, SIGNAL(updateGraph(int)), grafica,  SLOT(ecUpdate(int)));
+			connect(grafica, SIGNAL(changeSignal()), this,      SLOT(manageGraphs()));
+			connect(grafica, SIGNAL(enSelected(bool)),	viewer, SLOT(enSelected(bool)));
+		}
 
 	}
 
 
 
 
-  viewerChart::~viewerChart(){
+  ViewerChart::~ViewerChart(){
 		sel = false;
 		emit enSelected(sel);
-		delete gthread;
+		// delete gthread;
 	// delete thread;
 }
 
-	void viewerChart::change(const std::string params [], std::vector<roboStat>*  _wholeLista, std::vector<roboStat>*  _fitness){
+	void ViewerChart::change(const std::string params [], std::vector<roboStat>*  _wholeLista, std::vector<roboStat>*  _fitness){
 
 		// Enki::ViewerWindow *parent = qobject_cast<Enki::ViewerWindow*>(this->parent());
 
@@ -500,8 +508,9 @@ namespace Enki
 		connect(thread, SIGNAL (started()), gthread, SLOT (iniLoop()));
 		connect(this, SIGNAL (threadUpdate(float, bool)), gthread, SLOT (threadUpdate(float, bool)));
 		connect(gthread, SIGNAL (finished()), thread, SLOT (quit()));
-		connect(gthread, SIGNAL (finished()), gthread, SLOT (deleteLater()));
 		connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+		connect(this, SIGNAL (destroyed()), gthread, SLOT (deleteLater()));
+		// connect(gthread, SIGNAL (finished()), gthread, SLOT (deleteLater()));
 		//add point to graph signals
 		connect(gthread, SIGNAL(addpoints(float, float)), chart, SLOT(addPoint(float, float)));
 		connect(gthread, SIGNAL(addpoints(QVector<QPointF>*)), chart, SLOT(addPoint(QVector<QPointF>*)));
@@ -562,16 +571,16 @@ std::vector<double> GThread::retOrdRoboStats(int n, std::vector<double> *tempOri
 		{
 			if(lista->at(i).isString()){
 				double tempD = n==-1? atof(&lista->at(i).vectS->back()[pos*6]): atof(&lista->at(i).vectS->at(n)[pos*6]);
-				std::pair<double,double> temp (n==-1? fitness->at(i).vectD->back(): fitness->at(i).vectD->at(n),
+				std::pair<double,double> parTemp (n==-1? fitness->at(i).vectD->back(): fitness->at(i).vectD->at(n),
 																			tempD
 																			);
-				tempSet.push_back(temp);
+				tempSet.push_back(parTemp);
 				}
 			else{
-			std::pair<double,double> temp ( n==-1?fitness->at(i).vectD->back():fitness->at(i).vectD->at(n),
+			std::pair<double,double> parTemp ( n==-1?fitness->at(i).vectD->back():fitness->at(i).vectD->at(n),
 																			n==-1?lista->at(i).vectD->back():lista->at(i).vectD->at(n)
 																			);
-			tempSet.push_back(temp);
+			tempSet.push_back(parTemp);
 			}
 			if(tempOrig) tempOrig->push_back(tempSet[i].second); //keep track of original order
 		}
@@ -586,19 +595,19 @@ std::vector<double> GThread::retOrdRoboStats(int n, std::vector<double> *tempOri
 	else if (!mod.compare("mellor/es")){
 		for (int  i = 0; i<lista->size(); i++)
 		{
-			std::pair<double,double> temp;
+			// std::pair<double,double> temp;
 			if(lista->at(i).isString()){
 				double tempD = n==-1? atof(&lista->at(i).vectS->back()[pos*6]): atof(&lista->at(i).vectS->at(n)[pos*6]);
-				std::pair<double,double> temp (n==-1? fitness->at(i).vectD->back(): fitness->at(i).vectD->at(n),
+				std::pair<double,double> parTemp (n==-1? fitness->at(i).vectD->back(): fitness->at(i).vectD->at(n),
 																			tempD
 																			);
-				tempSet.push_back(temp);
+				tempSet.push_back(parTemp);
 				}
 			else{
-			std::pair<double,double> temp ( n==-1?fitness->at(i).vectD->back():fitness->at(i).vectD->at(n),
+			std::pair<double,double> parTemp ( n==-1?fitness->at(i).vectD->back():fitness->at(i).vectD->at(n),
 																			n==-1?lista->at(i).vectD->back():lista->at(i).vectD->at(n)
 																			);
-			tempSet.push_back(temp);
+			tempSet.push_back(parTemp);
 			}
 			if(tempOrig) tempOrig->push_back(tempSet[i].second); //keep track of original order
 		}
@@ -729,11 +738,11 @@ void GThread::threadUpdate(float x, bool sel){
 // }
 
 
-void viewerChart::ecUpdate(int i = 0){
+void ViewerChart::ecUpdate(int i = 0){
 	emit threadUpdate(i, sel);///
  }
 
-	viewerChart::viewerChart( eChart *_chart, QWidget *parent):
+	ViewerChart::ViewerChart( eChart *_chart, QWidget *parent):
 		QChartView(_chart, parent),
 		chart(_chart),
     m_isTouching(false)
@@ -753,7 +762,7 @@ void viewerChart::ecUpdate(int i = 0){
 
 	}
 
-	bool viewerChart::viewportEvent(QEvent *event)
+	bool ViewerChart::viewportEvent(QEvent *event)
 	{
 	    if (event->type() == QEvent::TouchBegin) {
 	        // By default touch events are converted to mouse events. So
@@ -769,7 +778,7 @@ void viewerChart::ecUpdate(int i = 0){
 	    return QChartView::viewportEvent(event);
 	}
 
-	void viewerChart::mousePressEvent(QMouseEvent *event)
+	void ViewerChart::mousePressEvent(QMouseEvent *event)
 	{
 		//qInfo("Tocouse o mid dentro? %i ",event->button()==Qt::MidButton);
 	    if (m_isTouching)
@@ -785,14 +794,14 @@ void viewerChart::ecUpdate(int i = 0){
 	    QChartView::mousePressEvent(event);
 	}
 
-	void viewerChart::mouseMoveEvent(QMouseEvent *event)
+	void ViewerChart::mouseMoveEvent(QMouseEvent *event)
 	{
 	    if (m_isTouching)
 	        return;
 	    QChartView::mouseMoveEvent(event);
 	}
 
-	void viewerChart::mouseReleaseEvent(QMouseEvent *event)
+	void ViewerChart::mouseReleaseEvent(QMouseEvent *event)
 {
     if (m_isTouching)
         m_isTouching = false;
@@ -805,7 +814,7 @@ void viewerChart::ecUpdate(int i = 0){
 }
 
 	//![1]
-	void viewerChart::keyPressEvent(QKeyEvent *event)
+	void ViewerChart::keyPressEvent(QKeyEvent *event)
 	{
 
 	    switch(event->key()) {
@@ -933,7 +942,7 @@ void viewerChart::ecUpdate(int i = 0){
     //setAnimationOptions(QChart::SeriesAnimations); // En linux-Q5.11 melhor sen elas..
 		grabGesture(Qt::PanGesture);
     grabGesture(Qt::PinchGesture);
-		qDebug("EXITS ECHART");
+		// qDebug("EXITS ECHART");
 	}
 
 	void eChart::zoomAction(bool act){
@@ -1140,7 +1149,7 @@ void viewerChart::ecUpdate(int i = 0){
 	}
 
 
-	Settings::Settings(QString ruta):route(ruta)
+	Settings::Settings(QString ruta, QWidget *parent):route(ruta),QDialog(parent)
 		{
 		    //createMenu();
 		    createHorizontalGroupBox();
@@ -1292,7 +1301,7 @@ void viewerChart::ecUpdate(int i = 0){
 		initTexturesResources();
 		//qDebug("oarent: %s", parentWidget());
 		settings = new Settings(".");
-		settings->setWindowFlags(Qt::Popup|Qt::WindowStaysOnTopHint);
+		settings->setWindowFlags(Qt::Dialog| Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
 		settings->resize(this->width()*0.5,this->height()*0.5);
 		//settings->setAlignment(Qt::AlignCenter);
 
@@ -1474,7 +1483,7 @@ void ViewerWidget::selectedUpdate(std::vector<std::string> * highlightedRobots){
 
 void ViewerWidget::enSelected(bool mode)
 {
-	viewerChart *vchart = qobject_cast<viewerChart*>( sender());
+	ViewerChart *vchart = qobject_cast<ViewerChart*>( sender());
 
 	if (!charthighlighted)
 		charthighlighted = vchart;
@@ -2063,6 +2072,8 @@ void ViewerWidget::enSelected(bool mode)
 	void ViewerWidget::renderScene(double left, double right, double bottom, double top, double zNear, double zFar)
 	{
 		std::map<int,Robot *> tempRob;
+		int colPos;
+		int rangeSearch=-1;
 		//float aspectRatio = (float)width() / (float)height();
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -2127,20 +2138,32 @@ void ViewerWidget::enSelected(bool mode)
 			userData->draw(*it);
 			displayObjectHook(*it);
 			Robot * rob = dynamic_cast<Robot*>(*it);
-
 			if(charthighlighted && rob)
 			{
-				int rangeSearch = std::find(showingObjects,showingObjects+20,"-")-showingObjects;
+				//calculate only once
+				rangeSearch = rangeSearch==-1?std::find(showingObjects,showingObjects+20,"-") - showingObjects: rangeSearch;
 				std::string *temp = std::find(showingObjects,showingObjects+rangeSearch,rob->getId());
-				int colPos = temp-showingObjects;
+				colPos = temp-showingObjects;
 				// std::cout<<"rangeSearch " <<rangeSearch<< " colPos "<<colPos;
 				if(colPos<rangeSearch){
 				tempRob[colPos]=rob;
 				// std::cout<<"found robot! "<< rob->getId()<<'\n';
 				}
+
 			}
 
 			glPopMatrix();
+		}
+
+		// adding movingObject since has previusly been removed from world
+		if(movingObject && charthighlighted){
+			Robot * rob = dynamic_cast<Robot*>(selectedObject);
+			std::string *temp = std::find(showingObjects,showingObjects+rangeSearch, rob->getId());
+			colPos = temp-showingObjects;
+			// std::cout<<"rangeSearch " <<rangeSearch<< " colPos "<<colPos;
+			if(colPos<rangeSearch)
+			tempRob[colPos]=rob;
+			// qDebug("%d %d",tempRob.size(), colPos);
 		}
 
 		// if an object is selected
@@ -2178,24 +2201,19 @@ void ViewerWidget::enSelected(bool mode)
 			glPopMatrix();
 		}
 
+
 		//paint the halo of the robots being monitorized
 		if (!tempRob.empty())
 		{
-
-			// std::cout << "Element found in myints: " << *temp << "at"<< colPos;
-			// std::cout << *temp<< '\n';
-			// qDebug("size map= %d", tempRob.size());
 			for(auto robPaint:tempRob)
 			{
-
 				glPushMatrix();
 				int color = robPaint.first ;
 				Robot * robotto = robPaint.second ;
-				// std::cout<<"Rob="<< robotto->getId()<<"\n";
 				glTranslated(robotto->pos.x, robotto->pos.y, 0);
 				glRotated(rad2deg * robotto->angle, 0, 0, 1);
-				if (movingObject)
-				{
+				if (movingObject && ((Robot *)selectedObject)->getId() == robotto->getId())
+				{//not being drawn before
 					ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>(selectedObject->userData);
 					userData->draw(selectedObject);
 					displayObjectHook(selectedObject);
@@ -2204,12 +2222,6 @@ void ViewerWidget::enSelected(bool mode)
 				glEnable(GL_TEXTURE_2D);
 				glDisable(GL_LIGHTING);
 				glBindTexture(GL_TEXTURE_2D, selectedTexture);
-				// int size = *(&showingObjects + 1) - showingObjects;
-				// ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>(selectedObject->userData);
-				// userData->draw(selectedObject);
-				// if( showingObjects[i].compare((*it)->getId()) ) robot = (*it);
-				// qDebug("robot %s", robot->getId());
-
 				glColor4d(colorSel[color].r(),colorSel[color].g(),colorSel[color].b(),1);
 				glBegin(GL_QUADS);
 				const double rs(robotto->getRadius() * 2);
@@ -2223,44 +2235,6 @@ void ViewerWidget::enSelected(bool mode)
 				glPopMatrix();
 			}
 }
-		//show agents from the selected chart by color
-		/*if(charthighlighted)
-		{
-			glPushMatrix();
-			glEnable(GL_BLEND);
-			glEnable(GL_TEXTURE_2D);
-			glDisable(GL_LIGHTING);
-			glBindTexture(GL_TEXTURE_2D, selectedTexture);
-			int size = *(&showingObjects + 1) - showingObjects;
-			qDebug("lenght %d",size);
-
-			for(int i =0; i<maxShowing &&  showingObjects[i].compare("-") ; i++)
-			{
-
-				Robot* robot;
-				for (World::RobotsIterator it = world->robots.begin(); it != world->robots.end(); ++it)
-				{
-					ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>(selectedObject->userData);
-					userData->draw(selectedObject);
-					if( showingObjects[i].compare((*it)->getId()) ) robot = (*it);
-					qDebug("robot %s", robot->getId());
-
-					glColor4d(colorSel[i].r(),colorSel[i].g(),colorSel[i].b(),1);
-					glBegin(GL_QUADS);
-					const double rs(robot->getRadius() * 2);
-					glTexCoord2f(0.f, 0.f); glVertex3d(-rs, -rs, 0.15);
-					glTexCoord2f(1.f, 0.f); glVertex3d(rs, -rs, 0.15);
-					glTexCoord2f(1.f, 1.f); glVertex3d(rs, rs, 0.15);
-					glTexCoord2f(0.f, 1.f); glVertex3d(-rs, rs, 0.15);
-					glEnd();
-
-				}
-			}
-			glDisable(GL_TEXTURE_2D);
-			glDisable(GL_BLEND);
-			glPopMatrix();
-		}*/
-
 
 }
 
