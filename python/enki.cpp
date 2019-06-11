@@ -451,8 +451,11 @@ struct Analytics: QAnalytics, wrapper<QAnalytics>
 
 	//QSplineSeries *series;
 	//ViewerChart *chart;
-	QThread *thread;
+	protected:
+		QThread *thread;
 	QList<double> * listaa = NULL;
+
+public:
 	Analytics(int _itMax = 5000):
 		thread(new QThread),
 		QAnalytics(_itMax)

@@ -1,6 +1,11 @@
 from MyBuffer import Buffer
 from Configuration import Config as conf
 import Tarefa
+import random
+wW = conf.wWidth
+wH = conf.wHeight
+wR = conf.wRadio
+
 width = 0 if conf.roundMap else conf.wWidth
 
 class TarefaZones(Tarefa.Tarefa):
@@ -47,6 +52,13 @@ class TarefaZones(Tarefa.Tarefa):
         if i==conf.populationSize-1:
 			anl.vlAdd("Zone Sharing Coef", 0, anl.coef_reparto_zona)
         # print(len(current.individual.genotype.chromosome))
+
+    def initObjets(self, w):
+        for a in range (-13,16):
+        	w.addItem("recta", ((a-1)* 10,0), 5000)
+        for eh in range(0,10):
+        	w.addItem("cruz",(random.randrange(-wR/2,wR/2,2),random.randrange(-wR/2,wR/2,2)), 100000)
+        w.addItem("recta",(a,0), 1000)
 
     def __str__(self):
          return "Task Zones " + ("raw" if  conf.fitness_sin_zonas else "double zone" if conf.fitness_dos_zonas else "active zone")

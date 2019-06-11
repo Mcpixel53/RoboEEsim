@@ -142,5 +142,5 @@ class sigNeural_Network(object):
 
 
   def __str__ (self):
-      return "Sigmoid Neural Network. k=" + str(k) +" "+ str(self.inputSize) \
+      return "Sigmoid Neural Network. k=" + str(k) +", "+ str(self.inputSize) \
       + " input layers, " + str(self.hiddenSize) + " hidden layers, "  + str(self.outputSize) + " output layers."

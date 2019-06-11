@@ -127,6 +127,9 @@ namespace Enki
 
 	protected:
 		Settings* settings;
+		QTimer * timer;
+		// bool g_paused;
+
 		//sampling const
 		int s_const = 200;
 		//! A camera pose that can be updated given a target position
@@ -231,6 +234,7 @@ namespace Enki
 		~ViewerWidget();
 
 		Settings* getSettings();
+		void putSettings(Settings*);
 		World* getWorld() const;
 		CameraPose getCamera() const;
 		QVector3D getPointedPoint() const;
@@ -425,7 +429,7 @@ struct roboStat{
 		QAnalytics(int maxIt){ maxIt=maxIt; internalLogic = 1;}
 		~QAnalytics() {file->close();}
 		std::unordered_map <std::string, std::vector<roboStat> > getVarList() {return varList;}
-		void initLogModule();
+		void initLogModule(QWidget *);
 		// static QAnalytics* getInstance() {if (QAnalytics::instance) return QAnalytics::instance; else qDebug("NOOOOORL");}
 		// void  getVarList() {qDebug("size: %d; %2.2f ",varList->size(),varList->at(0));}
 
@@ -449,10 +453,10 @@ struct roboStat{
 		void registaer(std::string name, std::vector<std::string>* list, std::string var);
 		// void registaer(std::string name, std::vector<double> *list){varList = list;};
 
-
-	signals:
-		void newTopQ(double iter, double quality);
-		void newAvgQ(double iter, double quality);
+	//
+	// signals:
+	// 	void newTopQ(double iter, double quality);
+	// 	void newAvgQ(double iter, double quality);
 
 	private:
 		int internalLogic;
@@ -603,6 +607,7 @@ class ViewerWindow : public QMainWindow
 			QStringList *variables;
 			const int chMAX;
 			bool s_paused;
+			bool e_paused;
 
 	protected:
 			virtual void timerEvent(QTimerEvent * event);

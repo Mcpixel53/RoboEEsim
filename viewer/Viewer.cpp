@@ -82,7 +82,8 @@ namespace Enki
 			m_pEdit(NULL),
 			chartLayout(new QWidget),
 			timerPeriodMs(1),
-			s_paused(true)
+			s_paused(true),
+			e_paused(false)
 	{
 			setWindowIcon(QIcon(":/appicon.png"));
 			QDesktopWidget widget;
@@ -94,18 +95,17 @@ namespace Enki
 									this, SLOT(hideGraph()) );
 			connect(viewer, SIGNAL(pause()),
 									this, SLOT(pauseRun()));
-			connect(viewer->getSettings(), SIGNAL(settingsChanged(QString)),
-		              this, SLOT(manageSettings(QString)));
+
 
 			QWidget *w = new QWidget;
 			QHBoxLayout *container = new QHBoxLayout;
 
 			QSlider *slider = new QSlider(Qt::Vertical);
-	    slider->setRange(1, 30);
+	    slider->setRange(0, 30);
 	    slider->setSingleStep(1);
 	    slider->setPageStep(4);
 	    slider->setTickInterval(5);
-			slider->setValue(timerPeriodMs);
+			slider->setValue(0);
 			slider->setInvertedAppearance(true);
 			slider->setInvertedControls(true);
 	    slider->setTickPosition(QSlider::TicksRight);
@@ -114,13 +114,12 @@ namespace Enki
 			connect(_viewer, SIGNAL(anlStep()),
 		              	_anl, SLOT(step()));
 
-			//connect(_viewer, SIGNAL(valueChanged(int)),slider, SLOT(setValue(int)));
-
-			m_sSettingsFile =  "/media/Cousas/git/enki/EnkiTest/demosettings.ini";
-			char * stringg = getenv("PWD");
-			m_sSettingsFile = stringg;
+			m_sSettingsFile =  QApplication::applicationDirPath().left(1) +":/settings.ini"; //"/media/Cousas/git/enki/EnkiTest/demosettings.ini";
+			// char * stringg = getenv("PWD");
+			// m_sSettingsFile = stringg;
 			//m_sSettingsFile.append(":/demosettings.ini");
-			//loadSettings();
+			loadSettings();
+			saveSettings();
 			//qDebug("A VERERR OHHH %s",m_sSettingsFile);
 
 			//_viewer->installEventFilter(this);
@@ -138,9 +137,14 @@ namespace Enki
 			layoutCov->addWidget(buttSett);
 			layoutCov->addWidget(buttIni);
 			cover->setLayout(layoutCov);
-			connect(buttIni, SIGNAL(clicked()), cover, SLOT(close()));
-			connect(buttSett, SIGNAL(clicked()), viewer->getSettings(), SLOT(show()));
 
+			Settings* settings = new Settings(".", cover);
+			settings->setWindowFlags(Qt::Dialog| Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+			settings->resize(this->width()*0.5,this->height()*0.5);
+			connect(buttIni, SIGNAL(clicked()), cover, SLOT(close()));
+			connect(buttSett, SIGNAL(clicked()), settings, SLOT(show()));
+			connect(settings, SIGNAL(settingsChanged(QString)),
+		              this, SLOT(manageSettings(QString)));
 //			QGridLayout *chartLayout = new QGridLayout;
 
 			//anlCharts->setLayout(chartLayout);
@@ -150,15 +154,18 @@ namespace Enki
 			container->addWidget(slider);
 			w->setLayout(container);
 			setCentralWidget(w);
-			_viewer->setFocus();
 			createDockWindows();
 
 			QPoint pos = QCursor::pos();
 			timer = startTimer(timerPeriodMs);
 			cover->setGeometry( pos.x() - cover->width(), pos.y() - cover->height(),
    												mainScreenSize.width()/8, mainScreenSize.height()/8);
+			cover->setWindowFlags(Qt::Window);
 			cover->exec();
-			anl->initLogModule();
+			// delete(settings);
+			// viewer->setFocus();
+			// viewer->putSettings(settings);
+			anl->initLogModule(this);
 	//    newLetter();
 	//    setUnifiedTitleAndToolBarOnMac(true);
 	// qDebug("%d",timer);
@@ -167,9 +174,9 @@ namespace Enki
 
 	void ViewerWindow::createDockWindows()
 	{
-		qDebug("GUCK");
 		QDockWidget *dock = new QDockWidget(this);
 		// *analise = new QWidget;
+		qDebug("GUCK");
 		QGridLayout *GLayout = new QGridLayout(this);
 		qDebug("GUCK");
 		// QHBoxLayout *HLayout = new QHBoxLayout();
@@ -223,15 +230,15 @@ namespace Enki
 			return a;
 		}
 
-		void QAnalytics::initLogModule(){
+		void QAnalytics::initLogModule(QWidget * parai){
 			file = new QFile(logName);
 			if (file->open(QIODevice::ReadWrite | QIODevice::ExistingOnly)){
 				if (QMessageBox::No == QMessageBox::question(0,"Sobrescrivir?","O ficheiro "+logName +" xa existe, sobrescrivir?" ,
 																	QMessageBox::Yes|QMessageBox::No,QMessageBox::No))
 				{
 					QFile* temp = file;
-					QFileSelector selector;
-					QString tempText= QFileDialog::getSaveFileName(0, tr("Gardar Como?"), "../"+logName+"_1.log",
+					// QFileSelector selector;
+					QString tempText= QFileDialog::getSaveFileName(parai, tr("Gardar Como?"), "../"+logName+"_1.log",
 																														tr("All files (*.*);; Log Files (*.log)"));
 					if(tempText != NULL)
 						{
@@ -1297,21 +1304,23 @@ void ViewerChart::ecUpdate(int i = 0){
 		charthighlighted(NULL),
 		showingObjects{"-"},
 		s_paused(true)
+		// g_paused(false)
 	{
 		initTexturesResources();
 		//qDebug("oarent: %s", parentWidget());
-		settings = new Settings(".");
+		settings = new Settings(".", this);
 		settings->setWindowFlags(Qt::Dialog| Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
 		settings->resize(this->width()*0.5,this->height()*0.5);
 		//settings->setAlignment(Qt::AlignCenter);
 
 // elapsed time currently used in help messages
 		elapsedTime = double(30)/1000.; // average second between two frames, can be updated each frame to better precision
-		QTimer *timer = new QTimer(this);
+		timer = new QTimer(this);
 		connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
 		timer->start(100);
 
 	}
+
 	void  ViewerWindow::speedSim(int timerSpeed){
 		timerPeriodMs = timerSpeed*timerSpeed;
 		killTimer(timer);
@@ -1355,6 +1364,10 @@ void ViewerChart::ecUpdate(int i = 0){
 			}
 }
 
+	void ViewerWidget::putSettings(Settings* _settings){
+			settings = _settings;
+			settings->setParent(this);
+ }
 	Settings* ViewerWidget::getSettings(){
 			return settings;
  }
@@ -2632,6 +2645,16 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 					//emit zoomSignal(1);
 					//chart()->scroll(0, -10);
 	        break;
+			// case Qt::Key_G:
+			// 			// qDebug("Cordenadas man");
+			// 			// g_paused =!g_paused;
+			// 			if(timer->isActive())
+			// 					timer->stop();
+			// 				else
+			// 					timer->start(100);
+			// 		//emit zoomSignal(1);
+			// 		//chart()->scroll(0, -10);
+	    //     break;
 			default:
 				//helpActivated();
 				break;
@@ -2849,7 +2872,8 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 		if(!s_paused){
 			viewer->step();
 			//Step for evolutionary
-			anl->step();
+		if(!e_paused)
+				anl->step();
 		}
 	}
 

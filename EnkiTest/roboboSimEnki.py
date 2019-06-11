@@ -254,7 +254,7 @@ class MyRobobo(pyenki.EPuck):
 		#incrementRot =  delta
 		'''
 		if (debugRbobo):
-			print("ID:",self.id,"speed", self.pos[0],self.speed[1],"rot",incrementRot,"speeds",self.leftSpeed,self.rightSpeed	 )
+			print("ID:",self.id,"speed", self.pos[0],self.speed[1],"rot",incrementRot,"speeds",self.leftSpeed,self.rightSpeed)
 
 
 
@@ -270,6 +270,8 @@ if objective:
 	w.addObject(objective)
 
 random.seed(0)
+anl.task.initObjets(w)
+
 for i in range(conf.populationSize):
 	robobo = MyRobobo((random.randrange(-wR/2,wR/2,2),random.randrange(-wR/2,wR/2,2)),i)
 	w.addObject(robobo)
