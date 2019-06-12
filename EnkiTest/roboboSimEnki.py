@@ -41,18 +41,14 @@ wR = conf.wRadio # for round worlds
 # round worldd with texture "area" and white background
 # w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/area.png", pyenki.Color(1,1, 1))
 # round world with texture terra and sky-blue color background
-if conf.roundMap:
-	w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/tiles.png", pyenki.Color(135/250., 206/250., 235/250.))
-else:
-	w = pyenki.WorldWithTexturedGround(wW, wH, "GroundTextures/tiles.png", pyenki.Color(135/250., 206/250., 235/250.))
 
-experimentData = {"Iterations": 0, "Individuals": [], "IndividualFitness": [], "MeanFitness": [] , "TopFitness": []}
+# experimentData = {"Iterations": 0, "Individuals": [], "IndividualFitness": [], "MeanFitness": [] , "TopFitness": []}
 
 
 
 class Analise(pyenki.Analytics_Module):
 
-	def __init__(self, maxIts, tarefa):
+	def __init__(self, maxIts, tarefa = Testing):
 		super(Analise,self).__init__(maxIts)
 		# self.integero = 8
 		# self.varName = []
@@ -174,6 +170,7 @@ class Analise(pyenki.Analytics_Module):
 				self.log("*Individual type: " + str(self.robotList[0].individual)+"\n")
 				# self.log("*Parametro cruze : " + str(conf.crueglgabmtrls)+"\n")
 				self.log("\n\n")
+				self.logData(0)
 				self.stop=True
 
 		else:
@@ -262,6 +259,12 @@ class MyRobobo(pyenki.EPuck):
 
 #w.steps = 100
 # task = ()
+
+if conf.roundMap:
+	w = pyenki.WorldWithTexturedGround(wR, "GroundTextures/tiles.png", pyenki.Color(135/250., 206/250., 235/250.))
+else:
+	w = pyenki.WorldWithTexturedGround(wW, wH, "GroundTextures/tiles.png", pyenki.Color(135/250., 206/250., 235/250.))
+
 anl = Analise(conf.maxIterations, TarefaZones)
 # anl = Analise(conf.maxIterations, TarefaChasing)
 # anl = Analise(conf.maxIterations, Testing)
@@ -269,15 +272,17 @@ objective = anl.getObjective()
 if objective:
 	w.addObject(objective)
 
-random.seed(0)
-anl.task.initObjets(w)
+
+anl.task.initObjects(w)
 
 for i in range(conf.populationSize):
-	robobo = MyRobobo((random.randrange(-wR/2,wR/2,2),random.randrange(-wR/2,wR/2,2)),i)
+	robobo = MyRobobo((random.randrange(-wR/2,wR/2,2),random.randrange(-wR/2,wR/2,2)),i+1)
 	w.addObject(robobo)
 	anl.addRobot(robobo)
 
+pyenki.EnkiViewer.runSimulation(w, anl, 10)
 
+#experimentData['Iterations'] = w.iterations
 
 # for a in range (-13,16):
 # 	w.addItem("recta", ((a-1)* 10,0), 5000)
@@ -288,6 +293,3 @@ for i in range(conf.populationSize):
 # anl.evolve()
 	#//runSimulation(Enki::World, AnalyticsModule, camPos, camAltitude, camYaw, camPitch, wallsHeight)
 #pyenki.EnkiViewer.runSimulation(w, anl, (wW/2,wH/2),wH*1.05, 0, Math.radians(-89.9), 10)
-pyenki.EnkiViewer.runSimulation(w, anl, 10)
-
-#experimentData['Iterations'] = w.iterations

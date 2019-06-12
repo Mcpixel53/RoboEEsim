@@ -1,8 +1,0 @@
-Begining new Simulation proba.log
-
-*Task: Task Zones double zone
-*Population size: 20
-*Controller: Sigmoid Neural Network. k=0.5, 5 input layers, 4 hidden layers, 1 output layers.
-*Individual type: differential
-
-

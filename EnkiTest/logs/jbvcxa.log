@@ -1,0 +1,14 @@
+Begining new Simulation jbvcxa.log
+
+*Task: Task Zones double zone
+*Population size: 20
+*Controller: Sigmoid Neural Network. k=0.5, 5 input layers, 4 hidden layers, 1 output layers.
+*Individual type: differential
+
+
+<Begining Data>
+iterations,robots,Age,Chromosome,ChromosomeSum,Fitness,Punish Sharing Coef,Zone Sharing Coef
+0,%2,1,-3.74,-19.4246,0,1,0
+<Ending data>
+ 
+Simulation finished at 1 iterations

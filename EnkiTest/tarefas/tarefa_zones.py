@@ -53,7 +53,8 @@ class TarefaZones(Tarefa.Tarefa):
 			anl.vlAdd("Zone Sharing Coef", 0, anl.coef_reparto_zona)
         # print(len(current.individual.genotype.chromosome))
 
-    def initObjets(self, w):
+    def initObjects(self, w):
+        random.seed(0)
         for a in range (-13,16):
         	w.addItem("recta", ((a-1)* 10,0), 5000)
         for eh in range(0,10):

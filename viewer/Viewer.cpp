@@ -85,6 +85,9 @@ namespace Enki
 			s_paused(true),
 			e_paused(false)
 	{
+			viewer->setParent(this);
+			// anl->setParent(this);
+
 			setWindowIcon(QIcon(":/appicon.png"));
 			QDesktopWidget widget;
 			QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen()); // or screenGeometry(), depending on your needs
@@ -95,6 +98,8 @@ namespace Enki
 									this, SLOT(hideGraph()) );
 			connect(viewer, SIGNAL(pause()),
 									this, SLOT(pauseRun()));
+			connect(viewer, SIGNAL(logData(int)),
+									anl, SLOT(logData(int)), Qt::DirectConnection);
 
 
 			QWidget *w = new QWidget;
@@ -114,7 +119,7 @@ namespace Enki
 			connect(_viewer, SIGNAL(anlStep()),
 		              	_anl, SLOT(step()));
 
-			m_sSettingsFile =  QApplication::applicationDirPath().left(1) +":/settings.ini"; //"/media/Cousas/git/enki/EnkiTest/demosettings.ini";
+			m_sSettingsFile =  QApplication::applicationDirPath().left(1) + ":/settings.ini"; //"/media/Cousas/git/enki/EnkiTest/demosettings.ini";
 			// char * stringg = getenv("PWD");
 			// m_sSettingsFile = stringg;
 			//m_sSettingsFile.append(":/demosettings.ini");
@@ -138,13 +143,16 @@ namespace Enki
 			layoutCov->addWidget(buttIni);
 			cover->setLayout(layoutCov);
 
-			Settings* settings = new Settings(".", cover);
-			settings->setWindowFlags(Qt::Dialog| Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
-			settings->resize(this->width()*0.5,this->height()*0.5);
+
+			// Settings* settings = new Settings(".", cover);
+			QDialog * logSettings = anl->createLogSett(viewer->getLconst());
+			logSettings->setWindowFlags(Qt::Popup);//| Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+			// logSettings->resize(this->width()*0.5,this->height()*0.5);
 			connect(buttIni, SIGNAL(clicked()), cover, SLOT(close()));
-			connect(buttSett, SIGNAL(clicked()), settings, SLOT(show()));
-			connect(settings, SIGNAL(settingsChanged(QString)),
-		              this, SLOT(manageSettings(QString)));
+			connect(buttSett, SIGNAL(clicked()), logSettings, SLOT(show()));
+			// connect(buttSett, SIGNAL(clicked()), logSettings, SLOT(enable()));
+			connect(anl->getLogSpinn(), SIGNAL(valueChanged(int)), viewer, SLOT(setLconst(int)));
+
 //			QGridLayout *chartLayout = new QGridLayout;
 
 			//anlCharts->setLayout(chartLayout);
@@ -162,23 +170,49 @@ namespace Enki
    												mainScreenSize.width()/8, mainScreenSize.height()/8);
 			cover->setWindowFlags(Qt::Window);
 			cover->exec();
-			// delete(settings);
-			// viewer->setFocus();
-			// viewer->putSettings(settings);
+			viewer->getSettings()->setVarDialog(logSettings);
 			anl->initLogModule(this);
-	//    newLetter();
-	//    setUnifiedTitleAndToolBarOnMac(true);
-	// qDebug("%d",timer);
 
+
+	}
+	void QAnalytics::updateLogname(const QString srt){
+		logName = srt;
+}
+
+	QDialog * QAnalytics::createLogSett(int cons){
+ 		QDialog *temp = new QDialog();
+		QGridLayout *layout = new QGridLayout();
+		int i =0;
+		QStringList* lista = getListVars();
+		int t;
+		QCheckBox *ch;
+		for (int i=0; i<lista->size(); i++){
+			QString var = (*lista)[i];
+			ch = new QCheckBox();
+			layout->addWidget(new QLabel(var), i + 1, 0);
+			layout->addWidget(ch , i + 1, 1);
+			logMap[var] = ch;
+			t=i+1;
+		}
+		logSpinn = new QSpinBox();
+		QLineEdit *filename = new QLineEdit(logName);
+		logSpinn->setMaximum(9999);
+		logSpinn->setValue(cons);
+		layout->addWidget(new QLabel(tr("Its. por log")), t+1, 0);
+		layout->addWidget(logSpinn, t+1 , 1);
+		layout->addWidget(new QLabel(tr("Log Name:")), t+2, 0);
+		layout->addWidget(filename, t+2 , 1);
+		connect(filename,SIGNAL(textChanged(const QString)), this, SLOT(updateLogname(const QString)),Qt::DirectConnection);
+		temp->setLayout(layout);
+		// temp->setWindowFlags(Qt::Dialog| Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+		return temp;
 	}
 
 	void ViewerWindow::createDockWindows()
 	{
 		QDockWidget *dock = new QDockWidget(this);
 		// *analise = new QWidget;
-		qDebug("GUCK");
-		QGridLayout *GLayout = new QGridLayout(this);
-		qDebug("GUCK");
+		QGridLayout *GLayout = new QGridLayout();
 		// QHBoxLayout *HLayout = new QHBoxLayout();
 		QWidget  *charts[chMAX];
 		//charts[0] = new ViewerChart(new eChart("",1), this);
@@ -231,7 +265,7 @@ namespace Enki
 		}
 
 		void QAnalytics::initLogModule(QWidget * parai){
-			file = new QFile(logName);
+			file = new QFile("logs/"+logName);
 			if (file->open(QIODevice::ReadWrite | QIODevice::ExistingOnly)){
 				if (QMessageBox::No == QMessageBox::question(0,"Sobrescrivir?","O ficheiro "+logName +" xa existe, sobrescrivir?" ,
 																	QMessageBox::Yes|QMessageBox::No,QMessageBox::No))
@@ -247,11 +281,44 @@ namespace Enki
 						delete temp;
 						}
 				}
+
+			}
+			//populate log variables
+			QMapIterator<QString, QCheckBox*> i(logMap);
+  		while (i.hasNext()) {
+      i.next();
+      if(i.value()->isChecked()) logList.push_back(i.key().toStdString());
+
 			}
 			// file->close();
 			std::string welcome = "Begining new Simulation "+logName.toStdString()+"\n\n";
 			this->log(welcome);
+
 		}
+
+
+	void  QAnalytics::logData(int its) {
+		//primeira vez, its=0
+		if (!its){
+			this->log("<Begining Data>\n");
+			std::string tempV = "iterations,robots";
+			for (auto var : logList){
+				tempV+=","+var;
+			}
+			this->log(tempV+"\n");
+		}
+		for (int i = 0; i<robots(); i++){
+			QString temp = QString("%1,%2").arg(its).arg(i+1);
+			// qDebug("debug2, %d ",i);
+			for (auto var : logList){
+				roboStat tempStat = varList[var][i];
+				double tempD = tempStat.isString()?atof(&tempStat.vectS->back()[0*6]):tempStat.vectD->back();//at(its-1);
+				temp+=QString(",%1").arg(tempD);
+				}
+			this->log(temp.toStdString()+"\n");
+		}
+	}
+
 
 	void  QAnalytics::log(std::string logText) {
 		if (file->isOpen() || (file->open(QIODevice::ReadWrite | QIODevice::Text)) )
@@ -309,16 +376,16 @@ namespace Enki
 	}
 
 
-	ViewerWindow::~ViewerWindow()
-	{
-	delete viewer;
+	ViewerWindow::~ViewerWindow(){
+		anl->log(QString("<Ending data>\n \nSimulation finished at %1 iterations").arg(viewer->getWorld()->iterations).toStdString());
+		delete viewer;
+
 	/*for(QWidget c :anlCharts->layout()){
 		delete c;
 	}*/
-
-	//delete customerList;
-
 	}
+
+
 	void gPopup::manage(const QString changed){
 		if(qobject_cast<QComboBox*>( sender())){
 
@@ -1172,6 +1239,7 @@ void ViewerChart::ecUpdate(int i = 0){
 
 		    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 		    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
 				//connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 				// connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
@@ -2863,6 +2931,7 @@ bool ViewerWidget::checkWidgetEvent( QMouseEvent *event)
 			//Step for evolutionary
 			//update graphs
 			if (!(world->iterations % s_const)) emit updateGraph(world->iterations);
+			if (!(world->iterations % l_const)){ emit logData(world->iterations);}
 
 	}
 

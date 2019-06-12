@@ -488,16 +488,14 @@ public:
 		listaa = lista;
 		return lista;
 	}
+
+	void iniLogData(){
+			logData(0);
+	}
+
 	void getVarList(){
 		qDebug("sizeListaa %d",listaa->size());
 	}
-	// void getVarList2(){
-	// 	qDebug("[");
-	// 		for(int i = 0; i < varList->size(); i++)
-	// 		qDebug("%3.4f ,",varList->at(i));
-	// 	qDebug("]");
-	//
-	// }
 
 	virtual void step(){
 		if (override step = this->get_override("step"))
@@ -584,7 +582,6 @@ void runInViewer(World& world, Analytics& anl, double wallsHeight = 10, Vector c
 	QApplication app(argc, argv);
 	EnkiViewer viewer(world, camPos, camAltitude, camYaw, camPitch, wallsHeight);
 	app.setWindowIcon(QIcon(":/appicon.ico"));
-
 	PythonViewer wViewer(viewer, anl);
 	wViewer.setWindowTitle("eRoboSim!");
 	//viewer.setWindowTitle("PyEnki Viewer");
@@ -862,16 +859,18 @@ BOOST_PYTHON_MODULE(pyenki)
 	//class_<Analytics>("AnalyticsModule")
 	class_<Analytics, bases<> , boost::noncopyable>("Analytics_Module")
 	.def(init<int>(args("maxIt")))
-	// .def("notifyBestQuality", &Analytics::addTopPoint)//, with_custodian_and_ward<1,2>())
-	// .def("notifyAVGQuality", &Analytics::addAVGPoint)//, with_custodian_and_ward<1,2>())
-	// .def("varList", &Analytics::varList, return_value_policy<reference_existing_object>())
-	//return_internal_reference
 	.def("getDoubleList", &Analytics::getDoubleList, return_internal_reference<>())
 	.def("getStringList", &Analytics::getStringList, return_internal_reference<>())
 	.def("getQList", &Analytics::getQList,  return_internal_reference<>())// .def("evController", &Analytics::evController)
 	.def("testList", &Analytics::getVarList)
 	.def("step", &Analytics::step)
 	.def("log",&QAnalytics::log)
+	.def("logData",&QAnalytics::logData)
+
+	// .def("notifyBestQuality", &Analytics::addTopPoint)//, with_custodian_and_ward<1,2>())
+	// .def("notifyAVGQuality", &Analytics::addAVGPoint)//, with_custodian_and_ward<1,2>())
+	// .def("varList", &Analytics::varList, return_value_policy<reference_existing_object>())
+	//return_internal_reference
 	//.def(init<>())
 	;
 

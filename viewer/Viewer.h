@@ -132,6 +132,8 @@ namespace Enki
 
 		//sampling const
 		int s_const = 200;
+		//loggin const
+		int l_const = 200;
 		//! A camera pose that can be updated given a target position
 		struct UpdatableCameraPose: CameraPose
 		{
@@ -232,7 +234,6 @@ namespace Enki
 	public:
 		ViewerWidget(World *world, QWidget *parent = 0);
 		~ViewerWidget();
-
 		Settings* getSettings();
 		void putSettings(Settings*);
 		World* getWorld() const;
@@ -242,15 +243,16 @@ namespace Enki
 		PhysicalObject* getSelectedObject() const;
 		bool isTrackingActivated() const;
 		bool isMovableByPicking(PhysicalObject* object) const;
-
+		int getLconst(){return l_const;}
 		void setMovableByPicking(PhysicalObject* object, bool movable = true);
 		void removeExtendedAttributes(PhysicalObject* object);
 
 	signals:
 		void hideGraph();
-		void updateGraph(int iters);
 		void anlStep();
 		void pause();
+		void updateGraph(int);
+		void logData(int);
 		//void sliderMove(int ammount);
 	public slots:
 		void setCamera(const QPointF& pos, double altitude, double yaw, double pitch);
@@ -266,6 +268,7 @@ namespace Enki
 		void enSelected(bool mode);
 		void addInfoMessage(const QString& message, double persistance = 5.0, const QColor& color = Qt::black, const QUrl& link = QUrl());
 		void showHelp();
+		void setLconst(int that){l_const = that;};
 
 
 	protected:
@@ -325,12 +328,12 @@ namespace Enki
 			int maxIterations = 10000;
 	public:
 	    Settings(QString ruta, QWidget *parent = 0);
-
+			void setVarDialog(QDialog* varD){vars=varD;  connect(buttons[2], SIGNAL(clicked()), vars, SLOT(show()));};
 	signals:
 			void settingsChanged(QString arg);
 
 	private:
-//	    void createMenu();
+//	    void createMenu();f
 			QString route;
 	    void createHorizontalGroupBox();
 	    void createGridGroupBox();
@@ -348,7 +351,7 @@ namespace Enki
 	    QLineEdit *lineEdits[NumGridRows];
 	    QPushButton *buttons[NumButtons];
 	    QDialogButtonBox *buttonBox;
-
+			QDialog *vars;
 	    QMenu *fileMenu;
 	    QAction *exitAction;
 	};
@@ -430,6 +433,8 @@ struct roboStat{
 		~QAnalytics() {file->close();}
 		std::unordered_map <std::string, std::vector<roboStat> > getVarList() {return varList;}
 		void initLogModule(QWidget *);
+		QDialog * createLogSett(int);
+		QSpinBox * getLogSpinn(){return logSpinn;};
 		// static QAnalytics* getInstance() {if (QAnalytics::instance) return QAnalytics::instance; else qDebug("NOOOOORL");}
 		// void  getVarList() {qDebug("size: %d; %2.2f ",varList->size(),varList->at(0));}
 
@@ -438,13 +443,16 @@ struct roboStat{
 		std::vector<roboStat>*  getListVar(const std::string& name ) { if (varList.count(name.c_str())==0) return NULL; else return &varList.at(name.c_str());}//qDebug("Retrieving ''%s'' %d",name.c_str(),varList.at(name.c_str())->size());
 		virtual void step(){};
 		int robots(){return numRobots;}
-		void  log(std::string logText);
-
+		void log(std::string logText);
+		void logData(int iterations);
+		void updateLogname(const QString);
 
 	protected:
 		// std::vector<double> * varList = NULL;
+		QMap<QString, QCheckBox*> logMap;
+		QSpinBox * logSpinn;
 		int numRobots = 0;
-		std::vector<Robot> robotList;
+		std::vector<std::string> logList;
 		std::unordered_map <std::string, std::vector<roboStat>> varList;
 		QString logName = "proba.log";
 		QFile *file;
@@ -454,7 +462,8 @@ struct roboStat{
 		// void registaer(std::string name, std::vector<double> *list){varList = list;};
 
 	//
-	// signals:
+	signals:
+		// void notifyLconst(int);
 	// 	void newTopQ(double iter, double quality);
 	// 	void newAvgQ(double iter, double quality);
 
