@@ -3,7 +3,7 @@ Evolutionary Robotics Simulator - based on Enki engine
 
 This app comes from the need of a multi-disciplinar and flexible tool for using 3D powered simulations in colective and evolutionary robotics.
 
-For further instructions about the engine, Enki, please read the attached [readme](README_enki.md).
+For further instructions about the engine, Enki, please read the attached [README_enki](README_enki.md).
 
 ## Features
 
